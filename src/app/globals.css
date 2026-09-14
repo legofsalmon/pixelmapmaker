@@ -487,3 +487,36 @@ a { color: var(--accent); }
 }
 .save__main { display: flex; flex-direction: column; min-width: 0; }
 .save__main span { color: var(--ink-dim); font-size: 11px; }
+
+/* ---------- pick list ---------- */
+
+.tabs { display: flex; gap: 2px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+.tabs button {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  font: inherit;
+  padding: 8px 12px;
+}
+.tabs button.is-active { color: var(--ink); border-bottom-color: var(--accent); }
+
+.opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end; }
+
+.group-row th {
+  background: var(--panel-2);
+  color: var(--ink-dim);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.patch { margin-bottom: 12px; }
+.patch__runs { margin: 4px 0 0; padding-left: 20px; color: var(--ink-dim); }
+.patch__runs li { margin-bottom: 2px; }
+
+@media print {
+  .tabs { display: none !important; }
+  .group-row th { background: #eee; color: #000; }
+}

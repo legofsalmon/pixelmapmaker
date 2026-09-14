@@ -5,6 +5,7 @@ import CabinetLibrary from './CabinetLibrary';
 import CanvasStage from './CanvasStage';
 import Inspector from './Inspector';
 import LayerPanel from './LayerPanel';
+import PickList from './PickList';
 import MultiSelectPanel from './MultiSelectPanel';
 import SaveDialog from './SaveDialog';
 import SpecSheet from './SpecSheet';
@@ -14,6 +15,7 @@ import { persistProject, restoreProject, useEditor } from '@/state/store';
 export default function Editor() {
   const [showSpecSheet, setShowSpecSheet] = useState(false);
   const [showSave, setShowSave] = useState(false);
+  const [showPickList, setShowPickList] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'library' | 'canvas' | 'screen'>('canvas');
   const undo = useEditor((s) => s.undo);
   const redo = useEditor((s) => s.redo);
@@ -74,7 +76,11 @@ export default function Editor() {
 
   return (
     <div className="app">
-      <Toolbar onShowSpecSheet={() => setShowSpecSheet(true)} onShowSave={() => setShowSave(true)} />
+      <Toolbar
+        onShowSpecSheet={() => setShowSpecSheet(true)}
+        onShowSave={() => setShowSave(true)}
+        onShowPickList={() => setShowPickList(true)}
+      />
 
       <nav className="mobile-tabs no-print" aria-label="Panels">
         {(['library', 'canvas', 'screen'] as const).map((tab) => (
@@ -106,6 +112,7 @@ export default function Editor() {
 
       {showSpecSheet && <SpecSheet onClose={() => setShowSpecSheet(false)} />}
       {showSave && <SaveDialog onClose={() => setShowSave(false)} />}
+      {showPickList && <PickList onClose={() => setShowPickList(false)} />}
     </div>
   );
 }

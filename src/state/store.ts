@@ -5,6 +5,8 @@ import type { CabinetSpec, Layer, Project } from '@/lib/types';
 import { CABINETS } from '@/lib/cabinets';
 import { DEFAULT_PALETTE, PALETTES, nextColor } from '@/lib/palettes';
 import { contentBounds, layerRect } from '@/lib/geometry';
+import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
+import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 
 const CANVAS_PRESETS = [
   { name: 'HD 1920 × 1080', width: 1920, height: 1080 },
@@ -65,6 +67,9 @@ interface Snapshot {
 interface EditorState extends Project {
   paletteId: string;
   snapEnabled: boolean;
+  processorId: string;
+  cabling: CablingSettings;
+  pickList: PickListOptions;
   past: Snapshot[];
   future: Snapshot[];
 
@@ -89,6 +94,9 @@ interface EditorState extends Project {
   setPalette: (id: string) => void;
   setSnapEnabled: (on: boolean) => void;
   setProjectName: (name: string) => void;
+  setProcessor: (id: string) => void;
+  setCabling: (patch: Partial<CablingSettings>) => void;
+  setPickList: (patch: Partial<PickListOptions>) => void;
 
   fitCanvasToContent: () => void;
   centreSelection: () => void;
@@ -124,6 +132,9 @@ export const useEditor = create<EditorState>((set, get) => ({
   selectedIds: [],
   paletteId: DEFAULT_PALETTE.id,
   snapEnabled: true,
+  processorId: 'brompton-sx40',
+  cabling: DEFAULT_CABLING,
+  pickList: DEFAULT_PICKLIST_OPTIONS,
   past: [],
   future: [],
 
@@ -337,6 +348,9 @@ export const useEditor = create<EditorState>((set, get) => ({
 
   setSnapEnabled: (on) => set({ snapEnabled: on }),
   setProjectName: (name) => set({ name }),
+  setProcessor: (id) => set({ processorId: id }),
+  setCabling: (patch) => set((s) => ({ cabling: { ...s.cabling, ...patch } })),
+  setPickList: (patch) => set((s) => ({ pickList: { ...s.pickList, ...patch } })),
 
   fitCanvasToContent: () => {
     get().commit();
@@ -386,6 +400,9 @@ export const useEditor = create<EditorState>((set, get) => ({
       canvas: { ...s.canvas, ...project.canvas },
       layers: (project.layers ?? s.layers).map((l) => ({ ...l, id: l.id || newId() })),
       selectedIds: [],
+      processorId: (project as { processorId?: string }).processorId ?? s.processorId,
+      cabling: { ...s.cabling, ...(project as { cabling?: Partial<CablingSettings> }).cabling },
+      pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
     }));
   },
 
@@ -395,8 +412,12 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers } = get();
-    return JSON.stringify({ app: 'pixelmapmaker', version: 1, name, canvas, layers }, null, 2);
+    const { name, canvas, layers, processorId, cabling, pickList } = get();
+    return JSON.stringify(
+      { app: 'pixelmapmaker', version: 1, name, canvas, layers, processorId, cabling, pickList },
+      null,
+      2
+    );
   },
 }));
 
@@ -424,6 +445,9 @@ export function restoreProject() {
       canvas: { ...initialCanvas, ...parsed.canvas },
       layers: parsed.layers,
       selectedIds: [],
+      processorId: parsed.processorId ?? 'brompton-sx40',
+      cabling: { ...DEFAULT_CABLING, ...parsed.cabling },
+      pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
       past: [],
       future: [],
     });

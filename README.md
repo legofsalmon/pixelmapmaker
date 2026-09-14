@@ -34,6 +34,19 @@ for the full feature review those two drove.
 - Cabinet count, surface area, megapixels
 - Weight, maximum and average power, current at 230 V and 120 V, heat load
 
+**Pick list**
+- Choose a processor and it works out how many you need — by pixel count and by
+  port count, telling you which one decides
+- Cabling either worked out for you (data runs from port capacity, circuits from
+  voltage, breaker size and how hard you want to load it) or set by hand
+- Data and power split into feed cables and panel-to-panel jumpers, the way a
+  prep list actually reads
+- A patch view listing which panels sit on which port, following each screen's
+  feed corner and run pattern
+- Contingency of 0–20% and rounding up to whole cases and cable bundles, shown
+  as required → with contingency → what to pull
+- Print to PDF or export CSV
+
 **Output**
 - PNG at the canvas's native resolution, with or without an alpha background
 - Per-screen PNG cropped to that wall
@@ -74,6 +87,16 @@ Each source in `scripts/scraper/sources/` exports `brand` and `scrape()`, and
 returns records that `scripts/scraper/index.mjs` normalises, validates and
 de-duplicates. To add a manufacturer, drop in another module and register it in
 the `SOURCES` map.
+
+### Processors
+
+`src/lib/processors.ts` carries a short processor list. Only entries with a
+`sourceUrl` are taken from a manufacturer's own datasheet — the Brompton Tessera
+SX40 (four 10GBASE-T outputs, nominally 9 million pixels at 36 bpp / 60 Hz) and
+the NovaStar MX40 Pro (twenty Gigabit ports, up to 9 million pixels). The
+generic 1G and 10G entries are labelled planning assumptions, not specifications.
+Real port capacity moves with bit depth, refresh and frame rate, so treat all of
+it as a first pass.
 
 ### Current sources
 

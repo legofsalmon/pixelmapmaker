@@ -8,9 +8,11 @@ import { exportCanvasPng, exportCompositionJson, readProjectFile } from '@/lib/e
 export default function Toolbar({
   onShowSpecSheet,
   onShowSave,
+  onShowPickList,
 }: {
   onShowSpecSheet: () => void;
   onShowSave: () => void;
+  onShowPickList: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -159,6 +161,7 @@ export default function Toolbar({
           PNG (alpha)
         </button>
         <button className="btn btn--ghost" type="button" onClick={onShowSpecSheet}>Spec sheet</button>
+        <button className="btn btn--ghost" type="button" onClick={onShowPickList}>Pick list</button>
         <button className="btn btn--ghost" type="button" onClick={onShowSave}>Save</button>
         <button className="btn btn--ghost" type="button" onClick={() => fileRef.current?.click()}>Open</button>
         <button className="btn btn--ghost" type="button" onClick={() => exportCompositionJson(name, canvas, layers)}>
