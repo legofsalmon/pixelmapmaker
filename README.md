@@ -16,11 +16,15 @@ for the full feature review those two drove.
 - Snapping to canvas edges and centre, to other screens' edges and centres, and
   to the cabinet grid — hold <kbd>Ctrl</kbd> to override
 - Marquee multi-select, arrow-key nudge (<kbd>Shift</kbd> for 10 px), undo/redo
+- Align six ways, distribute evenly, or pack into a row or column with a fixed
+  gap; bulk-edit colour, numbering and signal overlay across a selection
+- <kbd>⌘/Ctrl</kbd>+<kbd>A</kbd> select all, <kbd>⌘/Ctrl</kbd>+<kbd>D</kbd>
+  duplicate, <kbd>Delete</kbd> remove
 - Pan with <kbd>Space</kbd>-drag, alt-drag or right-drag; scroll to zoom
 - Layer list with show/hide, lock, reorder, duplicate
 
 **Cabinet library**
-- 165 real cabinets scraped from manufacturer spec pages
+- 246 real cabinets scraped from manufacturer spec pages and datasheets
 - Filter by brand, type, indoor/outdoor and pitch range; search; favourites
 - Add your own panels when a model is not in the list
 - Every entry links back to the manufacturer page it came from
@@ -75,6 +79,7 @@ the `SOURCES` map.
 |---|---:|---|
 | [ROE Visual](https://www.roevisual.com/en/products) | 74 | Full published specs including weight, power, BTU, hanging and stacking limits |
 | [GLOSHINE](https://gloshine.com/products) | 91 | Publishes size, pitch and weight; panel resolution is derived from size ÷ pitch |
+| [Absen](https://www.usabsen.com/) | 81 | Parsed from the specification PDFs linked on each product page; power is quoted per m² and converted per panel |
 
 ### Data quality
 
@@ -94,9 +99,18 @@ rigging anything.
 
 ### Manufacturers not included
 
-Absen, Unilumin, INFiLED and Desay all sit behind bot protection or render their
-spec tables client-side from an API this scraper cannot reach. They are worth
+Unilumin, INFiLED and Desay sit behind bot protection or render their spec
+tables client-side from an API this scraper cannot reach. They are worth
 revisiting; the source interface is ready for them.
+
+`absen.com` is one of those, but Absen's US site publishes the same
+specification PDFs and is reachable, so that is where the Absen source reads
+from.
+
+[LED Wall Central](https://www.ledwallcentral.com/) has a large multi-brand
+database and would be an obvious shortcut. Its `robots.txt` disallows
+`ClaudeBot` and `anthropic-ai` across the whole site, so it is deliberately
+not used.
 
 ## Deploying
 

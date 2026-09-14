@@ -5,6 +5,7 @@ import CabinetLibrary from './CabinetLibrary';
 import CanvasStage from './CanvasStage';
 import Inspector from './Inspector';
 import LayerPanel from './LayerPanel';
+import MultiSelectPanel from './MultiSelectPanel';
 import SpecSheet from './SpecSheet';
 import Toolbar from './Toolbar';
 import { persistProject, restoreProject, useEditor } from '@/state/store';
@@ -14,6 +15,10 @@ export default function Editor() {
   const [mobilePanel, setMobilePanel] = useState<'library' | 'canvas' | 'screen'>('canvas');
   const undo = useEditor((s) => s.undo);
   const redo = useEditor((s) => s.redo);
+  const selectedCount = useEditor((s) => s.selectedIds.length);
+  const selectAll = useEditor((s) => s.selectAll);
+  const duplicateSelection = useEditor((s) => s.duplicateSelection);
+  const removeSelection = useEditor((s) => s.removeSelection);
 
   useEffect(() => {
     restoreProject();
@@ -39,15 +44,31 @@ export default function Editor() {
       if (el && (el.isContentEditable || el.tagName === 'TEXTAREA' ||
         (el.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'color'].includes((el as HTMLInputElement).type)))) return;
       const mod = e.metaKey || e.ctrlKey;
-      if (mod && e.key.toLowerCase() === 'z') {
+      const key = e.key.toLowerCase();
+      if (mod && key === 'z') {
         e.preventDefault();
         if (e.shiftKey) redo();
         else undo();
+        return;
+      }
+      if (mod && key === 'a') {
+        e.preventDefault();
+        selectAll();
+        return;
+      }
+      if (mod && key === 'd') {
+        e.preventDefault();
+        duplicateSelection();
+        return;
+      }
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault();
+        removeSelection();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [undo, redo]);
+  }, [undo, redo, selectAll, duplicateSelection, removeSelection]);
 
   return (
     <div className="app">
@@ -76,7 +97,7 @@ export default function Editor() {
         </div>
 
         <aside className="app__rail app__rail--right">
-          <Inspector />
+          {selectedCount > 1 ? <MultiSelectPanel /> : <Inspector />}
           <LayerPanel />
         </aside>
       </main>

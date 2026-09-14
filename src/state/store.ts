@@ -55,6 +55,8 @@ export function makeLayer(
   };
 }
 
+export type AlignEdge = 'left' | 'hcentre' | 'right' | 'top' | 'vcentre' | 'bottom';
+
 interface Snapshot {
   canvas: Project['canvas'];
   layers: Layer[];
@@ -74,6 +76,14 @@ interface EditorState extends Project {
   reorderLayer: (id: string, direction: 'up' | 'down') => void;
   setSelection: (ids: string[]) => void;
   toggleSelection: (id: string) => void;
+  selectAll: () => void;
+
+  updateManyLayers: (ids: string[], patch: Partial<Layer>) => void;
+  duplicateSelection: () => void;
+  removeSelection: () => void;
+  alignLayers: (edge: AlignEdge) => void;
+  distributeLayers: (axis: 'horizontal' | 'vertical') => void;
+  spaceLayers: (axis: 'horizontal' | 'vertical', gap: number) => void;
 
   setCanvas: (patch: Partial<Project['canvas']>) => void;
   setPalette: (id: string) => void;
@@ -215,6 +225,102 @@ export const useEditor = create<EditorState>((set, get) => ({
         ? s.selectedIds.filter((x) => x !== id)
         : [...s.selectedIds, id],
     })),
+
+  selectAll: () => set((s) => ({ selectedIds: s.layers.filter((l) => l.visible).map((l) => l.id) })),
+
+  updateManyLayers: (ids, patch) => {
+    get().commit();
+    set((s) => ({ layers: s.layers.map((l) => (ids.includes(l.id) ? { ...l, ...patch } : l)) }));
+  },
+
+  duplicateSelection: () => {
+    get().commit();
+    set((s) => {
+      const sources = s.layers.filter((l) => s.selectedIds.includes(l.id));
+      if (!sources.length) return s;
+      const copies = sources.map((source) => ({
+        ...source,
+        id: newId(),
+        name: `${source.name} copy`,
+        x: source.x + layerRect(source).width,
+      }));
+      return { layers: [...s.layers, ...copies], selectedIds: copies.map((c) => c.id) };
+    });
+  },
+
+  removeSelection: () => {
+    get().commit();
+    set((s) => ({
+      layers: s.layers.filter((l) => !s.selectedIds.includes(l.id)),
+      selectedIds: [],
+    }));
+  },
+
+  alignLayers: (edge) => {
+    get().commit();
+    set((s) => {
+      const chosen = s.layers.filter((l) => s.selectedIds.includes(l.id) && !l.locked);
+      if (chosen.length < 2) return s;
+      const bounds = contentBounds(chosen);
+      if (!bounds) return s;
+      const place = (l: Layer) => {
+        const r = layerRect(l);
+        switch (edge) {
+          case 'left': return { x: bounds.x };
+          case 'right': return { x: bounds.x + bounds.width - r.width };
+          case 'hcentre': return { x: Math.round(bounds.x + (bounds.width - r.width) / 2) };
+          case 'top': return { y: bounds.y };
+          case 'bottom': return { y: bounds.y + bounds.height - r.height };
+          case 'vcentre': return { y: Math.round(bounds.y + (bounds.height - r.height) / 2) };
+        }
+      };
+      const ids = chosen.map((l) => l.id);
+      return { layers: s.layers.map((l) => (ids.includes(l.id) ? { ...l, ...place(l) } : l)) };
+    });
+  },
+
+  distributeLayers: (axis) => {
+    get().commit();
+    set((s) => {
+      const chosen = s.layers.filter((l) => s.selectedIds.includes(l.id) && !l.locked);
+      if (chosen.length < 3) return s;
+      const horizontal = axis === 'horizontal';
+      // Even gaps between the outermost two, which stay put.
+      const sorted = [...chosen].sort((a, b) => (horizontal ? a.x - b.x : a.y - b.y));
+      const first = layerRect(sorted[0]);
+      const last = layerRect(sorted[sorted.length - 1]);
+      const span = horizontal
+        ? last.x + last.width - first.x
+        : last.y + last.height - first.y;
+      const used = sorted.reduce((sum, l) => sum + (horizontal ? layerRect(l).width : layerRect(l).height), 0);
+      const gap = (span - used) / (sorted.length - 1);
+
+      let cursor = horizontal ? first.x : first.y;
+      const moved = new Map<string, Partial<Layer>>();
+      for (const l of sorted) {
+        moved.set(l.id, horizontal ? { x: Math.round(cursor) } : { y: Math.round(cursor) });
+        cursor += (horizontal ? layerRect(l).width : layerRect(l).height) + gap;
+      }
+      return { layers: s.layers.map((l) => (moved.has(l.id) ? { ...l, ...moved.get(l.id) } : l)) };
+    });
+  },
+
+  spaceLayers: (axis, gap) => {
+    get().commit();
+    set((s) => {
+      const chosen = s.layers.filter((l) => s.selectedIds.includes(l.id) && !l.locked);
+      if (chosen.length < 2) return s;
+      const horizontal = axis === 'horizontal';
+      const sorted = [...chosen].sort((a, b) => (horizontal ? a.x - b.x : a.y - b.y));
+      let cursor = horizontal ? sorted[0].x : sorted[0].y;
+      const moved = new Map<string, Partial<Layer>>();
+      for (const l of sorted) {
+        moved.set(l.id, horizontal ? { x: Math.round(cursor) } : { y: Math.round(cursor) });
+        cursor += (horizontal ? layerRect(l).width : layerRect(l).height) + gap;
+      }
+      return { layers: s.layers.map((l) => (moved.has(l.id) ? { ...l, ...moved.get(l.id) } : l)) };
+    });
+  },
 
   setCanvas: (patch) => set((s) => ({ canvas: { ...s.canvas, ...patch } })),
 

@@ -12,15 +12,32 @@ export default function LayerPanel() {
   const removeLayer = useEditor((s) => s.removeLayer);
   const duplicateLayer = useEditor((s) => s.duplicateLayer);
   const reorderLayer = useEditor((s) => s.reorderLayer);
+  const selectAll = useEditor((s) => s.selectAll);
   const commit = useEditor((s) => s.commit);
 
   return (
     <section className="panel">
       <header className="panel__head">
         <h2>Screens</h2>
-        <span className="panel__count">{layers.length}</span>
+        <span className="panel__count">
+          {selectedIds.length ? `${selectedIds.length} of ${layers.length} selected` : layers.length}
+        </span>
       </header>
       <div className="panel__body">
+        {layers.length > 1 && (
+          <div className="btn-row">
+            <button className="btn btn--ghost" type="button" onClick={selectAll}>Select all</button>
+            <button
+              className="btn btn--ghost"
+              type="button"
+              disabled={!selectedIds.length}
+              onClick={() => setSelection([])}
+            >
+              Deselect
+            </button>
+            <span className="note">Shift-click to add · ⌘/Ctrl+A all</span>
+          </div>
+        )}
         <ul className="layer-list">
           {/* Topmost first, matching what is drawn on top. */}
           {[...layers].reverse().map((layer) => {

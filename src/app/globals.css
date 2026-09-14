@@ -402,3 +402,69 @@ a { color: var(--accent); }
   .stats dt, .sheet__sub, .sheet__table small, .note { color: #555; }
   a { color: #000; }
 }
+
+/* ---------- multi-screen tools ---------- */
+
+.cab__add {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.cab__main:hover .cab__add,
+.cab__main:focus-visible .cab__add { opacity: 1; }
+
+.icon-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.icon-row button {
+  flex: 1;
+  min-width: 34px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 7px 4px;
+}
+.icon-row button:hover { border-color: var(--accent); color: var(--accent); }
+
+.gap-row { display: flex; gap: 6px; align-items: center; }
+.gap-row .input--num { width: 78px; flex: none; }
+
+.swatch-row { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+.swatch {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ffffff2a;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+.swatch:hover { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.linkish {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  padding: 0;
+}
+
+/*
+ * The rails are flex columns that scroll. Without this the panels shrink below
+ * their content height and spill over the panel beneath, which swallows clicks
+ * on the overlapped controls. Let each panel keep its natural height and let
+ * the rail do the scrolling.
+ */
+.app__rail > .panel { flex: 0 0 auto; }
+
+/*
+ * The right rail stacks two panels in one scroll container, so a sticky head on
+ * the lower panel would float over the upper panel's controls. Only the
+ * single-panel left rail keeps a sticky head.
+ */
+.app__rail--right .panel__head { position: static; }

@@ -1,7 +1,2758 @@
 {
-  "generatedAt": "2026-09-14T12:48:50.538Z",
-  "count": 165,
+  "generatedAt": "2026-09-14T18:43:21.054Z",
+  "count": 246,
   "cabinets": [
+    {
+      "id": "absen-a1021d-1280x960",
+      "brand": "Absen",
+      "series": "A Series",
+      "model": "A1021D",
+      "pixelPitch": 10.66,
+      "cabinet": {
+        "width": 1280,
+        "height": 960,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 120,
+        "h": 90
+      },
+      "weightKg": 37,
+      "power": {
+        "max": 319,
+        "avg": 107
+      },
+      "brightnessNits": 10000,
+      "refreshHz": 5000,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/5",
+      "ledConfig": "DIP 346",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a-series/",
+      "aspect": 1.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 10800,
+      "weightPerM2": 30.1,
+      "powerPerM2": 260,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a1621d-1280x960",
+      "brand": "Absen",
+      "series": "A Series",
+      "model": "A1621D",
+      "pixelPitch": 16,
+      "cabinet": {
+        "width": 1280,
+        "height": 960,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 80,
+        "h": 60
+      },
+      "weightKg": 35,
+      "power": {
+        "max": 332,
+        "avg": 111
+      },
+      "brightnessNits": 10000,
+      "refreshHz": 26000,
+      "ipRating": "IP65/IP54",
+      "scanRate": "Static",
+      "ledConfig": "DIP 346",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a-series/",
+      "aspect": 1.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 4800,
+      "weightPerM2": 28.5,
+      "powerPerM2": 270,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a0425-1280x960",
+      "brand": "Absen",
+      "series": "A25 Series",
+      "model": "A0425",
+      "pixelPitch": 4.44,
+      "cabinet": {
+        "width": 1280,
+        "height": 960,
+        "depth": 82
+      },
+      "resolution": {
+        "w": 288,
+        "h": 216
+      },
+      "weightKg": 35,
+      "power": {
+        "max": 664,
+        "avg": 166
+      },
+      "brightnessNits": 7500,
+      "refreshHz": 7680,
+      "ipRating": "IP66/IP66",
+      "scanRate": "1/9",
+      "ledConfig": "SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a25-series/",
+      "aspect": 1.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 62208,
+      "weightPerM2": 28.5,
+      "powerPerM2": 540,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a0625-1280x960",
+      "brand": "Absen",
+      "series": "A25 Series",
+      "model": "A0625",
+      "pixelPitch": 6.66,
+      "cabinet": {
+        "width": 1280,
+        "height": 960,
+        "depth": 82
+      },
+      "resolution": {
+        "w": 192,
+        "h": 144
+      },
+      "weightKg": 35,
+      "power": {
+        "max": 725,
+        "avg": 182
+      },
+      "brightnessNits": 10000,
+      "refreshHz": 7680,
+      "ipRating": "IP66/IP66",
+      "scanRate": "1/6",
+      "ledConfig": "SMD 3in1 2727",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a25-series/",
+      "aspect": 1.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 27648,
+      "weightPerM2": 28.5,
+      "powerPerM2": 590,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a0825-1280x960",
+      "brand": "Absen",
+      "series": "A25 Series",
+      "model": "A0825",
+      "pixelPitch": 8,
+      "cabinet": {
+        "width": 1280,
+        "height": 960,
+        "depth": 82
+      },
+      "resolution": {
+        "w": 160,
+        "h": 120
+      },
+      "weightKg": 35,
+      "power": {
+        "max": 713,
+        "avg": 178
+      },
+      "brightnessNits": 10000,
+      "refreshHz": 15000,
+      "ipRating": "IP66/IP66",
+      "scanRate": "1/4",
+      "ledConfig": "SMD 3in1 2727",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a25-series/",
+      "aspect": 1.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 19200,
+      "weightPerM2": 28.5,
+      "powerPerM2": 580,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a1025-1280x960",
+      "brand": "Absen",
+      "series": "A25 Series",
+      "model": "A1025",
+      "pixelPitch": 10,
+      "cabinet": {
+        "width": 1280,
+        "height": 960,
+        "depth": 82
+      },
+      "resolution": {
+        "w": 128,
+        "h": 96
+      },
+      "weightKg": 35,
+      "power": {
+        "max": 713,
+        "avg": 178
+      },
+      "brightnessNits": 10000,
+      "refreshHz": 15000,
+      "ipRating": "IP66/IP66",
+      "scanRate": "1/2",
+      "ledConfig": "SMD 3in1 2727",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a25-series/",
+      "aspect": 1.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 12288,
+      "weightPerM2": 28.5,
+      "powerPerM2": 580,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a99-6-v2-1600x900",
+      "brand": "Absen",
+      "series": "A99 Series",
+      "model": "A99-6 V2",
+      "pixelPitch": 6.25,
+      "cabinet": {
+        "width": 1600,
+        "height": 900,
+        "depth": 129
+      },
+      "resolution": {
+        "w": 256,
+        "h": 144
+      },
+      "weightKg": 49.5,
+      "power": {
+        "max": 576,
+        "avg": 192
+      },
+      "brightnessNits": 7000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP65",
+      "scanRate": "1/6",
+      "ledConfig": "SMD 3in1 2727",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a99-series/",
+      "aspect": 1.7778,
+      "areaM2": 1.44,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 34.4,
+      "powerPerM2": 400,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-a99-10-v2-1600x900",
+      "brand": "Absen",
+      "series": "A99 Series",
+      "model": "A99-10 V2",
+      "pixelPitch": 10,
+      "cabinet": {
+        "width": 1600,
+        "height": 900,
+        "depth": 129
+      },
+      "resolution": {
+        "w": 160,
+        "h": 90
+      },
+      "weightKg": 49.5,
+      "power": {
+        "max": 576,
+        "avg": 192
+      },
+      "brightnessNits": 7000,
+      "refreshHz": 15000,
+      "ipRating": "IP65/IP65",
+      "scanRate": "1/3",
+      "ledConfig": "SMD 3in1 2727",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/a99-series/",
+      "aspect": 1.7778,
+      "areaM2": 1.44,
+      "pixelsPerCabinet": 14400,
+      "weightPerM2": 34.4,
+      "powerPerM2": 400,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-alt1-2-600x337-5",
+      "brand": "Absen",
+      "series": "Alt Series",
+      "model": "ALT1.2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 37.7
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 4.5,
+      "power": {
+        "max": 65,
+        "avg": 30
+      },
+      "brightnessNits": 600,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/60",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/alt-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 22.2,
+      "powerPerM2": 321,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-alt1-5-600x337-5",
+      "brand": "Absen",
+      "series": "Alt Series",
+      "model": "ALT1.5",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 37.7
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "weightKg": 4.5,
+      "power": {
+        "max": 58,
+        "avg": 26
+      },
+      "brightnessNits": 600,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/54",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/alt-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 22.2,
+      "powerPerM2": 286,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-cl0-9-v3-600x337-5",
+      "brand": "Absen",
+      "series": "Cl V3 Series",
+      "model": "CL0.9 V3",
+      "pixelPitch": 0.9375,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.8
+      },
+      "resolution": {
+        "w": 640,
+        "h": 360
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 86,
+        "avg": 29
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/40",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/cl-v3-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 230400,
+      "weightPerM2": 21.7,
+      "powerPerM2": 425,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-cl1-2-v3-600x337-5",
+      "brand": "Absen",
+      "series": "Cl V3 Series",
+      "model": "CL1.2 V3",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.8
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 81,
+        "avg": 27
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/45",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/cl-v3-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 21.7,
+      "powerPerM2": 400,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-fl2-5-novastar-system-recommended-to-connect-with-pl2-5-lite-v10-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.5 (NovaStar system; Recommended to connect with PL2.5 Lite V10)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 145,
+        "avg": 48
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 28,
+      "powerPerM2": 580,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-5-novastar-system-recommended-to-connect-with-pl2-5-plus-v2-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.5 (NovaStar system; Recommended to connect with PL2.5 Plus V2)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 160,
+        "avg": 54
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 28,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-5-novastar-system-recommended-to-connect-with-pl2-5-pro-v10-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.5 (NovaStar system; Recommended to connect with PL2.5 Pro V10)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 170,
+        "avg": 58
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 28,
+      "powerPerM2": 680,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-5-novastar-system-recommended-to-connect-with-pl2-5-pro-v2-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.5 (NovaStar system; Recommended to connect with PL2.5 Pro V2)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 180,
+        "avg": 60
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 28,
+      "powerPerM2": 720,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-6-novastar-system-recommended-to-connect-with-nt2-6-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.6 (NovaStar system; Recommended to connect with NT2.6)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 173,
+        "avg": 58
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/24",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 28,
+      "powerPerM2": 692,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-9-novastar-system-recommended-to-connect-with-nt2-9-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.9 (NovaStar system; Recommended to connect with NT2.9)",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 125,
+        "avg": 42
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/28",
+      "ledConfig": "Black SMD 3in1 2020",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 28,
+      "powerPerM2": 500,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-9-novastar-system-recommended-to-connect-with-pl2-9-lite-v10-500x500",
+      "brand": "Absen",
+      "series": "Fl Series",
+      "model": "FL2.9 (NovaStar system; Recommended to connect with PL2.9 Lite V10)",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 135,
+        "avg": 45
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/28",
+      "ledConfig": "Black SMD 3in1 2020",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/fl-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 28,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "absen-jd3-9-h-250x1500",
+      "brand": "Absen",
+      "series": "Jd H Series",
+      "model": "JD3.9-H",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 250,
+        "height": 1500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 64,
+        "h": 384
+      },
+      "weightKg": 2,
+      "power": {
+        "max": 308,
+        "avg": 102
+      },
+      "brightnessNits": 5000,
+      "refreshHz": null,
+      "ipRating": "IP30/IP30",
+      "scanRate": "Static",
+      "ledConfig": "SMD 3in1 2222",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/jd-h-series/",
+      "aspect": 0.1667,
+      "areaM2": 0.375,
+      "pixelsPerCabinet": 24576,
+      "weightPerM2": 5.3,
+      "powerPerM2": 821,
+      "category": "rental"
+    },
+    {
+      "id": "absen-jd6-h-250x1500",
+      "brand": "Absen",
+      "series": "Jd H Series",
+      "model": "JD6-H",
+      "pixelPitch": 6.25,
+      "cabinet": {
+        "width": 250,
+        "height": 1500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 40,
+        "h": 240
+      },
+      "weightKg": 1.9,
+      "power": {
+        "max": 300,
+        "avg": 100
+      },
+      "brightnessNits": 5000,
+      "refreshHz": null,
+      "ipRating": "IP30/IP30",
+      "scanRate": "Static",
+      "ledConfig": "SMD 3in1 2222",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/jd-h-series/",
+      "aspect": 0.1667,
+      "areaM2": 0.375,
+      "pixelsPerCabinet": 9600,
+      "weightPerM2": 5.1,
+      "powerPerM2": 800,
+      "category": "rental"
+    },
+    {
+      "id": "absen-jd10-h-250x1500",
+      "brand": "Absen",
+      "series": "Jd H Series",
+      "model": "JD10-H",
+      "pixelPitch": 10.4,
+      "cabinet": {
+        "width": 250,
+        "height": 1500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 24,
+        "h": 144
+      },
+      "weightKg": 1.9,
+      "power": {
+        "max": 291,
+        "avg": 97
+      },
+      "brightnessNits": 5000,
+      "refreshHz": null,
+      "ipRating": "IP30/IP30",
+      "scanRate": "Static",
+      "ledConfig": "SMD 3in1 2222",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/jd-h-series/",
+      "aspect": 0.1667,
+      "areaM2": 0.375,
+      "pixelsPerCabinet": 3456,
+      "weightPerM2": 5.1,
+      "powerPerM2": 776,
+      "category": "rental"
+    },
+    {
+      "id": "absen-jp5-pro-brompton-1000x1000",
+      "brand": "Absen",
+      "series": "Jp Pro Series",
+      "model": "JP5 Pro - Brompton (1000×1000)",
+      "pixelPitch": 5.2,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 29.5,
+      "power": {
+        "max": 690,
+        "avg": 230
+      },
+      "brightnessNits": 50,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/6",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/jp-pro-series/",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 29.5,
+      "powerPerM2": 690,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-jp5-pro-brompton-500x500",
+      "brand": "Absen",
+      "series": "Jp Pro Series",
+      "model": "JP5 Pro - Brompton (500×500)",
+      "pixelPitch": 5.2,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 96,
+        "h": 96
+      },
+      "weightKg": 9.5,
+      "power": {
+        "max": 173,
+        "avg": 58
+      },
+      "brightnessNits": 50,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/6",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/jp-pro-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 9216,
+      "weightPerM2": 38,
+      "powerPerM2": 692,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-jp5-pro-novastar-1000x1000",
+      "brand": "Absen",
+      "series": "Jp Pro Series",
+      "model": "JP5 Pro - NovaStar (1000×1000)",
+      "pixelPitch": 5.2,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 29.5,
+      "power": {
+        "max": 690,
+        "avg": 230
+      },
+      "brightnessNits": 50,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/6",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/jp-pro-series/",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 29.5,
+      "powerPerM2": 690,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-jp5-pro-novastar-500x500",
+      "brand": "Absen",
+      "series": "Jp Pro Series",
+      "model": "JP5 Pro - NovaStar (500×500)",
+      "pixelPitch": 5.2,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 96,
+        "h": 96
+      },
+      "weightKg": 9.5,
+      "power": {
+        "max": 173,
+        "avg": 58
+      },
+      "brightnessNits": 5,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/6",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/jp-pro-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 9216,
+      "weightPerM2": 38,
+      "powerPerM2": 692,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-jp8-pro-brompton-1000x1000",
+      "brand": "Absen",
+      "series": "Jp Pro Series",
+      "model": "JP8 Pro - Brompton",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 1000
+      },
+      "resolution": {
+        "w": 112,
+        "h": 112
+      },
+      "weightKg": 20.5,
+      "power": {
+        "max": 480,
+        "avg": 160
+      },
+      "brightnessNits": 5,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/4",
+      "ledConfig": "SMD 3in1 1515",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/jp-pro-series/",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 12544,
+      "weightPerM2": 20.5,
+      "powerPerM2": 480,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-jp8-pro-novastar-1000x1000",
+      "brand": "Absen",
+      "series": "Jp Pro Series",
+      "model": "JP8 Pro - NovaStar",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 112,
+        "h": 112
+      },
+      "weightKg": 20.5,
+      "power": {
+        "max": 480,
+        "avg": 160
+      },
+      "brightnessNits": 5,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/4",
+      "ledConfig": "SMD 3in1 1515",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/jp-pro-series/",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 12544,
+      "weightPerM2": 20.5,
+      "powerPerM2": 480,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-klcob0-7-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB0.7 V2",
+      "pixelPitch": 0.78,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 768,
+        "h": 432
+      },
+      "weightKg": 4.6,
+      "power": {
+        "max": 91,
+        "avg": 30
+      },
+      "brightnessNits": 800,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/64",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 331776,
+      "weightPerM2": 22.7,
+      "powerPerM2": 449,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob0-9-pro-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB0.9 Pro V2",
+      "pixelPitch": 0.93,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 640,
+        "h": 360
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 91,
+        "avg": 30
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/40",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 230400,
+      "weightPerM2": 21.7,
+      "powerPerM2": 449,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob0-9-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB0.9 V2",
+      "pixelPitch": 0.93,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 640,
+        "h": 360
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 80,
+        "avg": 27
+      },
+      "brightnessNits": 800,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/54",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 230400,
+      "weightPerM2": 21.7,
+      "powerPerM2": 395,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob1-2-pro-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB1.2 Pro V2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 81,
+        "avg": 27
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/40",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 21.7,
+      "powerPerM2": 400,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob1-2-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB1.2 V2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 71,
+        "avg": 24
+      },
+      "brightnessNits": 800,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/60",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 21.7,
+      "powerPerM2": 351,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob1-5-pro-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB1.5 Pro V2",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "weightKg": 4.3,
+      "power": {
+        "max": 81,
+        "avg": 27
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/24",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 21.2,
+      "powerPerM2": 400,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob1-5-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB1.5 V2",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "weightKg": 4.4,
+      "power": {
+        "max": 66,
+        "avg": 22
+      },
+      "brightnessNits": 800,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/54",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 21.7,
+      "powerPerM2": 326,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-klcob1-8-pro-v2-600x337-5",
+      "brand": "Absen",
+      "series": "Klcob V2 Series",
+      "model": "KLCOB1.8 Pro V2",
+      "pixelPitch": 1.87,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 39.3
+      },
+      "resolution": {
+        "w": 320,
+        "h": 180
+      },
+      "weightKg": 4.3,
+      "power": {
+        "max": 80,
+        "avg": 27
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/klcob-v2-series/",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 57600,
+      "weightPerM2": 21.2,
+      "powerPerM2": 395,
+      "category": "rental"
+    },
+    {
+      "id": "absen-fl2-6-pro-v2-500x500",
+      "brand": "Absen",
+      "series": "Nt Pro V2 Series",
+      "model": "FL2.6 Pro V2",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 7
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": null,
+      "power": {
+        "max": 140,
+        "avg": 47
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/24",
+      "ledConfig": "IMD 2in1 SMD1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/nt-pro-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": null,
+      "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl1-9-plus-v2x-500x500",
+      "brand": "Absen",
+      "series": "Pl Plus V2x Series",
+      "model": "PL1.9 Plus V2X",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 175,
+        "avg": 59
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "Black SMD 3in1 1212",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-plus-v2x-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 28,
+      "powerPerM2": 700,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl1-9-b-plus-v2x-500x500",
+      "brand": "Absen",
+      "series": "Pl Plus V2x Series",
+      "model": "PL1.9-B Plus V2X",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 175,
+        "avg": 59
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "Black SMD 3in1 1212",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-plus-v2x-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 32,
+      "powerPerM2": 700,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl1-9-c-plus-v2x-500x500",
+      "brand": "Absen",
+      "series": "Pl Plus V2x Series",
+      "model": "PL1.9-C Plus V2X",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 175,
+        "avg": 59
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "Black SMD 3in1 1212",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-plus-v2x-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 36,
+      "powerPerM2": 700,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-plus-v2x-500x500",
+      "brand": "Absen",
+      "series": "Pl Plus V2x Series",
+      "model": "PL2.5 Plus V2X",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 160,
+        "avg": 54
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-plus-v2x-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 31.2,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-b-plus-v2x-500x500",
+      "brand": "Absen",
+      "series": "Pl Plus V2x Series",
+      "model": "PL2.5-B Plus V2X",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 160,
+        "avg": 54
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-plus-v2x-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 32,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-c-plus-v2x-500x500",
+      "brand": "Absen",
+      "series": "Pl Plus V2x Series",
+      "model": "PL2.5-C Plus V2X",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 175,
+        "avg": 59
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-plus-v2x-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 36,
+      "powerPerM2": 700,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.5 Plus V2 (NovaStar)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 160,
+        "avg": 54
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 31.2,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-pro-v2-brompton-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.5 Pro V2 (Brompton)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 170,
+        "avg": 58
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 31.2,
+      "powerPerM2": 680,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-pro-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.5 Pro V2 (NovaStar)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 170,
+        "avg": 58
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/20",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 31.2,
+      "powerPerM2": 680,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-5-xr-v2-brompton-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.5 XR V2 (Brompton)",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 200,
+        "h": 200
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 185,
+        "avg": 62
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 40000,
+      "weightPerM2": 31.2,
+      "powerPerM2": 740,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-9-plus-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.9 Plus V2 (NovaStar) (500×1000)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 336
+      },
+      "weightKg": 12.5,
+      "power": {
+        "max": 280,
+        "avg": 94
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/21",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 56448,
+      "weightPerM2": 25,
+      "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-9-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.9 Plus V2 (NovaStar) (500×500)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 140,
+        "avg": 47
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/21",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 31.2,
+      "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl2-9-pro-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.9 Pro V2 (NovaStar) (500×1000)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 336
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 305,
+        "avg": 102
+      },
+      "brightnessNits": 3000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/14",
+      "ledConfig": "Black SMD 3in1 SMD1515",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 56448,
+      "weightPerM2": 26,
+      "powerPerM2": 610,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl2-9-pro-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.9 Pro V2 (NovaStar) (500×500)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 153,
+        "avg": 51
+      },
+      "brightnessNits": 3000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/14",
+      "ledConfig": "Black SMD 3in1 SMD1515",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 32,
+      "powerPerM2": 612,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl2-9w-plus-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.9W Plus V2 (NovaStar) (500×1000)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 336
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 360,
+        "avg": 120
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/14",
+      "ledConfig": "SMD 3in1 1515",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 56448,
+      "weightPerM2": 26,
+      "powerPerM2": 720,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl2-9w-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL2.9W Plus V2 (NovaStar) (500×500)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 180,
+        "avg": 60
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/14",
+      "ledConfig": "SMD 3in1 1515",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 32,
+      "powerPerM2": 720,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9-plus-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9 Plus V2 (NovaStar) (500×1000)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 12.5,
+      "power": {
+        "max": 280,
+        "avg": 94
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "Black SMD 3in1 2121",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 25,
+      "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl3-9-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9 Plus V2 (NovaStar) (500×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 140,
+        "avg": 47
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "Black SMD 3in1 2121",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 31.2,
+      "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl3-9-pro-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9 Pro V2 (NovaStar) (500×1000)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 400,
+        "avg": 134
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 26,
+      "powerPerM2": 800,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9-pro-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9 Pro V2 (NovaStar) (500×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 200,
+        "avg": 67
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 32,
+      "powerPerM2": 800,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9b-plus-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9B Plus V2 (NovaStar) (500×1000)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 345,
+        "avg": 115
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 26,
+      "powerPerM2": 690,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9b-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9B Plus V2 (NovaStar) (500×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 173,
+        "avg": 58
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 32,
+      "powerPerM2": 692,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9w-plus-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9W Plus V2 (NovaStar) (500×1000)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 300,
+        "avg": 100
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/8",
+      "ledConfig": "SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 26,
+      "powerPerM2": 600,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9w-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL3.9W Plus V2 (NovaStar) (500×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 150,
+        "avg": 50
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/8",
+      "ledConfig": "SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 32,
+      "powerPerM2": 600,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl4-8-pro-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL4.8 Pro V2 (NovaStar)",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 200,
+        "avg": 67
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/7",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 32,
+      "powerPerM2": 800,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl4-8w-plus-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL4.8W Plus V2 (NovaStar)",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 300,
+        "avg": 100
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/7",
+      "ledConfig": "SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 26,
+      "powerPerM2": 600,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9-pro-v3-500x1000",
+      "brand": "Absen",
+      "series": "Pl V3 Series",
+      "model": "PL3.9 Pro V3 (500×1000)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 88
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 12,
+      "power": {
+        "max": 360,
+        "avg": 120
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP65",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v3-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 24,
+      "powerPerM2": 720,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl3-9-pro-v3-500x500",
+      "brand": "Absen",
+      "series": "Pl V3 Series",
+      "model": "PL3.9 Pro V3 (500×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 88
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 180,
+        "avg": 60
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP65",
+      "scanRate": "1/8",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v3-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 28,
+      "powerPerM2": 720,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl4-8-pro-v3-500x1000",
+      "brand": "Absen",
+      "series": "Pl V3 Series",
+      "model": "PL4.8 Pro V3 (500×1000)",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 88
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 12,
+      "power": {
+        "max": 370,
+        "avg": 124
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP65",
+      "scanRate": "1/7",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v3-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 24,
+      "powerPerM2": 740,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl4-8-pro-v3-500x500",
+      "brand": "Absen",
+      "series": "Pl V3 Series",
+      "model": "PL4.8 Pro V3 (500×500)",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 88
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 185,
+        "avg": 62
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP65",
+      "scanRate": "1/7",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v3-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 28,
+      "powerPerM2": 740,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-po1-5-pro-640x1920",
+      "brand": "Absen",
+      "series": "Po Series",
+      "model": "PO1.5 Pro",
+      "pixelPitch": 1.53,
+      "cabinet": {
+        "width": 640,
+        "height": 1920,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 416,
+        "h": 1248
+      },
+      "weightKg": 51,
+      "power": {
+        "max": 356,
+        "avg": 119
+      },
+      "brightnessNits": 600,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/52",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/po-series/",
+      "aspect": 0.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 519168,
+      "weightPerM2": 41.5,
+      "powerPerM2": 290,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-po1-8-pro-640x1920",
+      "brand": "Absen",
+      "series": "Po Series",
+      "model": "PO1.8 Pro",
+      "pixelPitch": 1.86,
+      "cabinet": {
+        "width": 640,
+        "height": 1920,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 344,
+        "h": 1032
+      },
+      "weightKg": 51,
+      "power": {
+        "max": 381,
+        "avg": 128
+      },
+      "brightnessNits": 600,
+      "refreshHz": 3840,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/43",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/po-series/",
+      "aspect": 0.3333,
+      "areaM2": 1.2288,
+      "pixelsPerCabinet": 355008,
+      "weightPerM2": 41.5,
+      "powerPerM2": 310,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa2-6-c-500x500",
+      "brand": "Absen",
+      "series": "Sa C Series",
+      "model": "SA2.6-C",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 10
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": null,
+      "power": {
+        "max": 135,
+        "avg": 45
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/12",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-c-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": null,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa1-5-novastar-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA1.5 (NovaStar)",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 320,
+        "h": 320
+      },
+      "weightKg": 7.2,
+      "power": {
+        "max": 150,
+        "avg": 50
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/32",
+      "ledConfig": "Flip-Chip COB",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 102400,
+      "weightPerM2": 28.8,
+      "powerPerM2": 600,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "absen-sa1-9-brompton-novastar-1000x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA1.9 (Brompton/NovaStar) (1000×500)",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 512,
+        "h": 256
+      },
+      "weightKg": 9.5,
+      "power": {
+        "max": 220,
+        "avg": 73
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "IMD 4in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 131072,
+      "weightPerM2": 19,
+      "powerPerM2": 440,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa1-9-brompton-novastar-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA1.9 (Brompton/NovaStar) (500×500)",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 5,
+      "power": {
+        "max": 110,
+        "avg": 37
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "IMD 4in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 20,
+      "powerPerM2": 440,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa1-9-c-brompton-novastar-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA1.9-C (Brompton/NovaStar)",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 107
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 9,
+      "power": null,
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "IMD 4in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 36,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa2-6-brompton-novastar-1000x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA2.6 (Brompton/NovaStar) (1000×500)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 384,
+        "h": 192
+      },
+      "weightKg": 9.5,
+      "power": {
+        "max": 270,
+        "avg": 90
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/12",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 19,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa2-6-brompton-novastar-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA2.6 (Brompton/NovaStar) (500×500)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 5.5,
+      "power": {
+        "max": 135,
+        "avg": 45
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/12",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 22,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa2-6-b-brompton-novastar-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA2.6-B (Brompton/NovaStar)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 7.2,
+      "power": {
+        "max": 135,
+        "avg": 45
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/12",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 28.8,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa2-6-c-brompton-novastar-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA2.6-C (Brompton/NovaStar)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 1
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 135,
+        "avg": 45
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/12",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 36,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa3-9-b-brompton-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA3.9 - B (Brompton)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 113,
+        "avg": 38
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/8",
+      "ledConfig": "SMD 3in1 2020",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 28,
+      "powerPerM2": 452,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa3-9-brompton-1000x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA3.9 (Brompton) (1000×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 256,
+        "h": 128
+      },
+      "weightKg": 9.5,
+      "power": {
+        "max": 225,
+        "avg": 75
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/8",
+      "ledConfig": "SMD 3in1 2020",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 19,
+      "powerPerM2": 450,
+      "category": "rental"
+    },
+    {
+      "id": "absen-sa3-9-brompton-500x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA3.9 (Brompton) (500×500)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 5.5,
+      "power": {
+        "max": 113,
+        "avg": 38
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/8",
+      "ledConfig": "SMD 3in1 2020",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 22,
+      "powerPerM2": 452,
+      "category": "rental"
+    },
     {
       "id": "gloshine-af-0-6",
       "brand": "GLOSHINE",

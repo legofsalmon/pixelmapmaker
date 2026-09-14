@@ -24,6 +24,7 @@
     "eslint": "9.36.0",
     "eslint-config-next": "^16.3.5",
     "html-entities": "2.6.0",
+    "pdfjs-dist": "^6.3.289",
     "typescript": "5.9.2"
   }
 }

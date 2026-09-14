@@ -50,6 +50,7 @@ function CabinetRow({
           <span>{cabinet.resolution.w} × {cabinet.resolution.h} px</span>
           {cabinet.weightKg != null && <span>{cabinet.weightKg} kg</span>}
         </span>
+        <span className="cab__add">+ Add screen</span>
       </button>
       <button
         className={`cab__fav${favourite ? ' is-on' : ''}`}
@@ -99,6 +100,7 @@ export default function CabinetLibrary() {
       </header>
 
       <div className="panel__body">
+        <p className="note">Click a cabinet to drop another screen on the canvas — add as many as you need.</p>
         <input
           className="input"
           type="search"

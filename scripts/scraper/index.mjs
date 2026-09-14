@@ -13,8 +13,9 @@ import { fileURLToPath } from 'node:url';
 
 import * as roevisual from './sources/roevisual.mjs';
 import * as gloshine from './sources/gloshine.mjs';
+import * as absen from './sources/absen.mjs';
 
-const SOURCES = { roevisual, gloshine };
+const SOURCES = { roevisual, gloshine, absen };
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), '../../data/cabinets.json');
 
 /** Classify a cabinet so the library can be filtered by use case. */
