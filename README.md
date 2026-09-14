@@ -37,6 +37,8 @@ for the full feature review those two drove.
 **Output**
 - PNG at the canvas's native resolution, with or without an alpha background
 - Per-screen PNG cropped to that wall
+- Named saves kept in the browser, listed with date, screen and cabinet counts,
+  reopened or deleted from the save dialog
 - Project JSON to save and reopen
 - Composition JSON of every screen's position and size, for After Effects,
   Resolume and Millumin
@@ -122,7 +124,8 @@ environment variables, no database and no server-side state. Import the repo at
 npx vercel --prod
 ```
 
-Projects are held in `localStorage`, so nothing leaves the browser.
+Projects are held in `localStorage` — the working project autosaves, and named
+saves sit alongside it — so nothing leaves the browser.
 
 ## Layout of the code
 

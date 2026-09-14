@@ -3,14 +3,15 @@
 import { useRef, useState } from 'react';
 import { CANVAS_PRESETS, useEditor } from '@/state/store';
 import { PALETTES } from '@/lib/palettes';
-import {
-  exportCanvasPng,
-  exportCompositionJson,
-  exportProjectJson,
-  readProjectFile,
-} from '@/lib/export';
+import { exportCanvasPng, exportCompositionJson, readProjectFile } from '@/lib/export';
 
-export default function Toolbar({ onShowSpecSheet }: { onShowSpecSheet: () => void }) {
+export default function Toolbar({
+  onShowSpecSheet,
+  onShowSave,
+}: {
+  onShowSpecSheet: () => void;
+  onShowSave: () => void;
+}) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +36,6 @@ export default function Toolbar({ onShowSpecSheet }: { onShowSpecSheet: () => vo
   const tileLayersHorizontally = useEditor((s) => s.tileLayersHorizontally);
   const loadProject = useEditor((s) => s.loadProject);
   const resetProject = useEditor((s) => s.resetProject);
-  const serialise = useEditor((s) => s.serialise);
 
   const withBusy = async (fn: () => Promise<void> | void) => {
     setBusy(true);
@@ -159,7 +159,7 @@ export default function Toolbar({ onShowSpecSheet }: { onShowSpecSheet: () => vo
           PNG (alpha)
         </button>
         <button className="btn btn--ghost" type="button" onClick={onShowSpecSheet}>Spec sheet</button>
-        <button className="btn btn--ghost" type="button" onClick={() => exportProjectJson(name, serialise())}>Save</button>
+        <button className="btn btn--ghost" type="button" onClick={onShowSave}>Save</button>
         <button className="btn btn--ghost" type="button" onClick={() => fileRef.current?.click()}>Open</button>
         <button className="btn btn--ghost" type="button" onClick={() => exportCompositionJson(name, canvas, layers)}>
           Comp JSON

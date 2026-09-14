@@ -6,12 +6,14 @@ import CanvasStage from './CanvasStage';
 import Inspector from './Inspector';
 import LayerPanel from './LayerPanel';
 import MultiSelectPanel from './MultiSelectPanel';
+import SaveDialog from './SaveDialog';
 import SpecSheet from './SpecSheet';
 import Toolbar from './Toolbar';
 import { persistProject, restoreProject, useEditor } from '@/state/store';
 
 export default function Editor() {
   const [showSpecSheet, setShowSpecSheet] = useState(false);
+  const [showSave, setShowSave] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'library' | 'canvas' | 'screen'>('canvas');
   const undo = useEditor((s) => s.undo);
   const redo = useEditor((s) => s.redo);
@@ -72,7 +74,7 @@ export default function Editor() {
 
   return (
     <div className="app">
-      <Toolbar onShowSpecSheet={() => setShowSpecSheet(true)} />
+      <Toolbar onShowSpecSheet={() => setShowSpecSheet(true)} onShowSave={() => setShowSave(true)} />
 
       <nav className="mobile-tabs no-print" aria-label="Panels">
         {(['library', 'canvas', 'screen'] as const).map((tab) => (
@@ -103,6 +105,7 @@ export default function Editor() {
       </main>
 
       {showSpecSheet && <SpecSheet onClose={() => setShowSpecSheet(false)} />}
+      {showSave && <SaveDialog onClose={() => setShowSave(false)} />}
     </div>
   );
 }
