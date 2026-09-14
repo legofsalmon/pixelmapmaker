@@ -47,6 +47,19 @@ for the full feature review those two drove.
   as required → with contingency → what to pull
 - Print to PDF or export CSV
 
+**Support structure**
+- Three ways of standing it up: truss and baseplates, a ground support system,
+  or flown from rigging points
+- The two ballasted cases run the overturning solver vendored from the
+  [tipping-point](https://github.com/legofsalmon/tipping-point) project: how
+  many uprights, ballast per plate, load per upright, and the wind speed it
+  holds to against the one it goes over at
+- Wind and buildability are reported separately, so a scheme that survives the
+  design wind but whose baseplates would overlap says exactly that
+- Flown screens get hang-point count and per-point load, checked against the
+  panel's own published maximum hanging count
+- Truss presets and force coefficients come from the same solver
+
 **Output**
 - PNG at the canvas's native resolution, with or without an alpha background
 - Per-screen PNG cropped to that wall
@@ -87,6 +100,24 @@ Each source in `scripts/scraper/sources/` exports `brand` and `scrape()`, and
 returns records that `scripts/scraper/index.mjs` normalises, validates and
 de-duplicates. To add a manufacturer, drop in another module and register it in
 the `SOURCES` map.
+
+### Support structure
+
+`src/lib/vendor/ledwall.js` is vendored from
+[legofsalmon/tipping-point](https://github.com/legofsalmon/tipping-point) (MIT).
+The only edit is the module wrapper — upstream ships a UMD, this needs an ES
+module — and the physics is copied verbatim. Re-vendor rather than editing it:
+
+```bash
+node scripts/vendor-ledwall.mjs [path-to-tipping-point-checkout]
+```
+
+The script refuses to run if the upstream wrapper changes shape, and stamps the
+commit it copied into the file header.
+
+It is a first pass and a sanity check, not a substitute for a structural
+engineer. Ground support is life-safety kit and real designs are signed off
+against the manufacturer's load data and a wind standard.
 
 ### Processors
 
@@ -157,6 +188,9 @@ src/lib/render.ts      canvas renderer, shared by the viewport and PNG export
 src/lib/geometry.ts    layer bounds, snapping, signal-run ordering
 src/lib/calc.ts        size / weight / power / current maths
 src/lib/cabinets.ts    library loading and filtering
+src/lib/picklist.ts    prep-list aggregation, contingency and pack rounding
+src/lib/cabling.ts     data and power runs, auto or manual
+src/lib/support.ts     support structure, wrapping the vendored solver
 src/state/store.ts     editor state, history, persistence
 src/components/        canvas stage, library, inspector, layers, toolbar, spec sheet
 scripts/scraper/       cabinet library scraper

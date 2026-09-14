@@ -520,3 +520,17 @@ a { color: var(--accent); }
   .tabs { display: none !important; }
   .group-row th { background: #eee; color: #000; }
 }
+
+/* ---------- support structure ---------- */
+
+.support-result { border-top: 1px solid var(--line); padding-top: 12px; }
+.support-result > * + * { margin-top: 8px; }
+
+.verdict {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  border: 1px solid;
+}
+.verdict--ok { background: #0d2a1a; border-color: #1f6d43; color: #9ff0c4; }
+.verdict--bad { background: #2c1113; border-color: #7d2a30; color: #ffb4b8; }

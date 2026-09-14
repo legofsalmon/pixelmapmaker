@@ -7,6 +7,7 @@ import { DEFAULT_PALETTE, PALETTES, nextColor } from '@/lib/palettes';
 import { contentBounds, layerRect } from '@/lib/geometry';
 import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
+import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
 
 const CANVAS_PRESETS = [
   { name: 'HD 1920 × 1080', width: 1920, height: 1080 },
@@ -70,6 +71,7 @@ interface EditorState extends Project {
   processorId: string;
   cabling: CablingSettings;
   pickList: PickListOptions;
+  support: SupportSettings;
   past: Snapshot[];
   future: Snapshot[];
 
@@ -97,6 +99,7 @@ interface EditorState extends Project {
   setProcessor: (id: string) => void;
   setCabling: (patch: Partial<CablingSettings>) => void;
   setPickList: (patch: Partial<PickListOptions>) => void;
+  setSupport: (patch: Partial<SupportSettings>) => void;
 
   fitCanvasToContent: () => void;
   centreSelection: () => void;
@@ -135,6 +138,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   processorId: 'brompton-sx40',
   cabling: DEFAULT_CABLING,
   pickList: DEFAULT_PICKLIST_OPTIONS,
+  support: DEFAULT_SUPPORT,
   past: [],
   future: [],
 
@@ -351,6 +355,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   setProcessor: (id) => set({ processorId: id }),
   setCabling: (patch) => set((s) => ({ cabling: { ...s.cabling, ...patch } })),
   setPickList: (patch) => set((s) => ({ pickList: { ...s.pickList, ...patch } })),
+  setSupport: (patch) => set((s) => ({ support: { ...s.support, ...patch } })),
 
   fitCanvasToContent: () => {
     get().commit();
@@ -403,6 +408,7 @@ export const useEditor = create<EditorState>((set, get) => ({
       processorId: (project as { processorId?: string }).processorId ?? s.processorId,
       cabling: { ...s.cabling, ...(project as { cabling?: Partial<CablingSettings> }).cabling },
       pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
+      support: { ...s.support, ...(project as { support?: Partial<SupportSettings> }).support },
     }));
   },
 
@@ -412,9 +418,9 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList } = get();
+    const { name, canvas, layers, processorId, cabling, pickList, support } = get();
     return JSON.stringify(
-      { app: 'pixelmapmaker', version: 1, name, canvas, layers, processorId, cabling, pickList },
+      { app: 'pixelmapmaker', version: 1, name, canvas, layers, processorId, cabling, pickList, support },
       null,
       2
     );
@@ -448,6 +454,7 @@ export function restoreProject() {
       processorId: parsed.processorId ?? 'brompton-sx40',
       cabling: { ...DEFAULT_CABLING, ...parsed.cabling },
       pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
+      support: { ...DEFAULT_SUPPORT, ...parsed.support },
       past: [],
       future: [],
     });

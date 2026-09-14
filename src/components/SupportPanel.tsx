@@ -1,0 +1,226 @@
+'use client';
+
+import { useMemo } from 'react';
+import { useEditor } from '@/state/store';
+import { CF_PRESETS, TRUSS_PRESETS, supportForProject, type SupportMode } from '@/lib/support';
+
+const MODES: Array<{ value: SupportMode; label: string; blurb: string }> = [
+  {
+    value: 'truss-baseplates',
+    label: 'Truss and baseplates',
+    blurb:
+      'Vertical truss uprights, each on its own ballasted baseplate, with the screen on the front face.',
+  },
+  {
+    value: 'ground-support',
+    label: 'Ground support system',
+    blurb:
+      'Modelled the same way — ballasted uprights carrying the screen. A proprietary system is signed off against its own load data, so treat this as a sanity check on the ballast, not a design.',
+  },
+  {
+    value: 'hanging',
+    label: 'Hanging / flown',
+    blurb:
+      'Flown from rigging points. Works out how many points the weight and spacing need, and checks the column height against the panel’s own hanging rating.',
+  },
+];
+
+const kg = (n: number) => `${Math.round(n).toLocaleString('en-GB')} kg`;
+
+export default function SupportPanel({ onClose }: { onClose: () => void }) {
+  const name = useEditor((s) => s.name);
+  const layers = useEditor((s) => s.layers);
+  const support = useEditor((s) => s.support);
+  const setSupport = useEditor((s) => s.setSupport);
+
+  const results = useMemo(() => supportForProject(layers, support), [layers, support]);
+  const mode = MODES.find((m) => m.value === support.mode)!;
+  const ballasted = support.mode !== 'hanging';
+
+  return (
+    <div className="modal" role="dialog" aria-modal="true" aria-label="Support structure">
+      <div className="modal__panel sheet">
+        <header className="modal__head no-print">
+          <h2>Support structure</h2>
+          <div className="btn-row">
+            <button className="btn" type="button" onClick={() => window.print()}>Print / PDF</button>
+            <button className="btn btn--ghost" type="button" onClick={onClose}>Close</button>
+          </div>
+        </header>
+
+        <div className="sheet__body">
+          <h3 className="sheet__title">{name}</h3>
+          <p className="sheet__sub">{mode.blurb}</p>
+
+          <section className="no-print">
+            <h4>How it is built</h4>
+            <div className="opt-grid">
+              <label className="field">
+                <span>Support</span>
+                <select
+                  className="input"
+                  value={support.mode}
+                  onChange={(e) => setSupport({ mode: e.target.value as SupportMode })}
+                >
+                  {MODES.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
+                </select>
+              </label>
+
+              {ballasted ? (
+                <>
+                  <label className="field">
+                    <span>Truss</span>
+                    <select
+                      className="input"
+                      value={support.trussDepth}
+                      onChange={(e) => {
+                        const preset = TRUSS_PRESETS.find((p) => p.depth === Number(e.target.value));
+                        if (preset) setSupport({ trussDepth: preset.depth!, trussLinearMass: preset.value });
+                      }}
+                    >
+                      {TRUSS_PRESETS.map((p) => (
+                        <option key={p.label} value={p.depth}>{p.label} · {p.value} kg/m</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="field">
+                    <span>Upright height (m)</span>
+                    <input className="input" type="number" step="0.5" min="1" value={support.trussHeight}
+                      onChange={(e) => setSupport({ trussHeight: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Screen bottom (m)</span>
+                    <input className="input" type="number" step="0.1" min="0" value={support.wallBottom}
+                      onChange={(e) => setSupport({ wallBottom: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Plate front / back (m)</span>
+                    <input className="input" type="number" step="0.1" min="0.1" value={support.plateFront}
+                      onChange={(e) => setSupport({ plateFront: Number(e.target.value), plateBack: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Plate width (m)</span>
+                    <input className="input" type="number" step="0.1" min="0.1" value={support.plateWidth}
+                      onChange={(e) => setSupport({ plateWidth: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Plate mass (kg)</span>
+                    <input className="input" type="number" step="5" min="0" value={support.plateMass}
+                      onChange={(e) => setSupport({ plateMass: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Ballast per plate (kg)</span>
+                    <input className="input" type="number" step="25" min="0" value={support.ballastMass}
+                      onChange={(e) => setSupport({ ballastMass: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Design wind (m/s)</span>
+                    <input className="input" type="number" step="1" min="0" value={support.windSpeed}
+                      onChange={(e) => setSupport({ windSpeed: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Force coefficient</span>
+                    <select className="input" value={support.forceCoefficient}
+                      onChange={(e) => setSupport({ forceCoefficient: Number(e.target.value) })}>
+                      {CF_PRESETS.map((p) => <option key={p.label} value={p.value}>{p.label}</option>)}
+                    </select>
+                  </label>
+                  <label className="field">
+                    <span>Safety factor</span>
+                    <input className="input" type="number" step="0.1" min="1" value={support.safetyFactor}
+                      onChange={(e) => setSupport({ safetyFactor: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Max upright spacing (m)</span>
+                    <input className="input" type="number" step="0.5" min="0.5" value={support.maxSpacing}
+                      onChange={(e) => setSupport({ maxSpacing: Number(e.target.value) })} />
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label className="field">
+                    <span>Point capacity (kg)</span>
+                    <input className="input" type="number" step="50" min="1" value={support.pointCapacityKg}
+                      onChange={(e) => setSupport({ pointCapacityKg: Number(e.target.value) })} />
+                  </label>
+                  <label className="field">
+                    <span>Max point spacing (m)</span>
+                    <input className="input" type="number" step="0.5" min="0.5" value={support.maxPointSpacing}
+                      onChange={(e) => setSupport({ maxPointSpacing: Number(e.target.value) })} />
+                  </label>
+                </>
+              )}
+            </div>
+          </section>
+
+          {results.map((r) => (
+            <section key={r.layerId} className="support-result">
+              <h4>{r.layerName} — {r.widthM.toFixed(2)} × {r.heightM.toFixed(2)} m</h4>
+
+              {r.unavailable && <p className="note note--warn">{r.unavailable}</p>}
+
+              {r.ground && (
+                <>
+                  <dl className="stats stats--wide">
+                    <div><dt>Uprights</dt><dd>{r.ground.uprights}</dd></div>
+                    <div><dt>Spacing</dt><dd>{r.ground.spacing.toFixed(2)} m</dd></div>
+                    <div><dt>Ballast per plate</dt><dd>{kg(r.ground.ballastNeededPerUpright)}</dd></div>
+                    <div><dt>Ballast total</dt><dd>{kg(r.ground.ballastNeededPerUpright * r.ground.uprights)}</dd></div>
+                    <div><dt>Load per upright</dt><dd>{kg(r.ground.loadPerUpright)}</dd></div>
+                    <div><dt>Total mass</dt><dd>{kg(r.ground.totalMass)}</dd></div>
+                    <div>
+                      <dt>Holds to</dt>
+                      <dd>{r.ground.limitingWindSpeed.toFixed(1)} m/s</dd>
+                    </div>
+                    <div>
+                      <dt>Goes over at</dt>
+                      <dd>{r.ground.tippingWindSpeed.toFixed(1)} m/s</dd>
+                    </div>
+                  </dl>
+                  {/* Two separate questions: does it stay up in the design wind,
+                      and can the scheme physically be built as configured. */}
+                  <p className={r.ground.passes ? 'verdict verdict--ok' : 'verdict verdict--bad'}>
+                    <strong>Wind:</strong>{' '}
+                    {r.ground.passes
+                      ? `holds at ${support.windSpeed} m/s, margin ${r.ground.worstRatio.toFixed(2)} against the ${r.ground.safetyFactor} required.`
+                      : `does not hold at ${support.windSpeed} m/s — margin ${r.ground.worstRatio.toFixed(2)} against the ${r.ground.safetyFactor} required. Needs ${kg(r.ground.ballastNeededPerUpright)} per plate.`}
+                  </p>
+                  <p className={r.ground.buildable ? 'verdict verdict--ok' : 'verdict verdict--bad'}>
+                    <strong>Buildable:</strong>{' '}
+                    {r.ground.buildable
+                      ? `${r.ground.uprights} uprights at ${r.ground.spacing.toFixed(2)} m fit as configured.`
+                      : 'not as configured — see below.'}
+                  </p>
+                  {r.ground.errors.map((e, i) => <p key={i} className="note note--warn">{e}</p>)}
+                  {r.ground.warnings.map((w, i) => <p key={i} className="note note--warn">{w}</p>)}
+                </>
+              )}
+
+              {r.hanging && (
+                <>
+                  <dl className="stats stats--wide">
+                    <div><dt>Hang points</dt><dd>{r.hanging.points}</dd></div>
+                    <div><dt>Load per point</dt><dd>{kg(r.hanging.loadPerPointKg)}</dd></div>
+                    <div><dt>Total mass</dt><dd>{kg(r.hanging.totalMassKg)}</dd></div>
+                    <div><dt>Panels per column</dt><dd>{r.hanging.panelsPerColumn}</dd></div>
+                  </dl>
+                  {r.hanging.warnings.map((w, i) => <p key={i} className="note note--warn">{w}</p>)}
+                </>
+              )}
+            </section>
+          ))}
+
+          <p className="note">
+            Ballast and overturning come from the{' '}
+            <a href="https://github.com/legofsalmon/tipping-point" target="_blank" rel="noopener noreferrer">
+              tipping-point
+            </a>{' '}
+            solver. This is a first pass and a sanity check on someone else&rsquo;s numbers — not a
+            substitute for a structural engineer. Ground support is life-safety kit, and real designs
+            are signed off against the manufacturer&rsquo;s load data and a wind standard.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
