@@ -1,0 +1,5530 @@
+{
+  "generatedAt": "2026-09-14T12:48:50.538Z",
+  "count": 165,
+  "cabinets": [
+    {
+      "id": "gloshine-af-0-6",
+      "brand": "GLOSHINE",
+      "series": "AF II series",
+      "model": "AFⅡ0.6",
+      "pixelPitch": 0.625,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 32
+      },
+      "resolution": {
+        "w": 960,
+        "h": 540
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Module: Front IP65, Panel: Front IP30 (SMD: IP30)",
+      "scanRate": "1/90",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/af-ii-series.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 518400,
+      "weightPerM2": 27.2,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-af-0-7",
+      "brand": "GLOSHINE",
+      "series": "AF II series",
+      "model": "AFⅡ0.7",
+      "pixelPitch": 0.78125,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 32
+      },
+      "resolution": {
+        "w": 768,
+        "h": 432
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Module: Front IP65, Panel: Front IP30 (SMD: IP30)",
+      "scanRate": "1/36",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/af-ii-series.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 331776,
+      "weightPerM2": 27.2,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-af-0-9",
+      "brand": "GLOSHINE",
+      "series": "AF II series",
+      "model": "AFⅡ0.9",
+      "pixelPitch": 0.9375,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 32
+      },
+      "resolution": {
+        "w": 640,
+        "h": 360
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Module: Front IP65, Panel: Front IP30 (SMD: IP30)",
+      "scanRate": "1/72",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/af-ii-series.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 230400,
+      "weightPerM2": 27.2,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-af-1-2",
+      "brand": "GLOSHINE",
+      "series": "AF II series",
+      "model": "AFⅡ1.2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 32
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Module: Front IP65, Panel: Front IP30 (SMD: IP30)",
+      "scanRate": "1/30",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/af-ii-series.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 27.2,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-af-1-5",
+      "brand": "GLOSHINE",
+      "series": "AF II series",
+      "model": "AFⅡ1.5",
+      "pixelPitch": 1.5625,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 32
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Module: Front IP65, Panel: Front IP30 (SMD: IP30)",
+      "scanRate": "1/45",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/af-ii-series.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 27.2,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-af-1-8",
+      "brand": "GLOSHINE",
+      "series": "AF II series",
+      "model": "AFⅡ1.8",
+      "pixelPitch": 1.875,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 32
+      },
+      "resolution": {
+        "w": 320,
+        "h": 180
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Module: Front IP65, Panel: Front IP30 (SMD: IP30)",
+      "scanRate": "1/54",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/af-ii-series.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 57600,
+      "weightPerM2": 27.2,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ar-pro1-9",
+      "brand": "GLOSHINE",
+      "series": "AR Pro Series",
+      "model": "AR Pro1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 91
+      },
+      "resolution": {
+        "w": 263,
+        "h": 263
+      },
+      "derivedResolution": true,
+      "weightKg": 12.8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP31",
+      "scanRate": "1/32",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ar-pro-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 69169,
+      "weightPerM2": 51.2,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ar-pro2-6",
+      "brand": "GLOSHINE",
+      "series": "AR Pro Series",
+      "model": "AR Pro2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 91
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 13,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/24",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/ar-pro-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 52,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-ar-pro2-9",
+      "brand": "GLOSHINE",
+      "series": "AR Pro Series",
+      "model": "AR Pro2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 91
+      },
+      "resolution": {
+        "w": 172,
+        "h": 172
+      },
+      "derivedResolution": true,
+      "weightKg": 12.8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP31",
+      "scanRate": "1/21",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ar-pro-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 29584,
+      "weightPerM2": 51.2,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ar-pro3-9",
+      "brand": "GLOSHINE",
+      "series": "AR Pro Series",
+      "model": "AR Pro3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 91
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 12.8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP31",
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ar-pro-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 51.2,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-aw-0-93",
+      "brand": "GLOSHINE",
+      "series": "AW series",
+      "model": "AW 0.93",
+      "pixelPitch": 0.93,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 41
+      },
+      "resolution": {
+        "w": 645,
+        "h": 363
+      },
+      "derivedResolution": true,
+      "weightKg": 5.8,
+      "power": {
+        "max": 500,
+        "avg": 250
+      },
+      "brightnessNits": 400,
+      "refreshHz": 7680,
+      "ipRating": "IP30",
+      "scanRate": "1/30",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/aw.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 234135,
+      "weightPerM2": 28.6,
+      "powerPerM2": 2469,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-aw-1-25",
+      "brand": "GLOSHINE",
+      "series": "AW series",
+      "model": "AW 1.25",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 41
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "derivedResolution": true,
+      "weightKg": 5.8,
+      "power": {
+        "max": 500,
+        "avg": 250
+      },
+      "brightnessNits": 400,
+      "refreshHz": 7680,
+      "ipRating": "IP30",
+      "scanRate": "1/30 or 1/60",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/aw.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 28.6,
+      "powerPerM2": 2469,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-aw-1-56",
+      "brand": "GLOSHINE",
+      "series": "AW series",
+      "model": "AW 1.56",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 41
+      },
+      "resolution": {
+        "w": 385,
+        "h": 216
+      },
+      "derivedResolution": true,
+      "weightKg": 5.8,
+      "power": {
+        "max": 500,
+        "avg": 250
+      },
+      "brightnessNits": 500,
+      "refreshHz": 7680,
+      "ipRating": "IP30",
+      "scanRate": "1/32 or 1/64",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/aw.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 83160,
+      "weightPerM2": 28.6,
+      "powerPerM2": 2469,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-aw-1-87",
+      "brand": "GLOSHINE",
+      "series": "AW series",
+      "model": "AW 1.87",
+      "pixelPitch": 1.87,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 41
+      },
+      "resolution": {
+        "w": 321,
+        "h": 180
+      },
+      "derivedResolution": true,
+      "weightKg": 5.8,
+      "power": {
+        "max": 500,
+        "avg": 250
+      },
+      "brightnessNits": 600,
+      "refreshHz": 7680,
+      "ipRating": "IP30",
+      "scanRate": "1/30",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/aw.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 57780,
+      "weightPerM2": 28.6,
+      "powerPerM2": 2469,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-aw-2-50",
+      "brand": "GLOSHINE",
+      "series": "AW series",
+      "model": "AW 2.50",
+      "pixelPitch": 2.5,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 41
+      },
+      "resolution": {
+        "w": 240,
+        "h": 135
+      },
+      "derivedResolution": true,
+      "weightKg": 5.8,
+      "power": {
+        "max": 500,
+        "avg": 250
+      },
+      "brightnessNits": 800,
+      "refreshHz": 7680,
+      "ipRating": "IP30",
+      "scanRate": "1/30",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/aw.html",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 32400,
+      "weightPerM2": 28.6,
+      "powerPerM2": 2469,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-s-cb-h-cb-v-2-6",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-S/CB-H/CB-VⅡ2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 19.6,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-s-cb-h-cb-v-2-9",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-S/CB-H/CB-VⅡ2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 172,
+        "h": 172
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/RearIP54",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 29584,
+      "weightPerM2": 19.6,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cb-s-2-9",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-SⅡ2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 172,
+        "h": 172
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 29584,
+      "weightPerM2": 19.6,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-h-3-9-7-8",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-HⅡ3.9-7.8",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 256,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 9.8,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-s-cb-h-cb-v-3-9",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-S/CB-H/CB-VⅡ3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 19.6,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-s-cb-h-cb-v-4-8",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-S/CB-H/CB-VⅡ4.8",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 19.6,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-s-cb-v-5-2",
+      "brand": "GLOSHINE",
+      "series": "Carbon Ⅱ series",
+      "model": "CB-S/CB-VⅡ5.2",
+      "pixelPitch": 5.2,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 96,
+        "h": 96
+      },
+      "derivedResolution": true,
+      "weightKg": 4.9,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/carbon-.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 9216,
+      "weightPerM2": 19.6,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cb-max3-9",
+      "brand": "GLOSHINE",
+      "series": "CB MAX Series",
+      "model": "CB MAX3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 15.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/16",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/cb-max-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 15.5,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cb-max3-9-7-8",
+      "brand": "GLOSHINE",
+      "series": "CB MAX Series",
+      "model": "CB MAX3.9-7.8",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 11.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/16 or 1/8",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/cb-max-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 11.5,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cb-max4-8",
+      "brand": "GLOSHINE",
+      "series": "CB MAX Series",
+      "model": "CB MAX4.8",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 208,
+        "h": 208
+      },
+      "derivedResolution": true,
+      "weightKg": 15.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/13",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/cb-max-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 43264,
+      "weightPerM2": 15.5,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cb-max8-9",
+      "brand": "GLOSHINE",
+      "series": "CB MAX Series",
+      "model": "CB MAX8.9",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 74.5
+      },
+      "resolution": {
+        "w": 112,
+        "h": 112
+      },
+      "derivedResolution": true,
+      "weightKg": 13.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/4",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/cb-max-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 12544,
+      "weightPerM2": 13.5,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cf-pro-1-9",
+      "brand": "GLOSHINE",
+      "series": "CF PRO II Series",
+      "model": "CF ProⅡ1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 111
+      },
+      "resolution": {
+        "w": 263,
+        "h": 263
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": null,
+      "scanRate": "1/32 or 1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 69169,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cf-pro-2-6",
+      "brand": "GLOSHINE",
+      "series": "CF PRO II Series",
+      "model": "CF ProⅡ2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 111
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": null,
+      "scanRate": "1/24",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cf-pro-2-9",
+      "brand": "GLOSHINE",
+      "series": "CF PRO II Series",
+      "model": "CF ProⅡ2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 111
+      },
+      "resolution": {
+        "w": 172,
+        "h": 172
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": null,
+      "scanRate": "1/21",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 29584,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cf-pro-3-9",
+      "brand": "GLOSHINE",
+      "series": "CF PRO II Series",
+      "model": "CF ProⅡ3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 111
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": null,
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cfpro1-5-indoor",
+      "brand": "GLOSHINE",
+      "series": "CF Pro Series",
+      "model": "CFPro1.5（Indoor）",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 108
+      },
+      "resolution": {
+        "w": 321,
+        "h": 321
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 103041,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-cfpro1-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "CF Pro Series",
+      "model": "CFPro1.9（Indoor）",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 108
+      },
+      "resolution": {
+        "w": 263,
+        "h": 263
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 69169,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cfpro2-38-indoor",
+      "brand": "GLOSHINE",
+      "series": "CF Pro Series",
+      "model": "CFPro2.38(Indoor)",
+      "pixelPitch": 2.38,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 108
+      },
+      "resolution": {
+        "w": 210,
+        "h": 210
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 44100,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cfpro2-6-indoor",
+      "brand": "GLOSHINE",
+      "series": "CF Pro Series",
+      "model": "CFPro2.6(Indoor)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 108
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cfpro2-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "CF Pro Series",
+      "model": "CFPro2.9(Indoor)",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 108
+      },
+      "resolution": {
+        "w": 172,
+        "h": 172
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 29584,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cfpro3-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "CF Pro Series",
+      "model": "CFPro3.9(Indoor)",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 108
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cf-pro.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cr-max3-9-7-8",
+      "brand": "GLOSHINE",
+      "series": "CR MAX Series",
+      "model": "CR MAX3.9-7.8",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 105
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 17.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/cr-max-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 17.5,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cs-ii2-6-indoor",
+      "brand": "GLOSHINE",
+      "series": "CS II Series",
+      "model": "CS II2.6(Indoor)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": null
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 6,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/24",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cs-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 24,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cs-ii2-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "CS II Series",
+      "model": "CS II2.9(Indoor)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": null
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": 6,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "front IP65/rear IP54",
+      "scanRate": "1/21",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/cs-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 24,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-cs-ii3-91-indoor",
+      "brand": "GLOSHINE",
+      "series": "CS II Series",
+      "model": "CS II3.91(Indoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": null
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 6,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cs-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 24,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cs-ii3-91-outdoor",
+      "brand": "GLOSHINE",
+      "series": "CS II Series",
+      "model": "CS II3.91(outdoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": null
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 6,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cs-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 24,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-cs-ii4-81-outdoor",
+      "brand": "GLOSHINE",
+      "series": "CS II Series",
+      "model": "CS II4.81(outdoor)",
+      "pixelPitch": 4.81,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": null
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "derivedResolution": true,
+      "weightKg": 6,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/13",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/cs-ii-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 24,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-dn-dn-plus2-6",
+      "brand": "GLOSHINE",
+      "series": "DN series",
+      "model": "DN/DN Plus2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 192,
+        "h": 385
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65, Rear IP54",
+      "scanRate": "1/24 or 1/16",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/dn-series-outdoor.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73920,
+      "weightPerM2": 14.4,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-dn-dn-plus2-9",
+      "brand": "GLOSHINE",
+      "series": "DN series",
+      "model": "DN/DN Plus2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 172,
+        "h": 345
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65, Rear IP54",
+      "scanRate": "1/21 or 1/14",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/dn-series-outdoor.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 59340,
+      "weightPerM2": 14.4,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-dn-dn-plus3-9",
+      "brand": "GLOSHINE",
+      "series": "DN series",
+      "model": "DN/DN Plus3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65, Rear IP54",
+      "scanRate": "1/8",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/dn-series-outdoor.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 14.4,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-dn1-2",
+      "brand": "GLOSHINE",
+      "series": "DN Series",
+      "model": "DN1.2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 400,
+        "h": 400
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/dn-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 160000,
+      "weightPerM2": 28.8,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-dn1-5",
+      "brand": "GLOSHINE",
+      "series": "DN Series",
+      "model": "DN1.5",
+      "pixelPitch": 1.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 333,
+        "h": 333
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/dn-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 110889,
+      "weightPerM2": 28.8,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-dn1-9",
+      "brand": "GLOSHINE",
+      "series": "DN Series",
+      "model": "DN1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 263,
+        "h": 263
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/dn-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 69169,
+      "weightPerM2": 28.8,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-gp2-9",
+      "brand": "GLOSHINE",
+      "series": "GP Series",
+      "model": "GP2.9",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 85
+      },
+      "resolution": {
+        "w": 337,
+        "h": 337
+      },
+      "derivedResolution": true,
+      "weightKg": 16,
+      "power": {
+        "max": 550,
+        "avg": 275
+      },
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP66",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/gp-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 113569,
+      "weightPerM2": 16,
+      "powerPerM2": 550,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-gp3-9",
+      "brand": "GLOSHINE",
+      "series": "GP Series",
+      "model": "GP3.9",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 84.5
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 25,
+      "power": {
+        "max": 550,
+        "avg": 275
+      },
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP66",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/gp-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 25,
+      "powerPerM2": 550,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-gp4-8",
+      "brand": "GLOSHINE",
+      "series": "GP Series",
+      "model": "GP4.8",
+      "pixelPitch": 4.81,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 85
+      },
+      "resolution": {
+        "w": 208,
+        "h": 208
+      },
+      "derivedResolution": true,
+      "weightKg": 16,
+      "power": {
+        "max": 550,
+        "avg": 275
+      },
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP66",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/gp-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 43264,
+      "weightPerM2": 16,
+      "powerPerM2": 550,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-gp6-2",
+      "brand": "GLOSHINE",
+      "series": "GP Series",
+      "model": "GP6.2",
+      "pixelPitch": 6.25,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 85
+      },
+      "resolution": {
+        "w": 160,
+        "h": 160
+      },
+      "derivedResolution": true,
+      "weightKg": 16,
+      "power": {
+        "max": 550,
+        "avg": 275
+      },
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP66",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/gp-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 25600,
+      "weightPerM2": 16,
+      "powerPerM2": 550,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-gp7-8",
+      "brand": "GLOSHINE",
+      "series": "GP Series",
+      "model": "GP7.8",
+      "pixelPitch": 7.81,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 85
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 16,
+      "power": {
+        "max": 550,
+        "avg": 275
+      },
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP66",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/gp-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 16,
+      "powerPerM2": 550,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-gp10-4",
+      "brand": "GLOSHINE",
+      "series": "GP Series",
+      "model": "GP10.4",
+      "pixelPitch": 10.42,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 85
+      },
+      "resolution": {
+        "w": 96,
+        "h": 96
+      },
+      "derivedResolution": true,
+      "weightKg": 16,
+      "power": {
+        "max": 550,
+        "avg": 275
+      },
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP66",
+      "scanRate": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/gp-series.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 9216,
+      "weightPerM2": 16,
+      "powerPerM2": 550,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-le2-97b-indoor",
+      "brand": "GLOSHINE",
+      "series": "LE Series",
+      "model": "LE2.97B(Indoor)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 87
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": 9.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP31",
+      "scanRate": "1/21",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/le.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 38,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-le2-97b-outdoor",
+      "brand": "GLOSHINE",
+      "series": "LE Series",
+      "model": "LE2.97B(Outdoor)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 87
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": 9.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "Front IP65,Rear IP54",
+      "scanRate": "1/21",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/le.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 38,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-le3-91b-outdoor",
+      "brand": "GLOSHINE",
+      "series": "LE Series",
+      "model": "LE3.91B(Outdoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 87
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 9.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP31",
+      "scanRate": "1/16 or 1/8",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/le.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 38,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-le4-81b-outdoor",
+      "brand": "GLOSHINE",
+      "series": "LE Series",
+      "model": "LE4.81B(Outdoor)",
+      "pixelPitch": 4.81,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 87
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "derivedResolution": true,
+      "weightKg": 9.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP31",
+      "scanRate": "1/13 or 1/7",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/le.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 38,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mr1-56",
+      "brand": "GLOSHINE",
+      "series": "MR Series",
+      "model": "MR1.56",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 250,
+        "height": 500,
+        "depth": 9.84
+      },
+      "resolution": {
+        "w": 160,
+        "h": 321
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/32",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mr-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.125,
+      "pixelsPerCabinet": 51360,
+      "weightPerM2": 44,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-mr1-95",
+      "brand": "GLOSHINE",
+      "series": "MR Series",
+      "model": "MR1.95",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 250,
+        "height": 500,
+        "depth": 9.84
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/16 or 1/32",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mr-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.125,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 44,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mr2-6",
+      "brand": "GLOSHINE",
+      "series": "MR Series",
+      "model": "MR2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 250,
+        "height": 500,
+        "depth": 9.84
+      },
+      "resolution": {
+        "w": 96,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/24 or 1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mr-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.125,
+      "pixelsPerCabinet": 18432,
+      "weightPerM2": 44,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mr2-97",
+      "brand": "GLOSHINE",
+      "series": "MR Series",
+      "model": "MR2.97",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 250,
+        "height": 500,
+        "depth": 9.84
+      },
+      "resolution": {
+        "w": 84,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mr-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.125,
+      "pixelsPerCabinet": 14112,
+      "weightPerM2": 44,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mr3-91",
+      "brand": "GLOSHINE",
+      "series": "MR Series",
+      "model": "MR3.91",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 250,
+        "height": 500,
+        "depth": 9.84
+      },
+      "resolution": {
+        "w": 64,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 5.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mr-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.125,
+      "pixelsPerCabinet": 8192,
+      "weightPerM2": 44,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mt-edge1-5-indoor",
+      "brand": "GLOSHINE",
+      "series": "MT Edge Series",
+      "model": "MT Edge1.5（Indoor）",
+      "pixelPitch": 1.55,
+      "cabinet": {
+        "width": 496,
+        "height": 496,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 320,
+        "h": 320
+      },
+      "derivedResolution": true,
+      "weightKg": 8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mt-edge-series.html",
+      "aspect": 1,
+      "areaM2": 0.246,
+      "pixelsPerCabinet": 102400,
+      "weightPerM2": 32.5,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-mt-edge1-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "MT Edge Series",
+      "model": "MT Edge1.9（Indoor）",
+      "pixelPitch": 1.93,
+      "cabinet": {
+        "width": 496,
+        "height": 496,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 257,
+        "h": 257
+      },
+      "derivedResolution": true,
+      "weightKg": 8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mt-edge-series.html",
+      "aspect": 1,
+      "areaM2": 0.246,
+      "pixelsPerCabinet": 66049,
+      "weightPerM2": 32.5,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mt-edge2-3-indoor",
+      "brand": "GLOSHINE",
+      "series": "MT Edge Series",
+      "model": "MT Edge2.3（Indoor）",
+      "pixelPitch": 2.38,
+      "cabinet": {
+        "width": 496,
+        "height": 496,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 208,
+        "h": 208
+      },
+      "derivedResolution": true,
+      "weightKg": 8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mt-edge-series.html",
+      "aspect": 1,
+      "areaM2": 0.246,
+      "pixelsPerCabinet": 43264,
+      "weightPerM2": 32.5,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mt-edge2-8-indoor",
+      "brand": "GLOSHINE",
+      "series": "MT Edge Series",
+      "model": "MT Edge2.8（Indoor）",
+      "pixelPitch": 2.82,
+      "cabinet": {
+        "width": 496,
+        "height": 496,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 176,
+        "h": 176
+      },
+      "derivedResolution": true,
+      "weightKg": 8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "IP30",
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mt-edge-series.html",
+      "aspect": 1,
+      "areaM2": 0.246,
+      "pixelsPerCabinet": 30976,
+      "weightPerM2": 32.5,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mt-2-3-indoor",
+      "brand": "GLOSHINE",
+      "series": "MT Ⅱ series",
+      "model": "MTⅡ2.3(Indoor)",
+      "pixelPitch": 2.3,
+      "cabinet": {
+        "width": 496,
+        "height": 496,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 216,
+        "h": 216
+      },
+      "derivedResolution": true,
+      "weightKg": 9,
+      "power": {
+        "max": 650,
+        "avg": 325
+      },
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mt-series.html",
+      "aspect": 1,
+      "areaM2": 0.246,
+      "pixelsPerCabinet": 46656,
+      "weightPerM2": 36.6,
+      "powerPerM2": 2642,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mt-2-8-indoor",
+      "brand": "GLOSHINE",
+      "series": "MT Ⅱ series",
+      "model": "MTⅡ2.8(Indoor)",
+      "pixelPitch": 2.8,
+      "cabinet": {
+        "width": 496,
+        "height": 496,
+        "depth": 62
+      },
+      "resolution": {
+        "w": 177,
+        "h": 177
+      },
+      "derivedResolution": true,
+      "weightKg": 9,
+      "power": {
+        "max": 650,
+        "avg": 325
+      },
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": null,
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mt-series.html",
+      "aspect": 1,
+      "areaM2": 0.246,
+      "pixelsPerCabinet": 31329,
+      "weightPerM2": 36.6,
+      "powerPerM2": 2642,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mv-ultra1-5",
+      "brand": "GLOSHINE",
+      "series": "MV Ultra Series",
+      "model": "MV Ultra1.5",
+      "pixelPitch": 1.5,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 333,
+        "h": 333
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/40 or 1/32 or 1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mv-ultra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 110889,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-mv-ultra1-9",
+      "brand": "GLOSHINE",
+      "series": "MV Ultra Series",
+      "model": "MV Ultra1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 263,
+        "h": 263
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/32 or 1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mv-ultra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 69169,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mv-ultra2-6",
+      "brand": "GLOSHINE",
+      "series": "MV Ultra Series",
+      "model": "MV Ultra2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/24",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mv-ultra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-mv-ultra2-9",
+      "brand": "GLOSHINE",
+      "series": "MV Ultra Series",
+      "model": "MV Ultra2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 172,
+        "h": 172
+      },
+      "derivedResolution": true,
+      "weightKg": 8.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/21",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/mv-ultra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 29584,
+      "weightPerM2": 34,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ra-1-5-indoor",
+      "brand": "GLOSHINE",
+      "series": "RA Ⅱ Series",
+      "model": "RA Ⅱ1.5(Indoor)",
+      "pixelPitch": 1.57,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 40
+      },
+      "resolution": {
+        "w": 318,
+        "h": 318
+      },
+      "derivedResolution": true,
+      "weightKg": null,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/53",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 101124,
+      "weightPerM2": null,
+      "powerPerM2": null,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "gloshine-ra-1-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "RA Ⅱ Series",
+      "model": "RAⅡ1.9(Indoor)",
+      "pixelPitch": 1.98,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 40
+      },
+      "resolution": {
+        "w": 253,
+        "h": 253
+      },
+      "derivedResolution": true,
+      "weightKg": null,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/42",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 64009,
+      "weightPerM2": null,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ra-ra-plus-2-6-indoor",
+      "brand": "GLOSHINE",
+      "series": "RA Ⅱ Series",
+      "model": "RA/RA PLUS Ⅱ2.6(Indoor)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 40
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "derivedResolution": true,
+      "weightKg": null,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/32",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": null,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ra-ra-plus-2-9-indoor",
+      "brand": "GLOSHINE",
+      "series": "RA Ⅱ Series",
+      "model": "RA/RA PLUS Ⅱ2.9(Indoor)",
+      "pixelPitch": 2.97,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 40
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": null,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/28",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ra-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": null,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-rb-b1-9",
+      "brand": "GLOSHINE",
+      "series": "RB-B Series",
+      "model": "RB-B1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 263,
+        "h": 263
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/32",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/rb-b-series.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 69169,
+      "weightPerM2": 28.8,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-rb-b-rb-plus-b2-6",
+      "brand": "GLOSHINE",
+      "series": "RB-B Series",
+      "model": "RB-B/RB PLUS-B2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 192,
+        "h": 385
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/24",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/rb-b-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73920,
+      "weightPerM2": 14.4,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-rb-b-rb-plus-b2-9",
+      "brand": "GLOSHINE",
+      "series": "RB-B Series",
+      "model": "RB-B/RB PLUS-B2.9",
+      "pixelPitch": 2.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 172,
+        "h": 345
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/21 or 1/28",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/rb-b-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 59340,
+      "weightPerM2": 14.4,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-rb-b-rb-plus-b3-9",
+      "brand": "GLOSHINE",
+      "series": "RB-B Series",
+      "model": "RB-B/RB PLUS-B3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 76
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 7.2,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": 3840,
+      "ipRating": "IP30",
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/rb-b-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 14.4,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ur2-indoor",
+      "brand": "GLOSHINE",
+      "series": "UR Series",
+      "model": "UR2(Indoor)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 85.5
+      },
+      "resolution": {
+        "w": 192,
+        "h": 385
+      },
+      "derivedResolution": true,
+      "weightKg": 10.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ur.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73920,
+      "weightPerM2": 21,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ur3-indoor",
+      "brand": "GLOSHINE",
+      "series": "UR Series",
+      "model": "UR3(Indoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 85.5
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 10.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/16",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/ur.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 21,
+      "powerPerM2": null,
+      "category": "rental"
+    },
+    {
+      "id": "gloshine-ur3-outdoor",
+      "brand": "GLOSHINE",
+      "series": "UR Series",
+      "model": "UR3(Outdoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 85.5
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 10.5,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/16",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/ur.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 21,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-va-max3-91-7-81-outdoor",
+      "brand": "GLOSHINE",
+      "series": "VA MAX Series",
+      "model": "VA MAX3.91-7.81(Outdoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 22,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/16 or 1/8",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/va-max.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 22,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-va-max3-91-outdoor",
+      "brand": "GLOSHINE",
+      "series": "VA MAX Series",
+      "model": "VA MAX3.91(Outdoor)",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 26,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/16 or 1/8",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/va-max.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 26,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-va-max5-95-outdoor",
+      "brand": "GLOSHINE",
+      "series": "VA MAX Series",
+      "model": "VA MAX5.95(Outdoor)",
+      "pixelPitch": 5.95,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 100
+      },
+      "resolution": {
+        "w": 168,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": 26,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/7",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/va-max.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 28224,
+      "weightPerM2": 26,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-va3-91-7-81",
+      "brand": "GLOSHINE",
+      "series": "Vanish Series",
+      "model": "VA3.91-7.81",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "derivedResolution": true,
+      "weightKg": 5.1,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/16 or 1/8",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/vanish.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 20.4,
+      "powerPerM2": null,
+      "category": "transparent"
+    },
+    {
+      "id": "gloshine-va8-93",
+      "brand": "GLOSHINE",
+      "series": "Vanish Series",
+      "model": "VA8.93",
+      "pixelPitch": 8.93,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 56,
+        "h": 56
+      },
+      "derivedResolution": true,
+      "weightKg": 5.1,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": null,
+      "scanRate": "1/4",
+      "environment": "indoor",
+      "sourceUrl": "https://gloshine.com/products/vanish.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 3136,
+      "weightPerM2": 20.4,
+      "powerPerM2": null,
+      "category": "transparent"
+    },
+    {
+      "id": "gloshine-zs-pro-3-9-zm-pro-3-9",
+      "brand": "GLOSHINE",
+      "series": "ZS PRO Ⅱ Series",
+      "model": "ZS ProⅡ3.9/ZM ProⅡ3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 90
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "derivedResolution": true,
+      "weightKg": 13.8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/16 or 1/8",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/zs-pro-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 27.6,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "gloshine-zs-pro-5-9-zm-pro-5-9",
+      "brand": "GLOSHINE",
+      "series": "ZS PRO Ⅱ Series",
+      "model": "ZS ProⅡ5.9/ZM ProⅡ5.9",
+      "pixelPitch": 5.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 90
+      },
+      "resolution": {
+        "w": 84,
+        "h": 168
+      },
+      "derivedResolution": true,
+      "weightKg": 13.8,
+      "power": null,
+      "brightnessNits": null,
+      "refreshHz": null,
+      "ipRating": "Front IP65/Rear IP54",
+      "scanRate": "1/7",
+      "environment": "outdoor",
+      "sourceUrl": "https://gloshine.com/products/zs-pro-series.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 14112,
+      "weightPerM2": 27.6,
+      "powerPerM2": null,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm2-matte",
+      "brand": "ROE Visual",
+      "series": "Black Marble",
+      "model": "BM2-Matte",
+      "pixelPitch": 2.82,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 133
+      },
+      "resolution": {
+        "w": 216,
+        "h": 216
+      },
+      "weightKg": 18.6,
+      "power": {
+        "max": 310,
+        "avg": 155
+      },
+      "brightnessNits": 800,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 46656,
+      "weightPerM2": 50.1,
+      "powerPerM2": 834,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm2v2-pc-matte-black-led",
+      "brand": "ROE Visual",
+      "series": "Black Marble",
+      "model": "BM2V2-PC Matte (Black LED)",
+      "pixelPitch": 2.82,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 133
+      },
+      "resolution": {
+        "w": 216,
+        "h": 216
+      },
+      "weightKg": 18.6,
+      "power": {
+        "max": 310,
+        "avg": 155
+      },
+      "brightnessNits": 800,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 46656,
+      "weightPerM2": 50.1,
+      "powerPerM2": 834,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm2v2-pc-matte-white-led",
+      "brand": "ROE Visual",
+      "series": "Black Marble",
+      "model": "BM2V2-PC Matte (White LED)",
+      "pixelPitch": 2.82,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 133
+      },
+      "resolution": {
+        "w": 216,
+        "h": 216
+      },
+      "weightKg": 18.6,
+      "power": {
+        "max": 310,
+        "avg": 155
+      },
+      "brightnessNits": 1700,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 46656,
+      "weightPerM2": 50.1,
+      "powerPerM2": 834,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm4-glass",
+      "brand": "ROE Visual",
+      "series": "Black Marble",
+      "model": "BM4-Glass",
+      "pixelPitch": 4.76,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 142
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 23.4,
+      "power": {
+        "max": 290,
+        "avg": 145
+      },
+      "brightnessNits": 800,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 63,
+      "powerPerM2": 780,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm4-matte",
+      "brand": "ROE Visual",
+      "series": "Black Marble",
+      "model": "BM4-Matte",
+      "pixelPitch": 4.76,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 135
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 17.5,
+      "power": {
+        "max": 290,
+        "avg": 145
+      },
+      "brightnessNits": 2000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 47.1,
+      "powerPerM2": 780,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm4-mirror",
+      "brand": "ROE Visual",
+      "series": "Black Marble",
+      "model": "BM4-Mirror",
+      "pixelPitch": 4.76,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 142
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 23.4,
+      "power": {
+        "max": 290,
+        "avg": 145
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 63,
+      "powerPerM2": 780,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm5-glass",
+      "brand": "ROE Visual",
+      "series": "Black Marble BM5",
+      "model": "BM5-Glass",
+      "pixelPitch": 5.7692,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 110
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 18.3,
+      "power": {
+        "max": 270,
+        "avg": 135
+      },
+      "brightnessNits": 800,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble-bm5",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 50.8,
+      "powerPerM2": 750,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm5-pc-matte",
+      "brand": "ROE Visual",
+      "series": "Black Marble BM5",
+      "model": "BM5-PC-Matte",
+      "pixelPitch": 5.7692,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 103
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 13.5,
+      "power": {
+        "max": 270,
+        "avg": 135
+      },
+      "brightnessNits": 2000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble-bm5",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 37.5,
+      "powerPerM2": 750,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bm2i-matte",
+      "brand": "ROE Visual",
+      "series": "Black Marble Interactive Floor",
+      "model": "BM2i-Matte",
+      "pixelPitch": 2.82,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 133
+      },
+      "resolution": {
+        "w": 216,
+        "h": 216
+      },
+      "weightKg": 18.6,
+      "power": {
+        "max": 310,
+        "avg": 155
+      },
+      "brightnessNits": 800,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble-interactive-floor",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 46656,
+      "weightPerM2": 50.1,
+      "powerPerM2": 834,
+      "category": "floor"
+    },
+    {
+      "id": "roe-bm4i",
+      "brand": "ROE Visual",
+      "series": "Black Marble Interactive Floor",
+      "model": "BM4i",
+      "pixelPitch": 4.76,
+      "cabinet": {
+        "width": 609.6,
+        "height": 609.6,
+        "depth": 135
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 17.5,
+      "power": {
+        "max": 290,
+        "avg": 145
+      },
+      "brightnessNits": 2000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-marble-interactive-floor",
+      "aspect": 1,
+      "areaM2": 0.3716,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 47.1,
+      "powerPerM2": 780,
+      "category": "floor"
+    },
+    {
+      "id": "roe-bq3-9",
+      "brand": "ROE Visual",
+      "series": "Black Quartz",
+      "model": "BQ3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 82.62
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 22,
+      "power": {
+        "max": 360,
+        "avg": 180
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD1415 Black Common Cathode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 13,
+      "maxStacking": 6,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-quartz",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 44,
+      "powerPerM2": 720,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bq3-9-half",
+      "brand": "ROE Visual",
+      "series": "Black Quartz",
+      "model": "BQ3.9 Half",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 82.62
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 9.8,
+      "power": {
+        "max": 190,
+        "avg": 85
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD1415 Black Common Cathode",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-quartz",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 39.2,
+      "powerPerM2": 760,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bq4-6",
+      "brand": "ROE Visual",
+      "series": "Black Quartz",
+      "model": "BQ4.6",
+      "pixelPitch": 4.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 82.62
+      },
+      "resolution": {
+        "w": 108,
+        "h": 216
+      },
+      "weightKg": 22,
+      "power": {
+        "max": 370,
+        "avg": 185
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD1921 Black Common Cathode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 13,
+      "maxStacking": 6,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-quartz",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 23328,
+      "weightPerM2": 44,
+      "powerPerM2": 740,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bq4-6-half",
+      "brand": "ROE Visual",
+      "series": "Black Quartz",
+      "model": "BQ4.6 Half",
+      "pixelPitch": 4.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 82.62
+      },
+      "resolution": {
+        "w": 108,
+        "h": 108
+      },
+      "weightKg": 9.8,
+      "power": {
+        "max": 190,
+        "avg": 85
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD1921 Black Common Cathode",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-quartz",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 11664,
+      "weightPerM2": 39.2,
+      "powerPerM2": 760,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bq6-2",
+      "brand": "ROE Visual",
+      "series": "Black Quartz",
+      "model": "BQ6.2",
+      "pixelPitch": 6.25,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 82.62
+      },
+      "resolution": {
+        "w": 80,
+        "h": 160
+      },
+      "weightKg": 22,
+      "power": {
+        "max": 450,
+        "avg": 225
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD1921 Black Common Anode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 13,
+      "maxStacking": 6,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-quartz",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 12800,
+      "weightPerM2": 44,
+      "powerPerM2": 900,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bq6-2-half",
+      "brand": "ROE Visual",
+      "series": "Black Quartz",
+      "model": "BQ6.2 Half",
+      "pixelPitch": 6.25,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 82.62
+      },
+      "resolution": {
+        "w": 80,
+        "h": 80
+      },
+      "weightKg": 9.8,
+      "power": {
+        "max": 230,
+        "avg": 115
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD1921 Black Common Anode",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-quartz",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 6400,
+      "weightPerM2": 39.2,
+      "powerPerM2": 920,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-bp2v2",
+      "brand": "ROE Visual",
+      "series": "BP2V2",
+      "model": "BP2V2",
+      "pixelPitch": 2.84,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 90
+      },
+      "resolution": {
+        "w": 176,
+        "h": 176
+      },
+      "weightKg": 9.35,
+      "power": {
+        "max": 190,
+        "avg": 95
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": 20,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/black-pearl-2v2",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 30976,
+      "weightPerM2": 37.4,
+      "powerPerM2": 760,
+      "category": "rental"
+    },
+    {
+      "id": "roe-cb5mkii-rgbca",
+      "brand": "ROE Visual",
+      "series": "Carbon Full Spectrum Led Panels",
+      "model": "CB5MKII RGBCA",
+      "pixelPitch": 5.77,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 15.5,
+      "power": {
+        "max": 300,
+        "avg": 150
+      },
+      "brightnessNits": 4400,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "RGB+Cyan+Amber",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon-full-spectrum-led-panels",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 21.5,
+      "powerPerM2": 417,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb5mkii-rgbw",
+      "brand": "ROE Visual",
+      "series": "Carbon Full Spectrum Led Panels",
+      "model": "CB5MKII RGBW",
+      "pixelPitch": 5.77,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 17.5,
+      "power": {
+        "max": 750,
+        "avg": 375
+      },
+      "brightnessNits": 3200,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "RGB+White",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon-full-spectrum-led-panels",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 24.3,
+      "powerPerM2": 1042,
+      "category": "rental"
+    },
+    {
+      "id": "roe-cb3mk",
+      "brand": "ROE Visual",
+      "series": "Carbon MarkII",
+      "model": "CB3MKⅡ",
+      "pixelPitch": 3.75,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 160,
+        "h": 320
+      },
+      "weightKg": 14.4,
+      "power": {
+        "max": 600,
+        "avg": 300
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/cb-mark2",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 51200,
+      "weightPerM2": 20,
+      "powerPerM2": 833,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb3mk-half",
+      "brand": "ROE Visual",
+      "series": "Carbon MarkII",
+      "model": "CB3MKⅡ Half",
+      "pixelPitch": 3.75,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 160,
+        "h": 160
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 290,
+        "avg": 145
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/cb-mark2",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 25600,
+      "weightPerM2": 21.7,
+      "powerPerM2": 806,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb5mk",
+      "brand": "ROE Visual",
+      "series": "Carbon MarkII",
+      "model": "CB5MKⅡ",
+      "pixelPitch": 5.77,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 13.6,
+      "power": {
+        "max": 480,
+        "avg": 240
+      },
+      "brightnessNits": 6000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/cb-mark2",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 18.9,
+      "powerPerM2": 667,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb5mk-half",
+      "brand": "ROE Visual",
+      "series": "Carbon MarkII",
+      "model": "CB5MKⅡ Half",
+      "pixelPitch": 5.77,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 7.2,
+      "power": {
+        "max": 250,
+        "avg": 125
+      },
+      "brightnessNits": 6000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/cb-mark2",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 20,
+      "powerPerM2": 694,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb8mk",
+      "brand": "ROE Visual",
+      "series": "Carbon MarkII",
+      "model": "CB8MKⅡ",
+      "pixelPitch": 8.33,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 72,
+        "h": 144
+      },
+      "weightKg": 11,
+      "power": {
+        "max": 530,
+        "avg": 260
+      },
+      "brightnessNits": 6000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/cb-mark2",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 10368,
+      "weightPerM2": 15.3,
+      "powerPerM2": 736,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb8mk-half",
+      "brand": "ROE Visual",
+      "series": "Carbon MarkII",
+      "model": "CB8MKⅡ Half",
+      "pixelPitch": 8.33,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 72,
+        "h": 72
+      },
+      "weightKg": 6,
+      "power": {
+        "max": 260,
+        "avg": 130
+      },
+      "brightnessNits": 6000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/cb-mark2",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 5184,
+      "weightPerM2": 16.7,
+      "powerPerM2": 722,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb3",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB3",
+      "pixelPitch": 3.75,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 77
+      },
+      "resolution": {
+        "w": 160,
+        "h": 320
+      },
+      "weightKg": 13.2,
+      "power": {
+        "max": 540,
+        "avg": 270
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 2020 Black",
+      "serviceability": "Rear",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 51200,
+      "weightPerM2": 18.3,
+      "powerPerM2": 750,
+      "category": "rental"
+    },
+    {
+      "id": "roe-cb3-half",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB3 Half",
+      "pixelPitch": 3.75,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 77
+      },
+      "resolution": {
+        "w": 160,
+        "h": 160
+      },
+      "weightKg": 7.5,
+      "power": {
+        "max": 260,
+        "avg": 130
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 2020 Black",
+      "serviceability": "Rear",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 25600,
+      "weightPerM2": 20.8,
+      "powerPerM2": 722,
+      "category": "rental"
+    },
+    {
+      "id": "roe-cb5",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB5",
+      "pixelPitch": 5.77,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 77
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 13.85,
+      "power": {
+        "max": 500,
+        "avg": 250
+      },
+      "brightnessNits": 6000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 19.2,
+      "powerPerM2": 694,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb5-half",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB5 Half",
+      "pixelPitch": 5.77,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 77
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 7.95,
+      "power": {
+        "max": 250,
+        "avg": 130
+      },
+      "brightnessNits": 6000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1921 White",
+      "serviceability": "Front",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 22.1,
+      "powerPerM2": 694,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb8",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB8",
+      "pixelPitch": 8.33,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 72
+      },
+      "resolution": {
+        "w": 72,
+        "h": 144
+      },
+      "weightKg": 12.68,
+      "power": {
+        "max": 430,
+        "avg": 220
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 2727 White",
+      "serviceability": "Front",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 10368,
+      "weightPerM2": 17.6,
+      "powerPerM2": 597,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb8-half",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB8 Half",
+      "pixelPitch": 8.33,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 72
+      },
+      "resolution": {
+        "w": 72,
+        "h": 72
+      },
+      "weightKg": 7.05,
+      "power": {
+        "max": 220,
+        "avg": 110
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 2727 White",
+      "serviceability": "Front",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 5184,
+      "weightPerM2": 19.6,
+      "powerPerM2": 611,
+      "category": "outdoor"
+    },
+    {
+      "id": "roe-cb8-transparent",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB8-Transparent",
+      "pixelPitch": 8.33,
+      "cabinet": {
+        "width": 600,
+        "height": 1200,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 72,
+        "h": 144
+      },
+      "weightKg": 10.9,
+      "power": {
+        "max": 430,
+        "avg": 220
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 2727 White",
+      "serviceability": "Front",
+      "maxHanging": 12,
+      "maxStacking": 5,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 0.5,
+      "areaM2": 0.72,
+      "pixelsPerCabinet": 10368,
+      "weightPerM2": 15.1,
+      "powerPerM2": 597,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-cb8-transparent-half",
+      "brand": "ROE Visual",
+      "series": "Carbon Series",
+      "model": "CB8-Transparent Half",
+      "pixelPitch": 8.33,
+      "cabinet": {
+        "width": 600,
+        "height": 600,
+        "depth": 70
+      },
+      "resolution": {
+        "w": 72,
+        "h": 72
+      },
+      "weightKg": 6,
+      "power": {
+        "max": 220,
+        "avg": 110
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 2727 White",
+      "serviceability": "Front",
+      "maxHanging": 24,
+      "maxStacking": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/carbon",
+      "aspect": 1,
+      "areaM2": 0.36,
+      "pixelsPerCabinet": 5184,
+      "weightPerM2": 16.7,
+      "powerPerM2": 611,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-coral-s0-9",
+      "brand": "ROE Visual",
+      "series": "Coral Cob",
+      "model": "Coral S0.9",
+      "pixelPitch": 0.93,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.2
+      },
+      "resolution": {
+        "w": 640,
+        "h": 360
+      },
+      "weightKg": 5.4,
+      "power": {
+        "max": 60,
+        "avg": 30
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Flip-chip COB",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/coral-cob",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 230400,
+      "weightPerM2": 26.7,
+      "powerPerM2": 296,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-coral-s1-2",
+      "brand": "ROE Visual",
+      "series": "Coral Cob",
+      "model": "Coral S1.2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.2
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 5.4,
+      "power": {
+        "max": 60,
+        "avg": 30
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Flip-chip COB",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/coral-cob",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 26.7,
+      "powerPerM2": 296,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-coral-s1-5",
+      "brand": "ROE Visual",
+      "series": "Coral Cob",
+      "model": "Coral S1.5",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.2
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "weightKg": 5.4,
+      "power": {
+        "max": 60,
+        "avg": 30
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Flip-chip COB",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/coral-cob",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 26.7,
+      "powerPerM2": 296,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-dm2-6",
+      "brand": "ROE Visual",
+      "series": "Diamond Series",
+      "model": "DM2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 5.76,
+      "power": {
+        "max": 180,
+        "avg": 90
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": null,
+      "maxHanging": 20,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/diamond",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 23,
+      "powerPerM2": 720,
+      "category": "rental"
+    },
+    {
+      "id": "roe-dm3-9",
+      "brand": "ROE Visual",
+      "series": "Diamond Series",
+      "model": "DM3.9",
+      "pixelPitch": 3.906,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 5.76,
+      "power": {
+        "max": 150,
+        "avg": 80
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 2020",
+      "serviceability": null,
+      "maxHanging": 20,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/diamond",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 23,
+      "powerPerM2": 600,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp2-6",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP2.6",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 320,
+        "avg": 160
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 18,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp2-6-4-in-1",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP2.6 (4 in 1)",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 8.6,
+      "power": {
+        "max": 250,
+        "avg": 125
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "4 in 1 common anode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 17.2,
+      "powerPerM2": 500,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp2-6-half",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP2.6 Half",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 5.2,
+      "power": {
+        "max": 160,
+        "avg": 80
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 20.8,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp2-6-half-4-in-1",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP2.6 Half (4 in 1)",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 5.1,
+      "power": {
+        "max": 125,
+        "avg": 62
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "4 in 1 common anode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 20.4,
+      "powerPerM2": 500,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp3-1",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP3.1",
+      "pixelPitch": 3.125,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 160,
+        "h": 320
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 320,
+        "avg": 160
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 51200,
+      "weightPerM2": 18,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp3-1-half",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP3.1 Half",
+      "pixelPitch": 3.125,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 160,
+        "h": 160
+      },
+      "weightKg": 5.2,
+      "power": {
+        "max": 160,
+        "avg": 80
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 25600,
+      "weightPerM2": 20.8,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp3-9",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP3.9",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 320,
+        "avg": 160
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 18,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp3-9-half",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP3.9 Half",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 5.2,
+      "power": {
+        "max": 160,
+        "avg": 80
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 20.8,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-sr1-2",
+      "brand": "ROE Visual",
+      "series": "High-Efficiency LED solution",
+      "model": "SR1.2",
+      "pixelPitch": 1.25,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.9
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 5.7,
+      "power": {
+        "max": 100,
+        "avg": 50
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "Flip-chip 4in1 LED",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/sierra",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 28.1,
+      "powerPerM2": 494,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-sr1-5",
+      "brand": "ROE Visual",
+      "series": "High-Efficiency LED solution",
+      "model": "SR1.5",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.9
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "weightKg": 5.7,
+      "power": {
+        "max": 80,
+        "avg": 40
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Flip-chip 4in1 LED",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/sierra",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 28.1,
+      "powerPerM2": 395,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-sr1-5f",
+      "brand": "ROE Visual",
+      "series": "High-Efficiency LED solution",
+      "model": "SR1.5F",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.9
+      },
+      "resolution": {
+        "w": 384,
+        "h": 216
+      },
+      "weightKg": 5.7,
+      "power": {
+        "max": 70,
+        "avg": 35
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Flip-chip LED",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/sierra",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 82944,
+      "weightPerM2": 28.1,
+      "powerPerM2": 346,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-dl0-7",
+      "brand": "ROE Visual",
+      "series": "Innovation Meets Visual Performance",
+      "model": "DL0.7",
+      "pixelPitch": 0.78,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.2
+      },
+      "resolution": {
+        "w": 768,
+        "h": 432
+      },
+      "weightKg": 5.5,
+      "power": {
+        "max": 70,
+        "avg": 35
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Micro LED",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/denali",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 331776,
+      "weightPerM2": 27.2,
+      "powerPerM2": 346,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-dl0-9",
+      "brand": "ROE Visual",
+      "series": "Innovation Meets Visual Performance",
+      "model": "DL0.9",
+      "pixelPitch": 0.93,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.2
+      },
+      "resolution": {
+        "w": 640,
+        "h": 360
+      },
+      "weightKg": 5.5,
+      "power": {
+        "max": 95,
+        "avg": 48
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Micro LED",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/denali",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 230400,
+      "weightPerM2": 27.2,
+      "powerPerM2": 469,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-dl1-2",
+      "brand": "ROE Visual",
+      "series": "Innovation Meets Visual Performance",
+      "model": "DL1.2",
+      "pixelPitch": 1.2,
+      "cabinet": {
+        "width": 600,
+        "height": 337.5,
+        "depth": 29.2
+      },
+      "resolution": {
+        "w": 480,
+        "h": 270
+      },
+      "weightKg": 5.5,
+      "power": {
+        "max": 100,
+        "avg": 50
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "Micro LED",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/denali",
+      "aspect": 1.7778,
+      "areaM2": 0.2025,
+      "pixelsPerCabinet": 129600,
+      "weightPerM2": 27.2,
+      "powerPerM2": 494,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-ja2-6",
+      "brand": "ROE Visual",
+      "series": "Jasper",
+      "model": "JA2.6",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 60
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 14.15,
+      "power": {
+        "max": 340,
+        "avg": 170
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/jasper",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 28.3,
+      "powerPerM2": 680,
+      "category": "rental"
+    },
+    {
+      "id": "roe-ja2-6-half",
+      "brand": "ROE Visual",
+      "series": "Jasper",
+      "model": "JA2.6 Half",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 60
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 7.5,
+      "power": {
+        "max": 190,
+        "avg": 95
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/jasper",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 30,
+      "powerPerM2": 760,
+      "category": "rental"
+    },
+    {
+      "id": "roe-ja3-9",
+      "brand": "ROE Visual",
+      "series": "Jasper",
+      "model": "JA3.9",
+      "pixelPitch": 3.906,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 60
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 14.15,
+      "power": {
+        "max": 340,
+        "avg": 170
+      },
+      "brightnessNits": 1400,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 2020 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/jasper",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 28.3,
+      "powerPerM2": 680,
+      "category": "rental"
+    },
+    {
+      "id": "roe-ja3-9-half",
+      "brand": "ROE Visual",
+      "series": "Jasper",
+      "model": "JA3.9 Half",
+      "pixelPitch": 3.906,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 60
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 7.5,
+      "power": {
+        "max": 160,
+        "avg": 80
+      },
+      "brightnessNits": 1400,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 2020 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/jasper",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 30,
+      "powerPerM2": 640,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr1-5",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR1.5",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 320,
+        "h": 640
+      },
+      "weightKg": 14.8,
+      "power": {
+        "max": 320,
+        "avg": 160
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1212 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 204800,
+      "weightPerM2": 29.6,
+      "powerPerM2": 640,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-mr1-5-half",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR1.5 Half",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 320,
+        "h": 320
+      },
+      "weightKg": 7.4,
+      "power": {
+        "max": 160,
+        "avg": 80
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1212 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 102400,
+      "weightPerM2": 29.6,
+      "powerPerM2": 640,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "roe-mr-c1-9",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR-C1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 65.3
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 6,
+      "power": {
+        "max": 150,
+        "avg": 75
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1212 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 24,
+      "powerPerM2": 600,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr1-9",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR1.9",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 256,
+        "h": 512
+      },
+      "weightKg": 14.8,
+      "power": {
+        "max": 300,
+        "avg": 150
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1212 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 131072,
+      "weightPerM2": 29.6,
+      "powerPerM2": 600,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr1-9-half",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR1.9 Half",
+      "pixelPitch": 1.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 7.4,
+      "power": {
+        "max": 150,
+        "avg": 75
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1212 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 29.6,
+      "powerPerM2": 600,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr2-6",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 14.8,
+      "power": {
+        "max": 230,
+        "avg": 115
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 29.6,
+      "powerPerM2": 460,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr2-6-half",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR2.6 Half",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 7.4,
+      "power": {
+        "max": 115,
+        "avg": 58
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 29.6,
+      "powerPerM2": 460,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr3-9",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 14.8,
+      "power": {
+        "max": 230,
+        "avg": 115
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 29.6,
+      "powerPerM2": 460,
+      "category": "rental"
+    },
+    {
+      "id": "roe-mr3-9-half",
+      "brand": "ROE Visual",
+      "series": "Meru Series",
+      "model": "MR3.9 Half",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 48
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 7.4,
+      "power": {
+        "max": 115,
+        "avg": 58
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/meru",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 29.6,
+      "powerPerM2": 460,
+      "category": "rental"
+    },
+    {
+      "id": "roe-v5s-mk",
+      "brand": "ROE Visual",
+      "series": "Vanish",
+      "model": "V5S MKⅡ",
+      "pixelPitch": 5.6,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 67
+      },
+      "resolution": {
+        "w": 176,
+        "h": 176
+      },
+      "weightKg": 10.9,
+      "power": {
+        "max": 420,
+        "avg": 210
+      },
+      "brightnessNits": 2000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": 15,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 30976,
+      "weightPerM2": 10.9,
+      "powerPerM2": 420,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-v8s-mk-white-led",
+      "brand": "ROE Visual",
+      "series": "Vanish",
+      "model": "V8S MKⅡ (White LED)",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 67
+      },
+      "resolution": {
+        "w": 112,
+        "h": 112
+      },
+      "weightKg": 9.6,
+      "power": {
+        "max": 460,
+        "avg": 230
+      },
+      "brightnessNits": 3500,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 White",
+      "serviceability": "Front",
+      "maxHanging": 15,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 12544,
+      "weightPerM2": 9.6,
+      "powerPerM2": 460,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-vc2-6",
+      "brand": "ROE Visual",
+      "series": "Vanish Acoustics",
+      "model": "VC2.6",
+      "pixelPitch": 2.604,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 85.6
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 9.26,
+      "power": {
+        "max": 210,
+        "avg": 105
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1212 Black",
+      "serviceability": "Front / Rear",
+      "maxHanging": null,
+      "maxStacking": null,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-acoustics",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 18.5,
+      "powerPerM2": 420,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-vai",
+      "brand": "ROE Visual",
+      "series": "Vanish Air Rental",
+      "model": "VAI",
+      "pixelPitch": 6.94,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 144,
+        "h": 144
+      },
+      "weightKg": 8.6,
+      "power": {
+        "max": 650,
+        "avg": 325
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": null,
+      "serviceability": "Full panel service",
+      "maxHanging": 20,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-air-rental",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 20736,
+      "weightPerM2": 8.6,
+      "powerPerM2": 650,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-vao",
+      "brand": "ROE Visual",
+      "series": "Vanish Air Rental",
+      "model": "VAO",
+      "pixelPitch": 6.94,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 79
+      },
+      "resolution": {
+        "w": 144,
+        "h": 144
+      },
+      "weightKg": 11.8,
+      "power": {
+        "max": 650,
+        "avg": 325
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "ledConfig": null,
+      "serviceability": "Full panel service",
+      "maxHanging": 20,
+      "maxStacking": 6,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-air-rental",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 20736,
+      "weightPerM2": 11.8,
+      "powerPerM2": 650,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-v8",
+      "brand": "ROE Visual",
+      "series": "Vanish V8",
+      "model": "V8",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 35
+      },
+      "resolution": {
+        "w": 112,
+        "h": 56
+      },
+      "weightKg": 6.5,
+      "power": {
+        "max": 320,
+        "avg": 160
+      },
+      "brightnessNits": 2500,
+      "refreshHz": 6576,
+      "ipRating": "IP40",
+      "ledConfig": "SMD 1515 Black",
+      "serviceability": "Front",
+      "maxHanging": 24,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-v8",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 6272,
+      "weightPerM2": 13,
+      "powerPerM2": 640,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-v8t",
+      "brand": "ROE Visual",
+      "series": "Vanish V8T - Touring",
+      "model": "V8T",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 95
+      },
+      "resolution": {
+        "w": 112,
+        "h": 112
+      },
+      "weightKg": 18.2,
+      "power": {
+        "max": 480,
+        "avg": 240
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 White",
+      "serviceability": "Rear",
+      "maxHanging": 22,
+      "maxStacking": 6,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-8-touring",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 12544,
+      "weightPerM2": 18.2,
+      "powerPerM2": 480,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-v8t-h",
+      "brand": "ROE Visual",
+      "series": "Vanish V8T - Touring",
+      "model": "V8T-H",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 95
+      },
+      "resolution": {
+        "w": 112,
+        "h": 56
+      },
+      "weightKg": 11.22,
+      "power": {
+        "max": 260,
+        "avg": 130
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 White",
+      "serviceability": "Rear",
+      "maxHanging": 40,
+      "maxStacking": 12,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-8-touring",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 6272,
+      "weightPerM2": 22.4,
+      "powerPerM2": 520,
+      "category": "transparent"
+    },
+    {
+      "id": "roe-v8t-v",
+      "brand": "ROE Visual",
+      "series": "Vanish V8T - Touring",
+      "model": "V8T-V",
+      "pixelPitch": 8.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 95
+      },
+      "resolution": {
+        "w": 56,
+        "h": 112
+      },
+      "weightKg": 14.56,
+      "power": {
+        "max": 260,
+        "avg": 130
+      },
+      "brightnessNits": 4000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "ledConfig": "SMD 1515 White",
+      "serviceability": "Rear",
+      "maxHanging": 22,
+      "maxStacking": 6,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/vanish-8-touring",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 6272,
+      "weightPerM2": 29.1,
+      "powerPerM2": 520,
+      "category": "transparent"
+    }
+  ]
+}
