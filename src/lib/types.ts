@@ -57,9 +57,16 @@ export interface Layer {
   /** Alternate tile shading, 0 = off. */
   checkerAmount: number;
   label: string;
+  /** Data URL of a logo drawn centred on the screen; null for none. */
+  logo: string | null;
+  /** Logo width as a fraction of the screen's shorter side. */
+  logoScale: number;
+  logoOpacity: number;
 }
 
 export interface CanvasSettings {
+  /** Effects sweep the whole canvas rather than each screen separately. */
+  effectScope: 'canvas' | 'per-screen';
   width: number;
   height: number;
   background: string;

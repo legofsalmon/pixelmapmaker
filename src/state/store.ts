@@ -8,6 +8,7 @@ import { contentBounds, layerRect } from '@/lib/geometry';
 import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
+import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
 
 const CANVAS_PRESETS = [
   { name: 'HD 1920 × 1080', width: 1920, height: 1080 },
@@ -54,6 +55,9 @@ export function makeLayer(
     signalPath: 'serpentine',
     checkerAmount: 0.12,
     label: '',
+    logo: null,
+    logoScale: 0.3,
+    logoOpacity: 1,
     ...overrides,
   };
 }
@@ -72,6 +76,7 @@ interface EditorState extends Project {
   cabling: CablingSettings;
   pickList: PickListOptions;
   support: SupportSettings;
+  effect: EffectSettings;
   past: Snapshot[];
   future: Snapshot[];
 
@@ -100,6 +105,7 @@ interface EditorState extends Project {
   setCabling: (patch: Partial<CablingSettings>) => void;
   setPickList: (patch: Partial<PickListOptions>) => void;
   setSupport: (patch: Partial<SupportSettings>) => void;
+  setEffect: (patch: Partial<EffectSettings>) => void;
 
   fitCanvasToContent: () => void;
   centreSelection: () => void;
@@ -126,6 +132,7 @@ const initialCanvas: Project['canvas'] = {
   showCanvasGuides: false,
   maskOutsideScreens: false,
   showRuler: true,
+  effectScope: 'canvas',
 };
 
 export const useEditor = create<EditorState>((set, get) => ({
@@ -139,6 +146,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   cabling: DEFAULT_CABLING,
   pickList: DEFAULT_PICKLIST_OPTIONS,
   support: DEFAULT_SUPPORT,
+  effect: DEFAULT_EFFECT,
   past: [],
   future: [],
 
@@ -356,6 +364,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   setCabling: (patch) => set((s) => ({ cabling: { ...s.cabling, ...patch } })),
   setPickList: (patch) => set((s) => ({ pickList: { ...s.pickList, ...patch } })),
   setSupport: (patch) => set((s) => ({ support: { ...s.support, ...patch } })),
+  setEffect: (patch) => set((s) => ({ effect: { ...s.effect, ...patch } })),
 
   fitCanvasToContent: () => {
     get().commit();
@@ -409,6 +418,7 @@ export const useEditor = create<EditorState>((set, get) => ({
       cabling: { ...s.cabling, ...(project as { cabling?: Partial<CablingSettings> }).cabling },
       pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
       support: { ...s.support, ...(project as { support?: Partial<SupportSettings> }).support },
+      effect: { ...s.effect, ...(project as { effect?: Partial<EffectSettings> }).effect },
     }));
   },
 
@@ -418,9 +428,9 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList, support } = get();
+    const { name, canvas, layers, processorId, cabling, pickList, support, effect } = get();
     return JSON.stringify(
-      { app: 'pixelmapmaker', version: 1, name, canvas, layers, processorId, cabling, pickList, support },
+      { app: 'pixelmapmaker', version: 1, name, canvas, layers, processorId, cabling, pickList, support, effect },
       null,
       2
     );
@@ -455,6 +465,7 @@ export function restoreProject() {
       cabling: { ...DEFAULT_CABLING, ...parsed.cabling },
       pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
       support: { ...DEFAULT_SUPPORT, ...parsed.support },
+      effect: { ...DEFAULT_EFFECT, ...parsed.effect },
       past: [],
       future: [],
     });

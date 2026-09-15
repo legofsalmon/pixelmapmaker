@@ -4,6 +4,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { useEditor } from '@/state/store';
 import { layerRect, rectContains, snapPosition, type SnapResult } from '@/lib/geometry';
 import { renderProject } from '@/lib/render';
+import { isAnimated } from '@/lib/effects';
+import { cachedLogos, loadLayerLogos } from '@/lib/logos';
 import type { Layer } from '@/lib/types';
 
 interface View {
@@ -52,11 +54,16 @@ export default function CanvasStage() {
   const [snapGuides, setSnapGuides] = useState<SnapResult['guides'] | null>(null);
   const [marquee, setMarquee] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+  // Bumped each animation frame to re-run the paint effect.
+  const [frame, setFrame] = useState(0);
+  const startedAt = useRef<number>(0);
+  const [logoVersion, setLogoVersion] = useState(0);
 
   const canvas = useEditor((s) => s.canvas);
   const layers = useEditor((s) => s.layers);
   const selectedIds = useEditor((s) => s.selectedIds);
   const snapEnabled = useEditor((s) => s.snapEnabled);
+  const effect = useEditor((s) => s.effect);
   const setSelection = useEditor((s) => s.setSelection);
   const toggleSelection = useEditor((s) => s.toggleSelection);
   const updateLayer = useEditor((s) => s.updateLayer);
@@ -109,6 +116,32 @@ export default function CanvasStage() {
     // Only refit when the canvas dimensions themselves change.
   }, [fitToCanvas]);
 
+  // Decode any logos, then repaint once they are ready.
+  useEffect(() => {
+    let cancelled = false;
+    const withLogos = layers.filter((l) => l.logo);
+    if (!withLogos.length) return;
+    loadLayerLogos(withLogos).then(() => {
+      if (!cancelled) setLogoVersion((v) => v + 1);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [layers]);
+
+  // Run the clock only while an effect is actually animating.
+  useEffect(() => {
+    if (!isAnimated(effect)) return;
+    let raf = 0;
+    startedAt.current = performance.now();
+    const tick = () => {
+      setFrame((f) => f + 1);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [effect]);
+
   // Paint.
   useEffect(() => {
     const el = canvasRef.current;
@@ -142,6 +175,9 @@ export default function CanvasStage() {
       selectedIds,
       scale: view.scale,
       snapGuides,
+      effect: isAnimated(effect) ? effect : undefined,
+      timeMs: isAnimated(effect) ? performance.now() - startedAt.current : 0,
+      logos: cachedLogos(layers),
     });
 
     // Canvas outline sits above everything so the frame is always readable.
@@ -161,7 +197,7 @@ export default function CanvasStage() {
       ctx.strokeRect(x, y, marquee.w * view.scale, marquee.h * view.scale);
       ctx.restore();
     }
-  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee]);
+  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion]);
 
   const hitTest = useCallback(
     (point: { x: number; y: number }): Layer | null => {

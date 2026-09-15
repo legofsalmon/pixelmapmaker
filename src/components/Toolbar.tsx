@@ -10,11 +10,13 @@ export default function Toolbar({
   onShowSave,
   onShowPickList,
   onShowSupport,
+  onShowEffects,
 }: {
   onShowSpecSheet: () => void;
   onShowSave: () => void;
   onShowPickList: () => void;
   onShowSupport: () => void;
+  onShowEffects: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -165,6 +167,7 @@ export default function Toolbar({
         <button className="btn btn--ghost" type="button" onClick={onShowSpecSheet}>Spec sheet</button>
         <button className="btn btn--ghost" type="button" onClick={onShowPickList}>Pick list</button>
         <button className="btn btn--ghost" type="button" onClick={onShowSupport}>Support</button>
+        <button className="btn btn--ghost" type="button" onClick={onShowEffects}>Patterns</button>
         <button className="btn btn--ghost" type="button" onClick={onShowSave}>Save</button>
         <button className="btn btn--ghost" type="button" onClick={() => fileRef.current?.click()}>Open</button>
         <button className="btn btn--ghost" type="button" onClick={() => exportCompositionJson(name, canvas, layers)}>

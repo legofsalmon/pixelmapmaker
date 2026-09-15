@@ -1,6 +1,8 @@
 'use client';
 
+import { useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
+import { readLogoFile } from '@/lib/logos';
 import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
 import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
@@ -20,6 +22,8 @@ const SIGNAL_PATHS: Array<{ value: SignalPath; label: string }> = [
 ];
 
 export default function Inspector() {
+  const logoInput = useRef<HTMLInputElement>(null);
+  const [logoError, setLogoError] = useState<string | null>(null);
   const layers = useEditor((s) => s.layers);
   const selectedIds = useEditor((s) => s.selectedIds);
   const updateLayer = useEditor((s) => s.updateLayer);
@@ -119,6 +123,72 @@ export default function Inspector() {
             onChange={(e) => updateLayer(layer.id, { label: e.target.value })}
           />
         </label>
+
+        <div className="field">
+          <span>Logo</span>
+          <div className="btn-row">
+            <button className="btn btn--ghost" type="button" onClick={() => logoInput.current?.click()}>
+              {layer.logo ? 'Replace' : 'Add an image'}
+            </button>
+            {layer.logo && (
+              <button
+                className="btn btn--ghost"
+                type="button"
+                onClick={() => updateLayer(layer.id, { logo: null })}
+              >
+                Remove
+              </button>
+            )}
+          </div>
+          <input
+            ref={logoInput}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              e.target.value = '';
+              if (!file) return;
+              setLogoError(null);
+              try {
+                commit();
+                updateLayer(layer.id, { logo: await readLogoFile(file) });
+              } catch (err) {
+                setLogoError(err instanceof Error ? err.message : 'That image could not be loaded');
+              }
+            }}
+          />
+          {logoError && <p className="note note--warn">{logoError}</p>}
+        </div>
+
+        {layer.logo && (
+          <div className="grid2">
+            <label className="field">
+              <span>Logo size</span>
+              <input
+                className="input"
+                type="range"
+                min="0.05"
+                max="0.9"
+                step="0.05"
+                value={layer.logoScale}
+                onChange={(e) => updateLayer(layer.id, { logoScale: Number(e.target.value) })}
+              />
+            </label>
+            <label className="field">
+              <span>Logo opacity</span>
+              <input
+                className="input"
+                type="range"
+                min="0.1"
+                max="1"
+                step="0.05"
+                value={layer.logoOpacity}
+                onChange={(e) => updateLayer(layer.id, { logoOpacity: Number(e.target.value) })}
+              />
+            </label>
+          </div>
+        )}
 
         <label className="checkbox">
           <input type="checkbox" checked={layer.showNumbers} onChange={(e) => updateLayer(layer.id, { showNumbers: e.target.checked })} />

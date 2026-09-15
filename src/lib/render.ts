@@ -1,6 +1,7 @@
 import type { CanvasSettings, Layer } from './types';
 import { contentBounds, layerRect, signalOrder, tileSize } from './geometry';
 import { contrastInk, shade } from './palettes';
+import { drawEffect, type EffectSettings } from './effects';
 
 export interface RenderOptions {
   /** Draw editor-only affordances (selection, handles, guides). */
@@ -9,6 +10,15 @@ export interface RenderOptions {
   /** Canvas pixels per screen pixel — used to keep chrome hairline-thin. */
   scale?: number;
   snapGuides?: { vertical: number[]; horizontal: number[] } | null;
+  /** Animated overlay; omit for a still frame. */
+  effect?: EffectSettings;
+  /** Milliseconds into the animation, so a frame is reproducible. */
+  timeMs?: number;
+  /**
+   * Images are decoded asynchronously, so the caller resolves each layer's
+   * logo up front and hands the bitmaps in. A layer with no entry draws none.
+   */
+  logos?: Map<string, CanvasImageSource>;
 }
 
 /** Font size that keeps a label inside a tile at any tile size. */
@@ -105,6 +115,28 @@ function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer) {
   ctx.restore();
 }
 
+/** Logo centred on the screen, sized against its shorter side. */
+function drawLogo(ctx: CanvasRenderingContext2D, layer: Layer, image: CanvasImageSource) {
+  const rect = layerRect(layer);
+  const source = image as { width?: number; height?: number };
+  const naturalW = source.width ?? 1;
+  const naturalH = source.height ?? 1;
+  if (!naturalW || !naturalH) return;
+
+  const width = Math.min(rect.width, rect.height) * layer.logoScale;
+  const height = width * (naturalH / naturalW);
+  ctx.save();
+  ctx.globalAlpha = layer.logoOpacity;
+  ctx.drawImage(
+    image,
+    rect.x + (rect.width - width) / 2,
+    rect.y + (rect.height - height) / 2,
+    width,
+    height
+  );
+  ctx.restore();
+}
+
 function drawLayerLabel(ctx: CanvasRenderingContext2D, layer: Layer) {
   if (!layer.label) return;
   const rect = layerRect(layer);
@@ -188,7 +220,15 @@ export function renderProject(
   layers: Layer[],
   options: RenderOptions = {}
 ) {
-  const { chrome = false, selectedIds = [], scale = 1, snapGuides = null } = options;
+  const {
+    chrome = false,
+    selectedIds = [],
+    scale = 1,
+    snapGuides = null,
+    effect,
+    timeMs = 0,
+    logos,
+  } = options;
   const hairline = 1 / scale;
 
   ctx.fillStyle = canvas.background;
@@ -198,7 +238,16 @@ export function renderProject(
   for (const layer of visible) {
     drawTiles(ctx, layer);
     if (layer.showSignalFlow) drawSignalFlow(ctx, layer);
+    const logo = logos?.get(layer.id);
+    if (logo) drawLogo(ctx, layer, logo);
     drawLayerLabel(ctx, layer);
+    if (effect && canvas.effectScope === 'per-screen') {
+      drawEffect(ctx, layerRect(layer), effect, timeMs);
+    }
+  }
+
+  if (effect && canvas.effectScope !== 'per-screen') {
+    drawEffect(ctx, { x: 0, y: 0, width: canvas.width, height: canvas.height }, effect, timeMs);
   }
 
   if (canvas.maskOutsideScreens) drawMask(ctx, canvas, visible);
@@ -229,7 +278,12 @@ export function renderProject(
 }
 
 /** Render one layer, cropped to its own bounds, for a per-screen PNG export. */
-export function renderLayerAlone(ctx: CanvasRenderingContext2D, layer: Layer, background: string) {
+export function renderLayerAlone(
+  ctx: CanvasRenderingContext2D,
+  layer: Layer,
+  background: string,
+  logo?: CanvasImageSource
+) {
   const rect = layerRect(layer);
   ctx.save();
   if (background !== 'transparent') {
@@ -239,6 +293,7 @@ export function renderLayerAlone(ctx: CanvasRenderingContext2D, layer: Layer, ba
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
   if (layer.showSignalFlow) drawSignalFlow(ctx, layer);
+  if (logo) drawLogo(ctx, layer, logo);
   drawLayerLabel(ctx, layer);
   ctx.restore();
 }

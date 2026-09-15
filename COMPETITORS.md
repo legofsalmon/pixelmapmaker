@@ -38,9 +38,9 @@ the vendors' own product pages and store listings, linked at the bottom.
 | Composition JSON for AE / Resolume | ✅² | ❌ | ❌ | ✅ | ✅ |
 | Printable spec sheet / PDF | ❌ | ✅ | print | ❌ | ✅ |
 | Runs in a browser, nothing to install | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Animated test patterns (sonar, scan, ripple) | live output | ❌ | ✅ | ❌ | ❌ (not built) |
-| MP4 export | ❌ | ❌ | ✅ | ❌ | ❌ (not built) |
-| Logo overlay | ✅ | ❌ | ✅ | ❌ | ❌ (not built) |
+| Animated test patterns (sonar, scan, ripple) | live output | ❌ | ✅ | ❌ | ✅ |
+| Video export | ❌ | ❌ | ✅ | ❌ | ✅ |
+| Logo overlay | ✅ | ❌ | ✅ | ❌ | ✅ |
 
 ¹ pixl Grid added an "LED Type Editor" with cloud download and import/export of
 LED types, but it is a user-maintained type list rather than a scraped catalogue
@@ -81,13 +81,22 @@ the calculator that does know is a separate app on a different device. Putting a
 scraped catalogue of shipping cabinets behind the layout canvas means the weight,
 power and current figures update as you drag.
 
+## Since built
+
+The three gaps this review first left open are now closed:
+
+- **Animated test patterns** — sonar, line, pulse, scan, ripple, waves and
+  screen lines, playing live on the canvas with speed, direction, colour,
+  opacity, trail and thickness, over the whole canvas or per screen.
+- **Video export** — records the animated map at the canvas's native
+  resolution, MP4 where the browser supports it and WebM otherwise.
+- **Logo overlay** — an image centred on each screen with size and opacity,
+  drawn into the PNG exports as well as the live canvas.
+
 ## Deliberately not built
 
-- **Live output / animated test patterns.** pixl Grid and LEDPIXMAP both do this
-  and it is a real part of a commissioning workflow. It is a large piece of work
-  (playback engine, MP4 encoding) and is better as a second phase.
-- **Logo overlay.** Straightforward to add; not core to laying out a map.
-- **Fixture-level pixel mapping** (ELM, Lightjams, PIXXEM). Different product.
+- **Fixture-level pixel mapping** (ELM, Lightjams, PIXXEM). Different product:
+  those drive addressable fixtures live rather than producing map artwork.
 
 ## Sources
 

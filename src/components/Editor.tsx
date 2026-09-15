@@ -5,6 +5,7 @@ import CabinetLibrary from './CabinetLibrary';
 import CanvasStage from './CanvasStage';
 import Inspector from './Inspector';
 import LayerPanel from './LayerPanel';
+import EffectsPanel from './EffectsPanel';
 import PickList from './PickList';
 import MultiSelectPanel from './MultiSelectPanel';
 import SaveDialog from './SaveDialog';
@@ -18,6 +19,7 @@ export default function Editor() {
   const [showSave, setShowSave] = useState(false);
   const [showPickList, setShowPickList] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [showEffects, setShowEffects] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'library' | 'canvas' | 'screen'>('canvas');
   const undo = useEditor((s) => s.undo);
   const redo = useEditor((s) => s.redo);
@@ -83,6 +85,7 @@ export default function Editor() {
         onShowSave={() => setShowSave(true)}
         onShowPickList={() => setShowPickList(true)}
         onShowSupport={() => setShowSupport(true)}
+        onShowEffects={() => setShowEffects(true)}
       />
 
       <nav className="mobile-tabs no-print" aria-label="Panels">
@@ -117,6 +120,7 @@ export default function Editor() {
       {showSave && <SaveDialog onClose={() => setShowSave(false)} />}
       {showPickList && <PickList onClose={() => setShowPickList(false)} />}
       {showSupport && <SupportPanel onClose={() => setShowSupport(false)} />}
+      {showEffects && <EffectsPanel onClose={() => setShowEffects(false)} />}
     </div>
   );
 }

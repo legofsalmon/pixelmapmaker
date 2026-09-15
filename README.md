@@ -60,6 +60,15 @@ for the full feature review those two drove.
   panel's own published maximum hanging count
 - Truss presets and force coefficients come from the same solver
 
+**Test patterns**
+- Sonar, line, pulse, scan, ripple, waves and screen lines, playing live on the
+  canvas — the moving patterns that show up a dead tile, a mis-patched cabinet
+  or processing latency
+- Speed, direction, colour, opacity, trail and thickness; sweep the whole canvas
+  or each screen separately
+- Record the animation out at the canvas's native resolution, MP4 where the
+  browser supports it and WebM otherwise
+
 **Output**
 - PNG at the canvas's native resolution, with or without an alpha background
 - Per-screen PNG cropped to that wall
@@ -70,7 +79,8 @@ for the full feature review those two drove.
   Resolume and Millumin
 - Printable spec sheet (print to PDF)
 
-**Rendering options** — cabinet numbering, signal-run overlay with four start
+**Rendering options** — a logo image centred on each screen with size and
+opacity, cabinet numbering, signal-run overlay with four start
 corners and four run patterns, six colour palettes, alternate tile tint, centre
 labels, canvas centre guides, and a mask that dims everything outside the walls.
 
@@ -185,6 +195,7 @@ saves sit alongside it — so nothing leaves the browser.
 
 ```
 src/lib/render.ts      canvas renderer, shared by the viewport and PNG export
+src/lib/effects.ts     animated test patterns, pure functions of time
 src/lib/geometry.ts    layer bounds, snapping, signal-run ordering
 src/lib/calc.ts        size / weight / power / current maths
 src/lib/cabinets.ts    library loading and filtering

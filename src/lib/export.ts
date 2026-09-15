@@ -1,6 +1,8 @@
 import type { CanvasSettings, Layer } from './types';
 import { layerRect } from './geometry';
 import { renderLayerAlone, renderProject } from './render';
+import { loadLayerLogos } from './logos';
+import { isAnimated, type EffectSettings } from './effects';
 
 function makeCanvas(width: number, height: number) {
   const canvas = document.createElement('canvas');
@@ -42,7 +44,7 @@ export async function exportCanvasPng(
     ctx,
     transparentBackground ? { ...canvasSettings, background: 'rgba(0,0,0,0)' } : canvasSettings,
     layers,
-    { chrome: false }
+    { chrome: false, logos: await loadLayerLogos(layers) }
   );
   download(await toBlob(canvas), `${safe(projectName)}_${canvasSettings.width}x${canvasSettings.height}.png`);
 }
@@ -51,7 +53,8 @@ export async function exportCanvasPng(
 export async function exportLayerPng(layer: Layer, background: string, transparent: boolean) {
   const rect = layerRect(layer);
   const { canvas, ctx } = makeCanvas(rect.width, rect.height);
-  renderLayerAlone(ctx, layer, transparent ? 'transparent' : background);
+  const logos = await loadLayerLogos([layer]);
+  renderLayerAlone(ctx, layer, transparent ? 'transparent' : background, logos.get(layer.id));
   download(await toBlob(canvas), `${safe(layer.name)}_${rect.width}x${rect.height}.png`);
 }
 
@@ -95,4 +98,79 @@ export async function readProjectFile(file: File) {
   const parsed = JSON.parse(text);
   if (!parsed?.layers?.length) throw new Error('That file has no screens in it');
   return parsed;
+}
+
+/** Container and codec the browser will actually record, best first. */
+function pickVideoType() {
+  const candidates = [
+    'video/mp4;codecs=avc1.42E01E',
+    'video/mp4',
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+    'video/webm',
+  ];
+  return candidates.find((type) => MediaRecorder.isTypeSupported(type)) ?? null;
+}
+
+export const canRecordVideo = () =>
+  typeof MediaRecorder !== 'undefined' && pickVideoType() !== null;
+
+export interface VideoExportOptions {
+  seconds: number;
+  fps: number;
+  onProgress?: (fraction: number) => void;
+}
+
+/**
+ * Record the animated map at the canvas's native resolution.
+ *
+ * Frames are drawn on a fixed timestep rather than from a wall clock, so the
+ * recording runs at the intended speed whether or not the tab keeps up, and the
+ * same settings always produce the same footage.
+ */
+export async function exportVideo(
+  projectName: string,
+  canvasSettings: CanvasSettings,
+  layers: Layer[],
+  effect: EffectSettings,
+  { seconds, fps, onProgress }: VideoExportOptions
+) {
+  if (!isAnimated(effect)) throw new Error('Choose a test pattern before recording');
+  const mimeType = pickVideoType();
+  if (!mimeType) throw new Error('This browser cannot record video from a canvas');
+
+  const { canvas, ctx } = makeCanvas(canvasSettings.width, canvasSettings.height);
+  const logos = await loadLayerLogos(layers);
+  const stream = canvas.captureStream(0);
+  const [track] = stream.getVideoTracks() as Array<MediaStreamTrack & { requestFrame?: () => void }>;
+  const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 12_000_000 });
+
+  const chunks: BlobPart[] = [];
+  recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+  const finished = new Promise<void>((resolve) => {
+    recorder.onstop = () => resolve();
+  });
+
+  recorder.start();
+  const total = Math.max(1, Math.round(seconds * fps));
+  for (let i = 0; i < total; i++) {
+    renderProject(ctx, canvasSettings, layers, {
+      chrome: false,
+      effect,
+      timeMs: (i / fps) * 1000,
+      logos,
+    });
+    track?.requestFrame?.();
+    onProgress?.((i + 1) / total);
+    // Yield so the recorder can pull the frame we just drew.
+    await new Promise((r) => setTimeout(r, 1000 / fps));
+  }
+
+  recorder.stop();
+  await finished;
+  track?.stop();
+
+  const extension = mimeType.startsWith('video/mp4') ? 'mp4' : 'webm';
+  download(new Blob(chunks, { type: mimeType }), `${safe(projectName)}_${effect.kind}.${extension}`);
+  return extension;
 }

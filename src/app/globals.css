@@ -534,3 +534,29 @@ a { color: var(--accent); }
 }
 .verdict--ok { background: #0d2a1a; border-color: #1f6d43; color: #9ff0c4; }
 .verdict--bad { background: #2c1113; border-color: #7d2a30; color: #ffb4b8; }
+
+/* ---------- docked panel (test patterns) ---------- */
+
+/*
+ * A centred modal would hide the canvas, and watching the pattern play is the
+ * point of this one. Dock it to the left and let clicks through the backdrop.
+ */
+.modal--docked {
+  background: none;
+  place-items: start;
+  padding: 12px;
+  pointer-events: none;
+}
+.modal--docked .modal__panel {
+  pointer-events: auto;
+}
+.modal__panel--docked {
+  max-width: 430px;
+  max-height: calc(100dvh - 24px);
+  box-shadow: 0 18px 50px #000000aa;
+}
+.modal__panel--docked .opt-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+
+@media (max-width: 900px) {
+  .modal__panel--docked { max-width: 100%; }
+}
