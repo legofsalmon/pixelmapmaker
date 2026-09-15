@@ -7,6 +7,7 @@ import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
 import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
+import Section from './Section';
 import Icon from './Icon';
 
 const SIGNAL_STARTS: Array<{ value: SignalStart; label: string }> = [
@@ -83,125 +84,130 @@ export default function Inspector() {
           </label>
         </div>
 
-        <div className="grid2">
-          <label className="field">
-            <span>Tile colour</span>
-            <input className="input input--color" type="color" value={layer.color} onChange={(e) => updateLayer(layer.id, { color: e.target.value })} />
-          </label>
-          <label className="field">
-            <span>Alternate tint</span>
-            <input
-              className="input"
-              type="range"
-              min="0"
-              max="0.6"
-              step="0.02"
-              value={layer.checkerAmount}
-              onChange={(e) => updateLayer(layer.id, { checkerAmount: Number(e.target.value) })}
-            />
-          </label>
-        </div>
-
-        <label className="field">
-          <span>Centre label</span>
-          <input
-            className="input"
-            value={layer.label}
-            placeholder="e.g. Main wall"
-            onChange={(e) => updateLayer(layer.id, { label: e.target.value })}
-          />
-        </label>
-
-        <div className="field">
-          <span>Logo</span>
-          <div className="btn-row">
-            <button className="btn btn--ghost" type="button" onClick={() => logoInput.current?.click()}>
-              {layer.logo ? 'Replace' : 'Add an image'}
-            </button>
-            {layer.logo && (
-              <button
-                className="btn btn--ghost"
-                type="button"
-                onClick={() => updateLayer(layer.id, { logo: null })}
-              >
-                Remove
-              </button>
-            )}
-          </div>
-          <input
-            ref={logoInput}
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              e.target.value = '';
-              if (!file) return;
-              setLogoError(null);
-              try {
-                commit();
-                updateLayer(layer.id, { logo: await readLogoFile(file) });
-              } catch (err) {
-                setLogoError(err instanceof Error ? err.message : 'That image could not be loaded');
-              }
-            }}
-          />
-          {logoError && <p className="note note--warn">{logoError}</p>}
-        </div>
-
-        {layer.logo && (
+        <Section id="appearance" title="Appearance" hint="colour, label, logo">
           <div className="grid2">
             <label className="field">
-              <span>Logo size</span>
-              <input
-                className="input"
-                type="range"
-                min="0.05"
-                max="0.9"
-                step="0.05"
-                value={layer.logoScale}
-                onChange={(e) => updateLayer(layer.id, { logoScale: Number(e.target.value) })}
-              />
+              <span>Tile colour</span>
+              <input className="input input--color" type="color" value={layer.color} onChange={(e) => updateLayer(layer.id, { color: e.target.value })} />
             </label>
             <label className="field">
-              <span>Logo opacity</span>
+              <span>Alternate tint</span>
               <input
                 className="input"
                 type="range"
-                min="0.1"
-                max="1"
-                step="0.05"
-                value={layer.logoOpacity}
-                onChange={(e) => updateLayer(layer.id, { logoOpacity: Number(e.target.value) })}
+                min="0"
+                max="0.6"
+                step="0.02"
+                value={layer.checkerAmount}
+                onChange={(e) => updateLayer(layer.id, { checkerAmount: Number(e.target.value) })}
               />
             </label>
           </div>
-        )}
 
-        <label className="checkbox">
-          <input type="checkbox" checked={layer.showNumbers} onChange={(e) => updateLayer(layer.id, { showNumbers: e.target.checked })} />
-          <span>Number the cabinets</span>
-        </label>
-        <label className="checkbox">
-          <input type="checkbox" checked={layer.showSignalFlow} onChange={(e) => updateLayer(layer.id, { showSignalFlow: e.target.checked })} />
-          <span>Draw the signal run</span>
-        </label>
-
-        <div className="grid2">
           <label className="field">
-            <span>Feed starts at</span>
-            <select className="input" value={layer.signalStart} onChange={(e) => updateLayer(layer.id, { signalStart: e.target.value as SignalStart })}>
-              {SIGNAL_STARTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
+            <span>Centre label</span>
+            <input
+              className="input"
+              value={layer.label}
+              placeholder="e.g. Main wall"
+              onChange={(e) => updateLayer(layer.id, { label: e.target.value })}
+            />
           </label>
-          <label className="field">
-            <span>Run pattern</span>
-            <select className="input" value={layer.signalPath} onChange={(e) => updateLayer(layer.id, { signalPath: e.target.value as SignalPath })}>
-              {SIGNAL_PATHS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
-          </label>
-        </div>
 
+          <div className="field">
+            <span>Logo</span>
+            <div className="btn-row">
+              <button className="btn btn--secondary" type="button" onClick={() => logoInput.current?.click()}>
+                {layer.logo ? 'Replace' : 'Add an image'}
+              </button>
+              {layer.logo && (
+                <button
+                  className="btn btn--secondary"
+                  type="button"
+                  onClick={() => updateLayer(layer.id, { logo: null })}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            <input
+              ref={logoInput}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                e.target.value = '';
+                if (!file) return;
+                setLogoError(null);
+                try {
+                  commit();
+                  updateLayer(layer.id, { logo: await readLogoFile(file) });
+                } catch (err) {
+                  setLogoError(err instanceof Error ? err.message : 'That image could not be loaded');
+                }
+              }}
+            />
+            {logoError && <p className="note note--warn">{logoError}</p>}
+          </div>
+
+          {layer.logo && (
+            <div className="grid2">
+              <label className="field">
+                <span>Logo size</span>
+                <input
+                  className="input"
+                  type="range"
+                  min="0.05"
+                  max="0.9"
+                  step="0.05"
+                  value={layer.logoScale}
+                  onChange={(e) => updateLayer(layer.id, { logoScale: Number(e.target.value) })}
+                />
+              </label>
+              <label className="field">
+                <span>Logo opacity</span>
+                <input
+                  className="input"
+                  type="range"
+                  min="0.1"
+                  max="1"
+                  step="0.05"
+                  value={layer.logoOpacity}
+                  onChange={(e) => updateLayer(layer.id, { logoOpacity: Number(e.target.value) })}
+                />
+              </label>
+            </div>
+          )}
+        </Section>
+
+        <Section id="signal" title="Numbering and signal" hint="feed corner, run pattern">
+          <label className="checkbox">
+            <input type="checkbox" checked={layer.showNumbers} onChange={(e) => updateLayer(layer.id, { showNumbers: e.target.checked })} />
+            <span>Number the cabinets</span>
+          </label>
+          <label className="checkbox">
+            <input type="checkbox" checked={layer.showSignalFlow} onChange={(e) => updateLayer(layer.id, { showSignalFlow: e.target.checked })} />
+            <span>Draw the signal run</span>
+          </label>
+
+          <div className="grid2">
+            <label className="field">
+              <span>Feed starts at</span>
+              <select className="input" value={layer.signalStart} onChange={(e) => updateLayer(layer.id, { signalStart: e.target.value as SignalStart })}>
+                {SIGNAL_STARTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+            </label>
+            <label className="field">
+              <span>Run pattern</span>
+              <select className="input" value={layer.signalPath} onChange={(e) => updateLayer(layer.id, { signalPath: e.target.value as SignalPath })}>
+                {SIGNAL_PATHS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+            </label>
+          </div>
+        </Section>
+
+        <Section id="numbers" title="Full numbers" hint="current, heat, imperial">
         <dl className="stats">
           <div><dt>Resolution</dt><dd>{totals.widthPx} × {totals.heightPx} px</dd></div>
           <div><dt>Aspect</dt><dd>{totals.aspectRatio}</dd></div>
@@ -231,10 +237,11 @@ export default function Inspector() {
             <dd>{totals.btuPerHour != null ? `${Math.round(totals.btuPerHour).toLocaleString('en-GB')} BTU/h` : '—'}</dd>
           </div>
         </dl>
+        </Section>
 
         <details className="spec-details">
           <summary>Cabinet datasheet</summary>
-          <dl className="stats">
+        <dl className="stats">
             <div><dt>Pitch</dt><dd>{spec.pixelPitch} mm</dd></div>
             <div><dt>Cabinet</dt><dd>{spec.cabinet.width} × {spec.cabinet.height}{spec.cabinet.depth ? ` × ${spec.cabinet.depth}` : ''} mm</dd></div>
             <div><dt>Cabinet pixels</dt><dd>{spec.resolution.w} × {spec.resolution.h}{spec.derivedResolution ? ' (derived)' : ''}</dd></div>
@@ -259,11 +266,11 @@ export default function Inspector() {
         </details>
 
         <div className="btn-row">
-          <button className="btn btn--ghost" type="button" onClick={() => exportLayerPng(layer, canvasBackground, false)}>
+          <button className="btn" type="button" onClick={() => exportLayerPng(layer, canvasBackground, false)}>
             Export this screen
           </button>
-          <button className="btn btn--ghost" type="button" onClick={() => exportLayerPng(layer, canvasBackground, true)}>
-            …transparent
+          <button className="btn btn--secondary" type="button" onClick={() => exportLayerPng(layer, canvasBackground, true)}>
+            Transparent
           </button>
         </div>
       </div>

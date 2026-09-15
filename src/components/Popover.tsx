@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { closeTopSurface, pushSurface } from '@/lib/surfaces';
 import Icon, { type IconName } from './Icon';
 
 /**
@@ -15,11 +16,13 @@ export default function Popover({
   label,
   title,
   icon,
+  ariaLabel,
   children,
 }: {
   label: string;
   title: string;
   icon?: IconName;
+  ariaLabel?: string;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -33,13 +36,21 @@ export default function Popover({
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      e.stopPropagation();
-      setOpen(false);
-      wrap.current?.querySelector('button')?.focus();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      closeTopSurface();
     };
+    const unregister = pushSurface({
+      kind: 'transient',
+      close: () => {
+        setOpen(false);
+        wrap.current?.querySelector('button')?.focus();
+      },
+    });
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey, true);
     return () => {
+      unregister();
       document.removeEventListener('mousedown', onDown);
       document.removeEventListener('keydown', onKey, true);
     };
@@ -50,6 +61,7 @@ export default function Popover({
       <button
         className="btn btn--quiet menu__trigger"
         type="button"
+        aria-label={ariaLabel || undefined}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={open ? id : undefined}

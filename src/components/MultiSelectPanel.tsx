@@ -58,7 +58,7 @@ export default function MultiSelectPanel() {
           <span>Distribute evenly</span>
           <div className="btn-row">
             <button
-              className="btn btn--ghost"
+              className="btn btn--secondary"
               type="button"
               disabled={selected.length < 3}
               title={selected.length < 3 ? 'Needs three or more screens' : undefined}
@@ -67,7 +67,7 @@ export default function MultiSelectPanel() {
               Horizontally
             </button>
             <button
-              className="btn btn--ghost"
+              className="btn btn--secondary"
               type="button"
               disabled={selected.length < 3}
               title={selected.length < 3 ? 'Needs three or more screens' : undefined}
@@ -82,10 +82,10 @@ export default function MultiSelectPanel() {
           <span>Pack with a fixed gap</span>
           <div className="gap-row">
             <NumberInput className="input input--num" value={gap} aria-label="Gap in pixels" onChange={setGap} />
-            <button className="btn btn--ghost" type="button" onClick={() => spaceLayers('horizontal', gap)}>
+            <button className="btn btn--secondary" type="button" onClick={() => spaceLayers('horizontal', gap)}>
               Row
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => spaceLayers('vertical', gap)}>
+            <button className="btn btn--secondary" type="button" onClick={() => spaceLayers('vertical', gap)}>
               Column
             </button>
           </div>
@@ -94,16 +94,16 @@ export default function MultiSelectPanel() {
         <div className="field">
           <span>Apply to all selected</span>
           <div className="btn-row">
-            <button className="btn btn--ghost" type="button" onClick={() => updateManyLayers(selectedIds, { showNumbers: true })}>
+            <button className="btn btn--secondary" type="button" onClick={() => updateManyLayers(selectedIds, { showNumbers: true })}>
               Number on
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => updateManyLayers(selectedIds, { showNumbers: false })}>
+            <button className="btn btn--secondary" type="button" onClick={() => updateManyLayers(selectedIds, { showNumbers: false })}>
               off
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => updateManyLayers(selectedIds, { showSignalFlow: true })}>
+            <button className="btn btn--secondary" type="button" onClick={() => updateManyLayers(selectedIds, { showSignalFlow: true })}>
               Signal on
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => updateManyLayers(selectedIds, { showSignalFlow: false })}>
+            <button className="btn btn--secondary" type="button" onClick={() => updateManyLayers(selectedIds, { showSignalFlow: false })}>
               off
             </button>
           </div>
@@ -119,7 +119,7 @@ export default function MultiSelectPanel() {
               />
             ))}
             <button
-              className="btn btn--ghost"
+              className="btn btn--secondary"
               type="button"
               title="Give each selected screen the next palette colour"
               onClick={() => {
@@ -147,8 +147,8 @@ export default function MultiSelectPanel() {
         </dl>
 
         <div className="btn-row">
-          <button className="btn btn--ghost" type="button" onClick={duplicateSelection}>Duplicate</button>
-          <button className="btn btn--ghost" type="button" onClick={removeSelection}>Delete</button>
+          <button className="btn btn--secondary" type="button" onClick={duplicateSelection}>Duplicate</button>
+          <button className="btn btn--danger" type="button" onClick={removeSelection}>Delete</button>
         </div>
       </div>
     </section>

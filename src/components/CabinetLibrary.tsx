@@ -184,7 +184,7 @@ export default function CabinetLibrary() {
           {!results.length && <li className="empty">No cabinets match those filters.</li>}
         </ul>
 
-        <button className="btn btn--ghost" type="button" onClick={() => setShowCustomForm((v) => !v)}>
+        <button className="btn btn--secondary" type="button" onClick={() => setShowCustomForm((v) => !v)}>
           {showCustomForm ? 'Cancel' : '+ Add a custom panel'}
         </button>
 

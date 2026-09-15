@@ -7,6 +7,7 @@ import { exportCanvasPng, exportCompositionJson, readProjectFile } from '@/lib/e
 import Icon from './Icon';
 import Menu from './Menu';
 import NumberInput from './NumberInput';
+import ConfirmDialog from './ConfirmDialog';
 import Popover from './Popover';
 
 /**
@@ -33,6 +34,7 @@ export default function Toolbar({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [confirming, setConfirming] = useState<null | { title: string; body: string; label: string; run: () => void }>(null);
   const [error, setError] = useState<string | null>(null);
 
   const name = useEditor((s) => s.name);
@@ -72,9 +74,10 @@ export default function Toolbar({
   };
 
   /** Replacing the project loses unsaved work, so both routes ask first. */
-  const confirmReplace = (what: string) =>
-    !layers.length ||
-    window.confirm(`${what} will replace the map you have open. Save it first if you need it.`);
+  const askBeforeReplacing = (title: string, body: string, label: string, run: () => void) => {
+    if (!layers.length) return run();
+    setConfirming({ title, body, label, run });
+  };
 
   const presetValue =
     CANVAS_PRESETS.find((p) => p.width === canvas.width && p.height === canvas.height)?.name ?? '';
@@ -95,7 +98,16 @@ export default function Toolbar({
             label="File"
             items={[
               { label: 'Save…', onSelect: onShowSave },
-              { label: 'Open…', onSelect: () => confirmReplace('Opening a file') && fileRef.current?.click() },
+              {
+                label: 'Open…',
+                onSelect: () =>
+                  askBeforeReplacing(
+                    'Open a different map?',
+                    'The map you have open will be replaced. Save it first if you need it — the browser save is under File → Save.',
+                    'Open a file',
+                    () => fileRef.current?.click()
+                  ),
+              },
               {
                 label: 'Composition JSON',
                 hint: 'After Effects, Resolume',
@@ -107,7 +119,13 @@ export default function Toolbar({
                 label: 'New map',
                 separated: true,
                 danger: true,
-                onSelect: () => confirmReplace('Starting a new map') && resetProject(),
+                onSelect: () =>
+                  askBeforeReplacing(
+                    'Start a new map?',
+                    'The map you have open will be cleared. Save it first if you need it — the browser save is under File → Save.',
+                    'Start a new map',
+                    resetProject
+                  ),
               },
             ]}
           />
@@ -125,7 +143,12 @@ export default function Toolbar({
       </div>
 
       <div className="toolbar__group" role="group" aria-label="Canvas and view">
-        <Popover label={`${canvas.width} × ${canvas.height}`} icon="frame" title="Canvas">
+        <Popover
+          label={`${canvas.width} × ${canvas.height}`}
+          ariaLabel={`Canvas size, ${canvas.width} by ${canvas.height} pixels`}
+          icon="frame"
+          title="Canvas"
+        >
           <label className="field">
             <span>Preset</span>
             <select
@@ -166,7 +189,7 @@ export default function Toolbar({
           </button>
         </Popover>
 
-        <Popover label="View" icon="settings" title="View options">
+        <Popover label="View" ariaLabel="View options" icon="settings" title="View options">
           <label className="checkbox">
             <input type="checkbox" checked={snapEnabled} onChange={(e) => setSnapEnabled(e.target.checked)} />
             <span>Snap while dragging</span>
@@ -189,10 +212,13 @@ export default function Toolbar({
       </div>
 
       {/* Arrange only exists once there is something to arrange. */}
-      {layers.length > 1 && (
+      {hasScreens && (
         <div className="toolbar__group" role="group" aria-label="Arrange">
+          {/* Centre works on one screen; only Tile needs two to mean anything. */}
           <button className="btn btn--quiet" type="button" onClick={centreSelection}>Centre</button>
-          <button className="btn btn--quiet" type="button" onClick={tileLayersHorizontally}>Tile</button>
+          {layers.length > 1 && (
+            <button className="btn btn--quiet" type="button" onClick={tileLayersHorizontally}>Tile</button>
+          )}
         </div>
       )}
 
@@ -204,7 +230,7 @@ export default function Toolbar({
           className={`btn btn--quiet${effectKind !== 'none' ? ' is-on' : ''}`}
           type="button"
           onClick={onShowEffects}
-          aria-pressed={effectKind !== 'none'}
+          aria-haspopup="dialog"
         >
           <Icon name="pattern" /> Patterns
         </button>
@@ -231,10 +257,11 @@ export default function Toolbar({
           </button>
           <Menu
             label=""
+            ariaLabel="More export options"
             align="end"
             items={[
-              { label: 'Export PNG', hint: 'opaque background', onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, false)) },
-              { label: 'Export PNG with alpha', hint: 'transparent background', onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, true)) },
+              { label: 'Export PNG', hint: 'opaque background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, false)) },
+              { label: 'Export PNG with alpha', hint: 'transparent background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, true)) },
             ]}
           />
         </div>
@@ -254,6 +281,17 @@ export default function Toolbar({
       />
 
       {/* Present at all times so a screen reader announces the change, not the node. */}
+      {confirming && (
+        <ConfirmDialog
+          title={confirming.title}
+          body={confirming.body}
+          confirmLabel={confirming.label}
+          onConfirm={confirming.run}
+          onCancel={() => setConfirming(null)}
+        />
+      )}
+
+      <p className="toolbar__status" role="status">{busy ? 'Rendering the PNG…' : ''}</p>
       <p className="toolbar__error" role="alert">{error ?? ''}</p>
     </header>
   );

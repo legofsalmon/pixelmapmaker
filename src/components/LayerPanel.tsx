@@ -27,9 +27,9 @@ export default function LayerPanel() {
       <div className="panel__body">
         {layers.length > 1 && (
           <div className="btn-row">
-            <button className="btn btn--ghost" type="button" onClick={selectAll}>Select all</button>
+            <button className="btn btn--secondary" type="button" onClick={selectAll}>Select all</button>
             <button
-              className="btn btn--ghost"
+              className="btn btn--secondary"
               type="button"
               disabled={!selectedIds.length}
               onClick={() => setSelection([])}
@@ -50,6 +50,7 @@ export default function LayerPanel() {
                 <button
                   className="layer__main"
                   type="button"
+                  aria-pressed={selected}
                   onClick={(e) => (e.shiftKey ? toggleSelection(layer.id) : setSelection([layer.id]))}
                 >
                   <strong>{layer.name}</strong>

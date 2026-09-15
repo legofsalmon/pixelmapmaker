@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef } from 'react';
 import Icon from './Icon';
+import { closeTopSurface, pushSurface } from '@/lib/surfaces';
 
 interface DialogProps {
   title: string;
@@ -16,6 +17,12 @@ interface DialogProps {
    */
   docked?: boolean;
   wide?: boolean;
+  /**
+   * The control to return focus to. A menu item cannot be used: it is
+   * unmounted in the same commit that mounts this dialog, so by the time the
+   * mount effect reads `document.activeElement` it is already `<body>`.
+   */
+  restoreFocusTo?: HTMLElement | null;
 }
 
 const FOCUSABLE =
@@ -35,26 +42,44 @@ const FOCUSABLE =
  * referenced with `aria-labelledby` rather than duplicated into an `aria-label`
  * that would drift from the visible heading on the next edit.
  */
-export default function Dialog({ title, onClose, children, actions, docked = false, wide = false }: DialogProps) {
+export default function Dialog({
+  title,
+  onClose,
+  children,
+  actions,
+  docked = false,
+  wide = false,
+  restoreFocusTo,
+}: DialogProps) {
   const panel = useRef<HTMLDivElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const restoreTo = useRef<HTMLElement | null>(null);
   const titleId = useId();
 
   useEffect(() => {
-    restoreTo.current = document.activeElement as HTMLElement | null;
+    const active = document.activeElement as HTMLElement | null;
+    // Ignore <body>: that is what a menu leaves behind when it unmounts.
+    restoreTo.current = restoreFocusTo ?? (active && active !== document.body ? active : null);
     heading.current?.focus();
     return () => {
       // Put the user back where they were, not at the top of the document.
       restoreTo.current?.focus?.();
     };
+    // restoreFocusTo is captured once, deliberately: it is the opener.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Register in the surface stack so Escape closes only the topmost layer and
+  // the editor's shortcuts know a surface owns the keyboard.
+  useEffect(() => pushSurface({ kind: docked ? 'docked' : 'modal', close: onClose }), [docked, onClose]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        e.stopPropagation();
-        onClose();
+        // Only the top of the stack closes, and nothing else sees the key.
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        closeTopSurface();
         return;
       }
       // A docked panel is non-modal on purpose — let Tab leave it.
@@ -67,6 +92,14 @@ export default function Dialog({ title, onClose, children, actions, docked = fal
       const first = items[0];
       const last = items[items.length - 1];
       const active = document.activeElement;
+
+      // Focus outside the panel entirely — which is where a click on any
+      // non-focusable text inside it leaves you — must come back in.
+      if (!active || !panel.current.contains(active)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+        return;
+      }
 
       if (!e.shiftKey && (active === last || active === heading.current)) {
         e.preventDefault();

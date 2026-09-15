@@ -12,6 +12,7 @@ import {
   type SaveSummary,
 } from '@/lib/browserStore';
 import { exportProjectJson } from '@/lib/export';
+import ConfirmDialog from './ConfirmDialog';
 import Dialog from './Dialog';
 
 const formatBytes = (n: number) => (n < 1024 ? `${n} B` : `${Math.round(n / 1024)} KB`);
@@ -29,6 +30,7 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
   const [saves, setSaves] = useState<SaveSummary[]>(listSaves);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<SaveSummary | null>(null);
   const available = isStorageAvailable();
 
   const cabinets = layers.reduce((sum, l) => sum + l.cols * l.rows, 0);
@@ -94,7 +96,7 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
           <section>
             <h4>Download a file</h4>
             <button
-              className="btn btn--ghost"
+              className="btn btn--secondary"
               type="button"
               onClick={() => exportProjectJson(name, serialise())}
             >
@@ -116,18 +118,13 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
                     </span>
                   </div>
                   <div className="btn-row">
-                    <button className="btn btn--ghost" type="button" onClick={() => handleLoad(s.id, s.name)}>
+                    <button className="btn btn--secondary" type="button" onClick={() => handleLoad(s.id, s.name)}>
                       Open
                     </button>
                     <button
-                      className="btn btn--ghost"
+                      className="btn btn--danger"
                       type="button"
-                      onClick={() => {
-                        if (!window.confirm(`Delete the saved project “${s.name}”?`)) return;
-                        deleteSave(s.id);
-                        setSaves(listSaves());
-                        setMessage(`Deleted “${s.name}”.`);
-                      }}
+                      onClick={() => setPendingDelete(s)}
                     >
                       Delete
                     </button>
@@ -137,6 +134,19 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
             </ul>
           </section>
 
+          {pendingDelete && (
+            <ConfirmDialog
+              title="Delete this save?"
+              body={`“${pendingDelete.name}” will be removed from this browser. This cannot be undone.`}
+              confirmLabel="Delete it"
+              onConfirm={() => {
+                deleteSave(pendingDelete.id);
+                setSaves(listSaves());
+                setMessage(`Deleted “${pendingDelete.name}”.`);
+              }}
+              onCancel={() => setPendingDelete(null)}
+            />
+          )}
           <p className="note" role="status">{message ?? ''}</p>
           <p className="note note--warn" role="alert">{error ?? ''}</p>
         </div>

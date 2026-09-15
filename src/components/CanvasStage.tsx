@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { useEditor } from '@/state/store';
 import { layerRect, rectContains, snapPosition, type SnapResult } from '@/lib/geometry';
 import { renderProject } from '@/lib/render';
+import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 import { isAnimated } from '@/lib/effects';
 import { cachedLogos, loadLayerLogos } from '@/lib/logos';
 import type { Layer } from '@/lib/types';
@@ -26,21 +27,6 @@ type Drag =
       origins: Map<string, { x: number; y: number }>;
     }
   | { kind: 'marquee'; start: { x: number; y: number }; current: { x: number; y: number } };
-
-/**
- * True when the event came from a control that consumes arrow keys itself.
- * Checkboxes and buttons do not, so nudging still works right after toggling
- * an option in the inspector.
- */
-function isTypingTarget(target: EventTarget | null) {
-  const el = target as HTMLElement | null;
-  if (!el) return false;
-  if (el.isContentEditable) return true;
-  if (el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return true;
-  if (el.tagName !== 'INPUT') return false;
-  const type = (el as HTMLInputElement).type;
-  return !['checkbox', 'radio', 'button', 'submit', 'reset', 'color', 'file'].includes(type);
-}
 
 const MIN_SCALE = 0.005;
 const MAX_SCALE = 8;
@@ -371,14 +357,16 @@ export default function CanvasStage() {
     const up = (e: KeyboardEvent) => {
       if (e.code === 'Space') spaceRef.current = false;
     };
+    const clear = () => {
+      spaceRef.current = false;
+    };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
-    window.addEventListener('blur', () => {
-      spaceRef.current = false;
-    });
+    window.addEventListener('blur', clear);
     return () => {
       window.removeEventListener('keydown', down);
       window.removeEventListener('keyup', up);
+      window.removeEventListener('blur', clear);
     };
   }, []);
 
@@ -386,6 +374,9 @@ export default function CanvasStage() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (isTypingTarget(e.target)) return;
+      // The nudge listener is on `window`, so without this an arrow key pressed
+      // inside an open dialog moved the screens hidden behind it.
+      if (isAnySurfaceOpen()) return;
       if (!selectedIds.length) return;
       const step = e.shiftKey ? 10 : 1;
       const map: Record<string, [number, number]> = {

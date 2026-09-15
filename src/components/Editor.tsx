@@ -14,6 +14,7 @@ import SpecSheet from './SpecSheet';
 import SupportPanel from './SupportPanel';
 import Toolbar from './Toolbar';
 import { persistProject, restoreProject, useEditor } from '@/state/store';
+import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 
 export default function Editor() {
   const [showSpecSheet, setShowSpecSheet] = useState(false);
@@ -48,12 +49,12 @@ export default function Editor() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const el = e.target as HTMLElement | null;
-      // Let text fields keep their own undo stack.
-      if (el && (el.isContentEditable || el.tagName === 'TEXTAREA' ||
-        (el.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'color'].includes((el as HTMLInputElement).type)))) return;
-      // A surface is open: its own keys win, and the canvas behind must not act.
-      if (document.querySelector('[role="dialog"]')) return;
+      // One question, one answer — Editor and CanvasStage used to keep two
+      // copies of this test and they disagreed about <select>.
+      if (isTypingTarget(e.target)) return;
+      // Any open surface owns the keyboard, including the docked panel: its
+      // own controls must not have Delete reach the canvas behind them.
+      if (isAnySurfaceOpen()) return;
       const mod = e.metaKey || e.ctrlKey;
       const key = e.key.toLowerCase();
       if (mod && key === 'z') {

@@ -444,7 +444,13 @@ export const useEditor = create<EditorState>((set, get) => ({
 
   resetProject: () => {
     get().commit();
-    set({ name: 'Untitled map', canvas: initialCanvas, layers: [seedLayer()], selectedIds: [] });
+    /*
+     * New means empty. The first load seeds a screen so the app demonstrates
+     * itself rather than opening on a blank page, but someone who asks for a
+     * new map wants a clean canvas and the empty state's guidance — not an
+     * arbitrary cabinet they did not choose.
+     */
+    set({ name: 'Untitled map', canvas: initialCanvas, layers: [], selectedIds: [] });
   },
 
   serialise: () => {

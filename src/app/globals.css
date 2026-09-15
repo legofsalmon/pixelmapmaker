@@ -109,10 +109,15 @@ a { color: var(--accent); }
   margin: 0;
   color: var(--danger);
 }
-.toolbar__error:empty { display: none; }
+/* Never `display: none` — a live region has to be in the tree before it has
+   content, or the insertion is what gets announced, if anything. */
+.toolbar__error:empty,
+.toolbar__status:empty { margin: 0; height: 0; overflow: hidden; }
+.toolbar__status { flex-basis: 100%; margin: 0; color: var(--ink-2); }
 
 /* A toggled mode reads as on without borrowing the accent from selection. */
-.btn.is-on { background: var(--accent-soft); color: var(--ink); }
+.btn.is-on,
+.btn.is-on:hover { background: var(--accent-soft); color: var(--ink); filter: none; }
 
 .split { display: flex; align-items: stretch; }
 .split > .btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
@@ -164,7 +169,7 @@ a { color: var(--accent); }
 .menu__item:disabled { opacity: 0.4; cursor: not-allowed; }
 .menu__item em { color: var(--ink-3); font-style: normal; font-size: 11px; }
 .menu__item--danger { color: var(--danger); }
-.menu__item--separated { margin-top: var(--s1); border-top: 1px solid var(--line); padding-top: var(--s3); }
+.menu__item--separated { margin-top: var(--s2); padding-top: var(--s2); box-shadow: inset 0 1px 0 var(--line-control); }
 
 .popover { width: 260px; display: flex; flex-direction: column; gap: var(--s3); padding: var(--s3); }
 .popover__title {
@@ -250,10 +255,6 @@ a { color: var(--accent); }
 .btn--danger { background: none; color: var(--danger); border-color: var(--line-control); }
 .btn--danger:hover { background: #f8717118; filter: none; }
 
-/* Legacy alias — .btn--ghost was doing the work of all three tiers. */
-.btn--ghost { background: var(--panel-3); color: var(--ink); border-color: var(--line-control); font-weight: 500; }
-.btn--ghost:hover { background: #2b3648; filter: none; }
-
 .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -312,7 +313,7 @@ a { color: var(--accent); }
   flex: 1;
   text-align: left;
   background: var(--panel-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius);
   color: inherit;
   font: inherit;
@@ -323,7 +324,7 @@ a { color: var(--accent); }
   gap: 3px;
   min-width: 0;
 }
-.cab__main:hover { border-color: var(--accent); }
+.cab__main:hover { background: var(--panel-3); border-color: var(--line-control); }
 .cab__title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .cab__title em { color: var(--ink-2); font-style: normal; font-size: 11px; }
 .cab__meta { display: flex; flex-wrap: wrap; gap: 6px; color: var(--ink-2); font-size: 11px; }
@@ -338,7 +339,7 @@ a { color: var(--accent); }
 
 .cab__fav {
   background: var(--panel-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius);
   color: var(--ink-2);
   cursor: pointer;
@@ -366,7 +367,7 @@ a { color: var(--accent); }
   align-items: center;
   gap: 6px;
   background: var(--panel-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius);
   padding: 5px 7px;
 }
@@ -539,7 +540,9 @@ a { color: var(--accent); }
   .app__rail, .app__centre { display: none; }
   .app__body[data-mobile-panel='library'] .app__rail--left { display: flex; }
   .app__body[data-mobile-panel='screen'] .app__rail--right { display: flex; }
-  .app__body[data-mobile-panel='canvas'] .app__centre { display: block; }
+  /* Must stay a flex column: .app__stage is flex:1 and would collapse to zero
+     height under display:block, taking the canvas with it. */
+  .app__body[data-mobile-panel='canvas'] .app__centre { display: flex; }
 
   .toolbar { gap: 10px; }
   .toolbar__group--end { margin-left: 0; }
@@ -576,7 +579,7 @@ a { color: var(--accent); }
   flex: 1;
   min-width: 34px;
   background: var(--panel-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: 6px;
   color: var(--ink);
   cursor: pointer;
@@ -585,7 +588,7 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.icon-row button:hover { border-color: var(--accent); color: var(--accent); }
+.icon-row button:hover { background: var(--panel-3); border-color: var(--line-control); }
 
 .gap-row { display: flex; gap: 6px; align-items: center; }
 .gap-row .input--num { width: 78px; flex: none; }
@@ -638,7 +641,7 @@ a { color: var(--accent); }
   gap: 10px;
   flex-wrap: wrap;
   background: var(--panel-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius);
   padding: 8px 10px;
 }
@@ -701,8 +704,13 @@ a { color: var(--accent); }
 .modal--docked {
   background: none;
   place-items: start;
-  padding: 12px;
+  /* Clear the toolbar and the left rail — it was covering both. */
+  padding: var(--s3);
+  padding-left: calc(var(--rail) + var(--s3));
+  padding-top: calc(var(--s3) + 52px);
   pointer-events: none;
+  /* Below the modal layer, so a dialog is never reachable underneath one. */
+  z-index: 30;
 }
 .modal--docked .modal__panel {
   pointer-events: auto;
@@ -748,8 +756,7 @@ a svg,
 
 /* The heading is the dialog's focus entry point, so it must not show a caret
    outline when focused programmatically — the ring is enough. */
-.modal__head h2:focus { outline: none; }
-.modal__head h2:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.modal__head h2:focus { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
 
 /* ---------- skip link, progress, reduced motion ---------- */
 
@@ -778,7 +785,13 @@ a svg,
 .progress span { display: block; height: 100%; background: var(--accent); }
 
 /* The canvas is a focus stop now, so it needs to show it. */
-.stage__canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.stage__canvas:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+  /* The canvas background is the user's choice, so the ring needs its own
+     backing to keep 3:1 against whatever is behind it. */
+  box-shadow: inset 0 0 0 4px var(--bg);
+}
 
 /*
  * Reduced motion. The animated test patterns are the reason this matters more
@@ -833,4 +846,54 @@ a svg,
 
 @media (max-width: 1200px) {
   .statusbar { gap: var(--s4); padding: var(--s2) var(--s3); justify-content: flex-start; }
+}
+
+/* ---------- collapsible sections ---------- */
+
+.section { margin-top: var(--s2); }
+
+.section__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  width: 100%;
+  background: none;
+  border: 0;
+  color: var(--ink-2);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: var(--s3) 0;
+  text-align: left;
+}
+.section__head:hover { color: var(--ink); }
+.section__head em {
+  margin-left: auto;
+  color: var(--ink-3);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+}
+.section__chevron { transform: rotate(-90deg); transition: transform 0.12s ease; }
+.section.is-open .section__chevron { transform: none; }
+.section.is-open .section__head { color: var(--ink); }
+
+.section__body { display: flex; flex-direction: column; gap: var(--s3); padding-bottom: var(--s4); }
+
+/*
+ * Phones. UX.md's Verify job happens at the wall on a phone: run a pattern,
+ * read the map, find the bad cabinet. Everything else can fold away.
+ */
+@media (max-width: 600px) {
+  .toolbar { gap: var(--s2); padding: var(--s2); }
+  .toolbar__name { width: 120px; }
+  .toolbar__group[aria-label='History'],
+  .toolbar__group[aria-label='Arrange'] { display: none; }
+  .toolbar__spacer { flex-basis: 100%; }
+
+  .modal--docked { padding: var(--s2); padding-top: calc(var(--s2) + 52px); }
+  .modal__panel--docked { max-width: 100%; }
+
+  .statusbar { gap: var(--s3); font-size: 12px; }
+  .statusbar > div:nth-child(n + 4) { display: none; }
 }

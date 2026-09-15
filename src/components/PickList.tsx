@@ -162,12 +162,12 @@ export default function PickList({ onClose }: { onClose: () => void }) {
               )}
             </div>
             <div className="btn-row">
-              <button className="btn btn--ghost" type="button" onClick={() => setShowProcessorForm((v) => !v)}>
+              <button className="btn btn--secondary" type="button" onClick={() => setShowProcessorForm((v) => !v)}>
                 {showProcessorForm ? 'Cancel' : '+ Add your own processor'}
               </button>
               {processor.custom && (
                 <button
-                  className="btn btn--ghost"
+                  className="btn btn--secondary"
                   type="button"
                   onClick={() => removeCustomProcessor(processor.id)}
                 >
