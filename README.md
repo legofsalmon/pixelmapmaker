@@ -131,13 +131,23 @@ against the manufacturer's load data and a wind standard.
 
 ### Processors
 
-`src/lib/processors.ts` carries a short processor list. Only entries with a
-`sourceUrl` are taken from a manufacturer's own datasheet — the Brompton Tessera
-SX40 (four 10GBASE-T outputs, nominally 9 million pixels at 36 bpp / 60 Hz) and
-the NovaStar MX40 Pro (twenty Gigabit ports, up to 9 million pixels). The
-generic 1G and 10G entries are labelled planning assumptions, not specifications.
-Real port capacity moves with bit depth, refresh and frame rate, so treat all of
-it as a first pass.
+`src/lib/processors.ts` carries the processor list. Only entries with a
+`sourceUrl` come from a manufacturer's own datasheet or support documentation:
+
+| Processor | Ports | Capacity |
+|---|---|---|
+| Brompton Tessera SX40 | 4 × 10GBASE-T | 9 MP at 36 bpp, 60 Hz |
+| Megapixel HELIOS | 8 × 10G fibre SFP+ | 35 MP |
+| NovaStar VX2000 Pro | 20 × 1G | 13 MP |
+| NovaStar MX40 Pro | 20 × 1G | 9 MP |
+| NovaStar MCTRL4K | 16 × 1G | 4096 × 2160 at 60 Hz |
+| NovaStar VX1000 | 10 × 1G | 6.5 MP |
+
+The generic 1G and 10G entries are labelled planning assumptions, not
+specifications. Real port capacity moves with bit depth, refresh and frame rate
+— some of these halve it in 3D or top-and-bottom modes — so treat all of it as a
+first pass, and add your own kit with **+ Add your own processor**, which saves
+with the project.
 
 ### Current sources
 
@@ -165,13 +175,20 @@ rigging anything.
 
 ### Manufacturers not included
 
-Unilumin, INFiLED and Desay sit behind bot protection or render their spec
-tables client-side from an API this scraper cannot reach. They are worth
-revisiting; the source interface is ready for them.
-
-`absen.com` is one of those, but Absen's US site publishes the same
+`absen.com` is bot-protected, but Absen's US site publishes the same
 specification PDFs and is reachable, so that is where the Absen source reads
-from.
+from. The same trick was tried on the others and does not work:
+
+| Brand | What happens |
+|---|---|
+| Unilumin | Site loads, but specs render client-side. No spec PDFs anywhere on it, and `products` is not exposed through the WordPress REST API. |
+| INFiLED | Host does not resolve or answer. |
+| Desay | Host does not resolve or answer. |
+| Chauvet Professional | Site and WooCommerce Store API both reachable, but the API carries only pitch and IP rating — `dimensions` and `weight` are empty, and the linked PDFs are marketing one-pagers with no cabinet size or resolution. |
+
+The common blocker is that these publish specs only to a JavaScript client. A
+headless browser would solve it, and the source interface is ready for one —
+run the scraper somewhere the browser has ordinary TLS to the open internet.
 
 [LED Wall Central](https://www.ledwallcentral.com/) has a large multi-brand
 database and would be an obvious shortcut. Its `robots.txt` disallows

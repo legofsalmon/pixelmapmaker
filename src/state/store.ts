@@ -9,6 +9,7 @@ import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
 import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
+import type { Processor } from '@/lib/processors';
 
 const CANVAS_PRESETS = [
   { name: 'HD 1920 × 1080', width: 1920, height: 1080 },
@@ -77,6 +78,7 @@ interface EditorState extends Project {
   pickList: PickListOptions;
   support: SupportSettings;
   effect: EffectSettings;
+  customProcessors: Processor[];
   past: Snapshot[];
   future: Snapshot[];
 
@@ -106,6 +108,8 @@ interface EditorState extends Project {
   setPickList: (patch: Partial<PickListOptions>) => void;
   setSupport: (patch: Partial<SupportSettings>) => void;
   setEffect: (patch: Partial<EffectSettings>) => void;
+  addCustomProcessor: (processor: Processor) => void;
+  removeCustomProcessor: (id: string) => void;
 
   fitCanvasToContent: () => void;
   centreSelection: () => void;
@@ -147,6 +151,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   pickList: DEFAULT_PICKLIST_OPTIONS,
   support: DEFAULT_SUPPORT,
   effect: DEFAULT_EFFECT,
+  customProcessors: [],
   past: [],
   future: [],
 
@@ -366,6 +371,19 @@ export const useEditor = create<EditorState>((set, get) => ({
   setSupport: (patch) => set((s) => ({ support: { ...s.support, ...patch } })),
   setEffect: (patch) => set((s) => ({ effect: { ...s.effect, ...patch } })),
 
+  addCustomProcessor: (processor) =>
+    set((s) => ({
+      customProcessors: [processor, ...s.customProcessors],
+      processorId: processor.id,
+    })),
+
+  removeCustomProcessor: (id) =>
+    set((s) => ({
+      customProcessors: s.customProcessors.filter((p) => p.id !== id),
+      // Fall back to a built-in if the one in use was the one deleted.
+      processorId: s.processorId === id ? 'brompton-sx40' : s.processorId,
+    })),
+
   fitCanvasToContent: () => {
     get().commit();
     set((s) => {
@@ -419,6 +437,8 @@ export const useEditor = create<EditorState>((set, get) => ({
       pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
       support: { ...s.support, ...(project as { support?: Partial<SupportSettings> }).support },
       effect: { ...s.effect, ...(project as { effect?: Partial<EffectSettings> }).effect },
+      customProcessors:
+        (project as { customProcessors?: Processor[] }).customProcessors ?? s.customProcessors,
     }));
   },
 
@@ -428,9 +448,22 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList, support, effect } = get();
+    const { name, canvas, layers, processorId, cabling, pickList, support, effect, customProcessors } =
+      get();
     return JSON.stringify(
-      { app: 'pixelmapmaker', version: 1, name, canvas, layers, processorId, cabling, pickList, support, effect },
+      {
+        app: 'pixelmapmaker',
+        version: 1,
+        name,
+        canvas,
+        layers,
+        processorId,
+        cabling,
+        pickList,
+        support,
+        effect,
+        customProcessors,
+      },
       null,
       2
     );
@@ -466,6 +499,7 @@ export function restoreProject() {
       pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
       support: { ...DEFAULT_SUPPORT, ...parsed.support },
       effect: { ...DEFAULT_EFFECT, ...parsed.effect },
+      customProcessors: parsed.customProcessors ?? [],
       past: [],
       future: [],
     });

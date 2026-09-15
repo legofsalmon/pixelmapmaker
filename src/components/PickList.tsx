@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useEditor } from '@/state/store';
-import { PROCESSORS, findProcessor, pixelsPerPort } from '@/lib/processors';
+import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib/processors';
 import { buildPickList, pickListCsv } from '@/lib/picklist';
 import type { LineCategory } from '@/lib/picklist';
 
@@ -30,8 +30,12 @@ export default function PickList({ onClose }: { onClose: () => void }) {
   const setProcessor = useEditor((s) => s.setProcessor);
   const setCabling = useEditor((s) => s.setCabling);
   const setPickList = useEditor((s) => s.setPickList);
+  const customProcessors = useEditor((s) => s.customProcessors);
+  const addCustomProcessor = useEditor((s) => s.addCustomProcessor);
+  const removeCustomProcessor = useEditor((s) => s.removeCustomProcessor);
+  const [showProcessorForm, setShowProcessorForm] = useState(false);
 
-  const processor = findProcessor(processorId);
+  const processor = findProcessor(processorId, customProcessors);
   const { lines, cabling: runs, processors } = useMemo(
     () => buildPickList(layers, cabling, processor, options),
     [layers, cabling, processor, options]
@@ -73,9 +77,18 @@ export default function PickList({ onClose }: { onClose: () => void }) {
               <label className="field">
                 <span>Processor</span>
                 <select className="input" value={processorId} onChange={(e) => setProcessor(e.target.value)}>
-                  {PROCESSORS.map((p) => (
-                    <option key={p.id} value={p.id}>{p.brand} {p.model}</option>
-                  ))}
+                  {customProcessors.length > 0 && (
+                    <optgroup label="Yours">
+                      {customProcessors.map((p) => (
+                        <option key={p.id} value={p.id}>{p.brand} {p.model}</option>
+                      ))}
+                    </optgroup>
+                  )}
+                  <optgroup label="Library">
+                    {PROCESSORS.map((p) => (
+                      <option key={p.id} value={p.id}>{p.brand} {p.model}</option>
+                    ))}
+                  </optgroup>
                 </select>
               </label>
               <label className="field">
@@ -151,6 +164,30 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                 </>
               )}
             </div>
+            <div className="btn-row">
+              <button className="btn btn--ghost" type="button" onClick={() => setShowProcessorForm((v) => !v)}>
+                {showProcessorForm ? 'Cancel' : '+ Add your own processor'}
+              </button>
+              {processor.custom && (
+                <button
+                  className="btn btn--ghost"
+                  type="button"
+                  onClick={() => removeCustomProcessor(processor.id)}
+                >
+                  Remove {processor.model}
+                </button>
+              )}
+            </div>
+
+            {showProcessorForm && (
+              <ProcessorForm
+                onCreate={(p) => {
+                  addCustomProcessor(p);
+                  setShowProcessorForm(false);
+                }}
+              />
+            )}
+
             <p className="note">
               {processor.note}{' '}
               {processor.sourceUrl ? (
@@ -306,5 +343,74 @@ export default function PickList({ onClose }: { onClose: () => void }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function ProcessorForm({ onCreate }: { onCreate: (p: ReturnType<typeof customProcessor>) => void }) {
+  const [model, setModel] = useState('');
+  const [brand, setBrand] = useState('');
+  const [ports, setPorts] = useState(8);
+  const [portType, setPortType] = useState<'1G' | '10G'>('1G');
+  const [megapixels, setMegapixels] = useState(4.5);
+
+  const perPort = Math.floor((megapixels * 1_000_000) / Math.max(1, ports));
+
+  return (
+    <form
+      className="custom-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onCreate(
+          customProcessor({ model, brand, ports, portType, totalPixels: megapixels * 1_000_000 })
+        );
+      }}
+    >
+      <div className="opt-grid">
+        <label className="field">
+          <span>Make</span>
+          <input className="input" value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="Brompton" />
+        </label>
+        <label className="field">
+          <span>Model</span>
+          <input className="input" value={model} onChange={(e) => setModel(e.target.value)} placeholder="Tessera S8" required />
+        </label>
+        <label className="field">
+          <span>Output ports</span>
+          <input
+            className="input"
+            type="number"
+            min="1"
+            max="64"
+            value={ports}
+            onChange={(e) => setPorts(Math.max(1, Number(e.target.value)))}
+            required
+          />
+        </label>
+        <label className="field">
+          <span>Port type</span>
+          <select className="input" value={portType} onChange={(e) => setPortType(e.target.value as '1G' | '10G')}>
+            <option value="1G">1G copper</option>
+            <option value="10G">10G</option>
+          </select>
+        </label>
+        <label className="field">
+          <span>Capacity (MP)</span>
+          <input
+            className="input"
+            type="number"
+            step="0.1"
+            min="0.1"
+            value={megapixels}
+            onChange={(e) => setMegapixels(Math.max(0.1, Number(e.target.value)))}
+            required
+          />
+        </label>
+      </div>
+      <p className="note">
+        That works out at {perPort.toLocaleString('en-GB')} pixels a port. It is saved with the
+        project.
+      </p>
+      <button className="btn" type="submit">Add it</button>
+    </form>
   );
 }
