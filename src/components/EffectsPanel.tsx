@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useEditor } from '@/state/store';
-import { DIRECTION_LABELS, EFFECT_LABELS, isAnimated, type EffectDirection, type EffectKind } from '@/lib/effects';
+import { DIRECTION_LABELS, isAnimated, type EffectDirection } from '@/lib/effects';
 import { canRecordVideo, exportVideo } from '@/lib/export';
 import NumberInput from './NumberInput';
 import Dialog from './Dialog';
+import EffectPicker from './EffectPicker';
 
 /**
  * Live test patterns for commissioning a wall, and recording them out as
@@ -57,17 +58,13 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
 
           <section>
             <h4>Pattern</h4>
+            <EffectPicker
+              value={effect.kind}
+              settings={effect}
+              onChange={(kind) => setEffect({ kind })}
+            />
+
             <div className="opt-grid">
-              <label className="field">
-                <span>Effect</span>
-                <select
-                  className="input"
-                  value={effect.kind}
-                  onChange={(e) => setEffect({ kind: e.target.value as EffectKind })}
-                >
-                  {EFFECT_LABELS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
-              </label>
               <label className="field">
                 <span>Direction</span>
                 <select

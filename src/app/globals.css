@@ -996,3 +996,54 @@ a svg,
  * its full-width divider rather than collapsing against the next head.
  */
 .panel:not(.is-open) .panel__head { border-bottom: 0; }
+
+/* ---------- test-pattern picker ---------- */
+
+.fx {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-bottom: var(--s3);
+}
+.fx__item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s1);
+  padding: var(--s1);
+  background: var(--panel-2);
+  border: 1px solid var(--line-control);
+  border-radius: var(--radius);
+  color: var(--ink-2);
+  font: inherit;
+  cursor: pointer;
+}
+.fx__item:hover { background: var(--panel-3); color: var(--ink); }
+/*
+ * Selection is the accent's one job, so the chosen pattern takes it — the
+ * thumbnail is already a picture, and a picture needs an unmistakable frame
+ * rather than a slightly different border.
+ */
+.fx__item.is-on {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+  color: var(--ink);
+}
+.fx__canvas,
+.fx__none {
+  display: block;
+  width: 104px;
+  height: 58px;
+  border-radius: 4px;
+  background: var(--bg);
+}
+/* "None" draws nothing, which is exactly what it does to the canvas. A dotted
+   edge keeps an empty tile from reading as a thumbnail that failed to load. */
+.fx__none {
+  border: 1px dashed var(--line-control);
+}
+.fx__label { font-size: 11px; text-align: center; }
+
+@media (max-width: 900px) {
+  .fx { gap: var(--s1); }
+}
