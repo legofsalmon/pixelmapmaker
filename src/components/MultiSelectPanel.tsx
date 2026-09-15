@@ -6,6 +6,7 @@ import type { AlignEdge } from '@/state/store';
 import { projectTotals } from '@/lib/calc';
 import { PALETTES } from '@/lib/palettes';
 import { nextColor } from '@/lib/palettes';
+import NumberInput from './NumberInput';
 
 const ALIGN: Array<{ edge: AlignEdge; label: string; title: string }> = [
   { edge: 'left', label: '⇤', title: 'Align left edges' },
@@ -79,13 +80,7 @@ export default function MultiSelectPanel() {
         <div className="field">
           <span>Pack with a fixed gap</span>
           <div className="gap-row">
-            <input
-              className="input input--num"
-              type="number"
-              value={gap}
-              aria-label="Gap in pixels"
-              onChange={(e) => setGap(Number(e.target.value))}
-            />
+            <NumberInput className="input input--num" value={gap} aria-label="Gap in pixels" onChange={setGap} />
             <button className="btn btn--ghost" type="button" onClick={() => spaceLayers('horizontal', gap)}>
               Row
             </button>

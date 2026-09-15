@@ -6,6 +6,7 @@ import { readLogoFile } from '@/lib/logos';
 import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
 import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
+import NumberInput from './NumberInput';
 
 const SIGNAL_STARTS: Array<{ value: SignalStart; label: string }> = [
   { value: 'tl', label: 'Top left' },
@@ -65,33 +66,19 @@ export default function Inspector() {
         <div className="grid2">
           <label className="field">
             <span>Cabinets across</span>
-            <input
-              className="input"
-              type="number"
-              min="1"
-              max="200"
-              value={layer.cols}
-              onChange={(e) => change('cols', Math.max(1, Math.min(200, Number(e.target.value))))}
-            />
+            <NumberInput min={1} max={200} value={layer.cols} onChange={(cols) => change('cols', cols)} />
           </label>
           <label className="field">
             <span>Cabinets down</span>
-            <input
-              className="input"
-              type="number"
-              min="1"
-              max="200"
-              value={layer.rows}
-              onChange={(e) => change('rows', Math.max(1, Math.min(200, Number(e.target.value))))}
-            />
+            <NumberInput min={1} max={200} value={layer.rows} onChange={(rows) => change('rows', rows)} />
           </label>
           <label className="field">
             <span>X offset (px)</span>
-            <input className="input" type="number" value={layer.x} onChange={(e) => change('x', Number(e.target.value))} />
+            <NumberInput value={layer.x} onChange={(x) => change('x', x)} />
           </label>
           <label className="field">
             <span>Y offset (px)</span>
-            <input className="input" type="number" value={layer.y} onChange={(e) => change('y', Number(e.target.value))} />
+            <NumberInput value={layer.y} onChange={(y) => change('y', y)} />
           </label>
         </div>
 

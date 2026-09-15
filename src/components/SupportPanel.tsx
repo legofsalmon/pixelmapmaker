@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useEditor } from '@/state/store';
 import { CF_PRESETS, TRUSS_PRESETS, supportForProject, type SupportMode } from '@/lib/support';
+import NumberInput from './NumberInput';
 
 const MODES: Array<{ value: SupportMode; label: string; blurb: string }> = [
   {
@@ -85,38 +86,38 @@ export default function SupportPanel({ onClose }: { onClose: () => void }) {
                   </label>
                   <label className="field">
                     <span>Upright height (m)</span>
-                    <input className="input" type="number" step="0.5" min="1" value={support.trussHeight}
-                      onChange={(e) => setSupport({ trussHeight: Number(e.target.value) })} />
+                    <NumberInput step="0.5" min={1} value={support.trussHeight}
+                      onChange={(trussHeight) => setSupport({ trussHeight })} />
                   </label>
                   <label className="field">
                     <span>Screen bottom (m)</span>
-                    <input className="input" type="number" step="0.1" min="0" value={support.wallBottom}
-                      onChange={(e) => setSupport({ wallBottom: Number(e.target.value) })} />
+                    <NumberInput step="0.1" min={0} value={support.wallBottom}
+                      onChange={(wallBottom) => setSupport({ wallBottom })} />
                   </label>
                   <label className="field">
                     <span>Plate front / back (m)</span>
-                    <input className="input" type="number" step="0.1" min="0.1" value={support.plateFront}
-                      onChange={(e) => setSupport({ plateFront: Number(e.target.value), plateBack: Number(e.target.value) })} />
+                    <NumberInput step="0.1" min={0.1} max={5} value={support.plateFront}
+                      onChange={(reach) => setSupport({ plateFront: reach, plateBack: reach })} />
                   </label>
                   <label className="field">
                     <span>Plate width (m)</span>
-                    <input className="input" type="number" step="0.1" min="0.1" value={support.plateWidth}
-                      onChange={(e) => setSupport({ plateWidth: Number(e.target.value) })} />
+                    <NumberInput step="0.1" min={0.1} value={support.plateWidth}
+                      onChange={(plateWidth) => setSupport({ plateWidth })} />
                   </label>
                   <label className="field">
                     <span>Plate mass (kg)</span>
-                    <input className="input" type="number" step="5" min="0" value={support.plateMass}
-                      onChange={(e) => setSupport({ plateMass: Number(e.target.value) })} />
+                    <NumberInput step="5" min={0} value={support.plateMass}
+                      onChange={(plateMass) => setSupport({ plateMass })} />
                   </label>
                   <label className="field">
                     <span>Ballast per plate (kg)</span>
-                    <input className="input" type="number" step="25" min="0" value={support.ballastMass}
-                      onChange={(e) => setSupport({ ballastMass: Number(e.target.value) })} />
+                    <NumberInput step="25" min={0} value={support.ballastMass}
+                      onChange={(ballastMass) => setSupport({ ballastMass })} />
                   </label>
                   <label className="field">
                     <span>Design wind (m/s)</span>
-                    <input className="input" type="number" step="1" min="0" value={support.windSpeed}
-                      onChange={(e) => setSupport({ windSpeed: Number(e.target.value) })} />
+                    <NumberInput step="1" min={0} value={support.windSpeed}
+                      onChange={(windSpeed) => setSupport({ windSpeed })} />
                   </label>
                   <label className="field">
                     <span>Force coefficient</span>
@@ -127,26 +128,26 @@ export default function SupportPanel({ onClose }: { onClose: () => void }) {
                   </label>
                   <label className="field">
                     <span>Safety factor</span>
-                    <input className="input" type="number" step="0.1" min="1" value={support.safetyFactor}
-                      onChange={(e) => setSupport({ safetyFactor: Number(e.target.value) })} />
+                    <NumberInput step="0.1" min={1} value={support.safetyFactor}
+                      onChange={(safetyFactor) => setSupport({ safetyFactor })} />
                   </label>
                   <label className="field">
                     <span>Max upright spacing (m)</span>
-                    <input className="input" type="number" step="0.5" min="0.5" value={support.maxSpacing}
-                      onChange={(e) => setSupport({ maxSpacing: Number(e.target.value) })} />
+                    <NumberInput step="0.5" min={0.5} value={support.maxSpacing}
+                      onChange={(maxSpacing) => setSupport({ maxSpacing })} />
                   </label>
                 </>
               ) : (
                 <>
                   <label className="field">
                     <span>Point capacity (kg)</span>
-                    <input className="input" type="number" step="50" min="1" value={support.pointCapacityKg}
-                      onChange={(e) => setSupport({ pointCapacityKg: Number(e.target.value) })} />
+                    <NumberInput step="50" min={1} value={support.pointCapacityKg}
+                      onChange={(pointCapacityKg) => setSupport({ pointCapacityKg })} />
                   </label>
                   <label className="field">
                     <span>Max point spacing (m)</span>
-                    <input className="input" type="number" step="0.5" min="0.5" value={support.maxPointSpacing}
-                      onChange={(e) => setSupport({ maxPointSpacing: Number(e.target.value) })} />
+                    <NumberInput step="0.5" min={0.5} value={support.maxPointSpacing}
+                      onChange={(maxPointSpacing) => setSupport({ maxPointSpacing })} />
                   </label>
                 </>
               )}

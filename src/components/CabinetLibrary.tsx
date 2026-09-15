@@ -14,6 +14,7 @@ import {
 } from '@/lib/cabinets';
 import { useEditor } from '@/state/store';
 import type { CabinetSpec } from '@/lib/types';
+import NumberInput from './NumberInput';
 
 const FAVOURITES_KEY = 'pixelmapmaker.favourites.v1';
 
@@ -138,6 +139,7 @@ export default function CabinetLibrary() {
               step="0.1"
               min="0"
               value={filter.minPitch ?? ''}
+              onFocus={(e) => e.target.select()}
               onChange={(e) => set({ minPitch: e.target.value ? Number(e.target.value) : null })}
             />
           </label>
@@ -149,6 +151,7 @@ export default function CabinetLibrary() {
               step="0.1"
               min="0"
               value={filter.maxPitch ?? ''}
+              onFocus={(e) => e.target.select()}
               onChange={(e) => set({ maxPitch: e.target.value ? Number(e.target.value) : null })}
             />
           </label>
@@ -238,27 +241,27 @@ function CustomPanelForm({ onCreate }: { onCreate: (spec: CabinetSpec) => void }
       <div className="grid2">
         <label className="field">
           <span>Width (mm)</span>
-          <input className="input" type="number" min="1" value={width} onChange={(e) => setWidth(Number(e.target.value))} required />
+          <NumberInput min={1} max={3000} value={width} onChange={setWidth} required />
         </label>
         <label className="field">
           <span>Height (mm)</span>
-          <input className="input" type="number" min="1" value={height} onChange={(e) => setHeight(Number(e.target.value))} required />
+          <NumberInput min={1} max={3000} value={height} onChange={setHeight} required />
         </label>
         <label className="field">
           <span>Pixels across</span>
-          <input className="input" type="number" min="1" value={resW} onChange={(e) => setResW(Number(e.target.value))} required />
+          <NumberInput min={1} max={8192} value={resW} onChange={setResW} required />
         </label>
         <label className="field">
           <span>Pixels down</span>
-          <input className="input" type="number" min="1" value={resH} onChange={(e) => setResH(Number(e.target.value))} required />
+          <NumberInput min={1} max={8192} value={resH} onChange={setResH} required />
         </label>
         <label className="field">
           <span>Weight (kg)</span>
-          <input className="input" type="number" step="0.1" min="0" value={weight} onChange={(e) => setWeight(e.target.value)} />
+          <input className="input" type="number" step="0.1" min="0" value={weight} onFocus={(e) => e.target.select()} onChange={(e) => setWeight(e.target.value)} />
         </label>
         <label className="field">
           <span>Max power (W)</span>
-          <input className="input" type="number" min="0" value={power} onChange={(e) => setPower(e.target.value)} />
+          <input className="input" type="number" min="0" value={power} onFocus={(e) => e.target.select()} onChange={(e) => setPower(e.target.value)} />
         </label>
       </div>
       <p className={`note${square ? '' : ' note--warn'}`}>

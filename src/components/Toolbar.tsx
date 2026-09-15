@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { CANVAS_PRESETS, useEditor } from '@/state/store';
 import { PALETTES } from '@/lib/palettes';
 import { exportCanvasPng, exportCompositionJson, readProjectFile } from '@/lib/export';
+import NumberInput from './NumberInput';
 
 export default function Toolbar({
   onShowSpecSheet,
@@ -90,24 +91,22 @@ export default function Toolbar({
             {CANVAS_PRESETS.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
           </select>
         </label>
-        <input
+        <NumberInput
           className="input input--num"
-          type="number"
-          min="16"
-          max="32768"
+          min={16}
+          max={32768}
           value={canvas.width}
           aria-label="Canvas width"
-          onChange={(e) => setCanvas({ width: Math.max(16, Number(e.target.value)) })}
+          onChange={(width) => setCanvas({ width })}
         />
         <span className="times">×</span>
-        <input
+        <NumberInput
           className="input input--num"
-          type="number"
-          min="16"
-          max="32768"
+          min={16}
+          max={32768}
           value={canvas.height}
           aria-label="Canvas height"
-          onChange={(e) => setCanvas({ height: Math.max(16, Number(e.target.value)) })}
+          onChange={(height) => setCanvas({ height })}
         />
         <input
           className="input input--color"

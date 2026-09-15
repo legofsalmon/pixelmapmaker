@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useEditor } from '@/state/store';
 import { DIRECTION_LABELS, EFFECT_LABELS, isAnimated, type EffectDirection, type EffectKind } from '@/lib/effects';
 import { canRecordVideo, exportVideo } from '@/lib/export';
+import NumberInput from './NumberInput';
 
 /**
  * Live test patterns for commissioning a wall, and recording them out as
@@ -166,14 +167,7 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
             <div className="opt-grid">
               <label className="field">
                 <span>Length (s)</span>
-                <input
-                  className="input"
-                  type="number"
-                  min="1"
-                  max="120"
-                  value={seconds}
-                  onChange={(e) => setSeconds(Math.max(1, Math.min(120, Number(e.target.value))))}
-                />
+                <NumberInput min={1} max={120} value={seconds} onChange={setSeconds} />
               </label>
               <label className="field">
                 <span>Frame rate</span>

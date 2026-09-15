@@ -5,6 +5,7 @@ import { useEditor } from '@/state/store';
 import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib/processors';
 import { buildPickList, pickListCsv } from '@/lib/picklist';
 import type { LineCategory } from '@/lib/picklist';
+import NumberInput from './NumberInput';
 
 const CATEGORY_ORDER: LineCategory[] = ['Cabinets', 'Processing', 'Data', 'Power', 'Transport'];
 
@@ -107,22 +108,18 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                 <>
                   <label className="field">
                     <span>Panels per data run</span>
-                    <input
-                      className="input"
-                      type="number"
-                      min="1"
+                    <NumberInput
+                      min={1}
                       value={cabling.cabinetsPerDataRun}
-                      onChange={(e) => setCabling({ cabinetsPerDataRun: Math.max(1, Number(e.target.value)) })}
+                      onChange={(cabinetsPerDataRun) => setCabling({ cabinetsPerDataRun })}
                     />
                   </label>
                   <label className="field">
                     <span>Panels per circuit</span>
-                    <input
-                      className="input"
-                      type="number"
-                      min="1"
+                    <NumberInput
+                      min={1}
                       value={cabling.cabinetsPerPowerRun}
-                      onChange={(e) => setCabling({ cabinetsPerPowerRun: Math.max(1, Number(e.target.value)) })}
+                      onChange={(cabinetsPerPowerRun) => setCabling({ cabinetsPerPowerRun })}
                     />
                   </label>
                 </>
@@ -130,22 +127,20 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                 <>
                   <label className="field">
                     <span>Supply voltage</span>
-                    <input
-                      className="input"
-                      type="number"
-                      min="100"
+                    <NumberInput
+                      min={100}
+                      max={480}
                       value={cabling.supplyVoltage}
-                      onChange={(e) => setCabling({ supplyVoltage: Math.max(100, Number(e.target.value)) })}
+                      onChange={(supplyVoltage) => setCabling({ supplyVoltage })}
                     />
                   </label>
                   <label className="field">
                     <span>Amps per circuit</span>
-                    <input
-                      className="input"
-                      type="number"
-                      min="1"
+                    <NumberInput
+                      min={1}
+                      max={200}
                       value={cabling.maxAmpsPerCircuit}
-                      onChange={(e) => setCabling({ maxAmpsPerCircuit: Math.max(1, Number(e.target.value)) })}
+                      onChange={(maxAmpsPerCircuit) => setCabling({ maxAmpsPerCircuit })}
                     />
                   </label>
                   <label className="field">
@@ -217,22 +212,20 @@ export default function PickList({ onClose }: { onClose: () => void }) {
               </label>
               <label className="field">
                 <span>Panels per case</span>
-                <input
-                  className="input"
-                  type="number"
-                  min="0"
+                <NumberInput
+                  min={0}
+                  max={64}
                   value={options.cabinetsPerCase}
-                  onChange={(e) => setPickList({ cabinetsPerCase: Math.max(0, Number(e.target.value)) })}
+                  onChange={(cabinetsPerCase) => setPickList({ cabinetsPerCase })}
                 />
               </label>
               <label className="field">
                 <span>Cables per bundle</span>
-                <input
-                  className="input"
-                  type="number"
-                  min="0"
+                <NumberInput
+                  min={0}
+                  max={100}
                   value={options.cablesPerBundle}
-                  onChange={(e) => setPickList({ cablesPerBundle: Math.max(0, Number(e.target.value)) })}
+                  onChange={(cablesPerBundle) => setPickList({ cablesPerBundle })}
                 />
               </label>
               <label className="checkbox">
@@ -376,15 +369,7 @@ function ProcessorForm({ onCreate }: { onCreate: (p: ReturnType<typeof customPro
         </label>
         <label className="field">
           <span>Output ports</span>
-          <input
-            className="input"
-            type="number"
-            min="1"
-            max="64"
-            value={ports}
-            onChange={(e) => setPorts(Math.max(1, Number(e.target.value)))}
-            required
-          />
+          <NumberInput min={1} max={64} value={ports} onChange={setPorts} required />
         </label>
         <label className="field">
           <span>Port type</span>
@@ -395,15 +380,7 @@ function ProcessorForm({ onCreate }: { onCreate: (p: ReturnType<typeof customPro
         </label>
         <label className="field">
           <span>Capacity (MP)</span>
-          <input
-            className="input"
-            type="number"
-            step="0.1"
-            min="0.1"
-            value={megapixels}
-            onChange={(e) => setMegapixels(Math.max(0.1, Number(e.target.value)))}
-            required
-          />
+          <NumberInput step="0.1" min={0.1} max={200} value={megapixels} onChange={setMegapixels} required />
         </label>
       </div>
       <p className="note">
