@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useEditor } from '@/state/store';
 import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib/processors';
 import { buildPickList, pickListCsv } from '@/lib/picklist';
+import { assignPorts } from '@/lib/cabling';
 import type { LineCategory } from '@/lib/picklist';
 import NumberInput from './NumberInput';
 import Icon from './Icon';
@@ -42,6 +43,12 @@ export default function PickList({ onClose }: { onClose: () => void }) {
   const { lines, cabling: runs, processors } = useMemo(
     () => buildPickList(layers, cabling, processor, options),
     [layers, cabling, processor, options]
+  );
+  // Ports belong to the project, not to a screen, so they are dealt out once
+  // across every run rather than numbered from 1 inside each screen.
+  const portMap = useMemo(
+    () => assignPorts(runs.screens, processor, processors.count),
+    [runs.screens, processor, processors.count]
   );
 
   return (
@@ -143,6 +150,15 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                       max={200}
                       value={cabling.maxAmpsPerCircuit}
                       onChange={(maxAmpsPerCircuit) => setCabling({ maxAmpsPerCircuit })}
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Longest chain</span>
+                    <NumberInput
+                      min={1}
+                      max={200}
+                      value={cabling.maxCabinetsPerChain}
+                      onChange={(maxCabinetsPerChain) => setCabling({ maxCabinetsPerChain })}
                     />
                   </label>
                   <label className="field">
@@ -316,23 +332,34 @@ export default function PickList({ onClose }: { onClose: () => void }) {
               </table>
 
               <h4>Patch</h4>
-              {runs.screens.map((s) => (
-                <div key={s.layerId} className="patch">
-                  <strong>{s.layerName}</strong>
-                  <ol className="patch__runs">
-                    {s.runOrder.map((run, i) => (
-                      <li key={i}>
-                        Port {i + 1}: {run.length} panel{run.length === 1 ? '' : 's'} — from
-                        {' '}col {run[0][0] + 1}, row {run[0][1] + 1} to col{' '}
-                        {run[run.length - 1][0] + 1}, row {run[run.length - 1][1] + 1}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              ))}
+              {runs.screens.map((s) => {
+                const ports = portMap.get(s.layerId) ?? [];
+                return (
+                  <div key={s.layerId} className="patch">
+                    <strong>{s.layerName}</strong>
+                    <ol className="patch__runs">
+                      {s.runOrder.map((run, i) => (
+                        <li key={i}>
+                          {ports[i]?.label ?? `Port ${i + 1}`}: {run.length} panel
+                          {run.length === 1 ? '' : 's'} — from col {run[0][0] + 1}, row {run[0][1] + 1}
+                          {' '}to col {run[run.length - 1][0] + 1}, row {run[run.length - 1][1] + 1}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                );
+              })}
               <p className="note">
                 Runs follow each screen&rsquo;s feed corner and run pattern, set in the screen inspector.
+                Ports are dealt out across the whole project, so no two screens share one.
               </p>
+              {runs.longHops > 0 && (
+                <p className="note note--warn">
+                  {runs.longHops} hop{runs.longHops === 1 ? '' : 's'} in these runs land on a cabinet
+                  that is not touching the one before it, so they need a cable back across the screen
+                  rather than a short jumper. A serpentine run pattern removes them.
+                </p>
+              )}
             </section>
           )}
         </div>

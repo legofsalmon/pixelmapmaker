@@ -19,6 +19,13 @@ export interface RenderOptions {
    * logo up front and hands the bitmaps in. A layer with no entry draws none.
    */
   logos?: Map<string, CanvasImageSource>;
+  /**
+   * Cabinets on one data run, by layer id. The signal overlay breaks into
+   * separate chains at this length. Without it the overlay draws one unbroken
+   * cable through every cabinet on the screen, which is not how the wall is
+   * ever patched — each run starts again at the processor.
+   */
+  runLengths?: Map<string, number>;
 }
 
 /** Font size that keeps a label inside a tile at any tile size. */
@@ -67,11 +74,17 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer) {
   }
 }
 
-function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer) {
+function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer, runLength?: number) {
   const tile = tileSize(layer);
   const rect = layerRect(layer);
   const order = signalOrder(layer);
   if (order.length < 2) return;
+
+  // One chain per port. Absent a plan, the whole screen is one run — which is
+  // the old behaviour, and correct for a screen small enough to need one port.
+  const perRun = Math.max(1, Math.floor(runLength && runLength > 0 ? runLength : order.length));
+  const runs: Array<Array<[number, number]>> = [];
+  for (let i = 0; i < order.length; i += perRun) runs.push(order.slice(i, i + perRun));
 
   const centre = ([col, row]: [number, number]) => ({
     x: rect.x + col * tile.w + tile.w / 2,
@@ -87,31 +100,38 @@ function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer) {
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
 
-  ctx.beginPath();
-  order.forEach((cell, i) => {
-    const p = centre(cell);
-    if (i === 0) ctx.moveTo(p.x, p.y);
-    else ctx.lineTo(p.x, p.y);
-  });
-  ctx.stroke();
-
-  // Arrow head on the final hop shows the direction of travel.
-  const last = centre(order[order.length - 1]);
-  const prev = centre(order[order.length - 2]);
-  const angle = Math.atan2(last.y - prev.y, last.x - prev.x);
+  const dot = Math.min(tile.w, tile.h) * 0.12;
   const size = Math.min(tile.w, tile.h) * 0.22;
-  ctx.beginPath();
-  ctx.moveTo(last.x, last.y);
-  ctx.lineTo(last.x - size * Math.cos(angle - Math.PI / 6), last.y - size * Math.sin(angle - Math.PI / 6));
-  ctx.lineTo(last.x - size * Math.cos(angle + Math.PI / 6), last.y - size * Math.sin(angle + Math.PI / 6));
-  ctx.closePath();
-  ctx.fill();
 
-  // Start marker.
-  const first = centre(order[0]);
-  ctx.beginPath();
-  ctx.arc(first.x, first.y, Math.min(tile.w, tile.h) * 0.12, 0, Math.PI * 2);
-  ctx.fill();
+  for (const run of runs) {
+    // The line is drawn per run, never between runs: the gap between one run's
+    // last cabinet and the next run's first is not a cable.
+    ctx.beginPath();
+    run.forEach((cell, i) => {
+      const p = centre(cell);
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
+    // Every run starts at the processor, so every run gets a start marker.
+    const first = centre(run[0]);
+    ctx.beginPath();
+    ctx.arc(first.x, first.y, dot, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Arrow head on the run's final hop shows the direction of travel.
+    if (run.length < 2) continue;
+    const last = centre(run[run.length - 1]);
+    const prev = centre(run[run.length - 2]);
+    const angle = Math.atan2(last.y - prev.y, last.x - prev.x);
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(last.x - size * Math.cos(angle - Math.PI / 6), last.y - size * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(last.x - size * Math.cos(angle + Math.PI / 6), last.y - size * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+  }
   ctx.restore();
 }
 
@@ -228,6 +248,7 @@ export function renderProject(
     effect,
     timeMs = 0,
     logos,
+    runLengths,
   } = options;
   const hairline = 1 / scale;
 
@@ -237,7 +258,7 @@ export function renderProject(
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
     drawTiles(ctx, layer);
-    if (layer.showSignalFlow) drawSignalFlow(ctx, layer);
+    if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLengths?.get(layer.id));
     const logo = logos?.get(layer.id);
     if (logo) drawLogo(ctx, layer, logo);
     drawLayerLabel(ctx, layer);
@@ -282,7 +303,8 @@ export function renderLayerAlone(
   ctx: CanvasRenderingContext2D,
   layer: Layer,
   background: string,
-  logo?: CanvasImageSource
+  logo?: CanvasImageSource,
+  runLength?: number
 ) {
   const rect = layerRect(layer);
   ctx.save();
@@ -292,7 +314,7 @@ export function renderLayerAlone(
   }
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
-  if (layer.showSignalFlow) drawSignalFlow(ctx, layer);
+  if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLength);
   if (logo) drawLogo(ctx, layer, logo);
   drawLayerLabel(ctx, layer);
   ctx.restore();

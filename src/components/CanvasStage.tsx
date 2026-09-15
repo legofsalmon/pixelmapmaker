@@ -1,9 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
 import { layerRect, rectContains, snapPosition, type SnapResult } from '@/lib/geometry';
 import { renderProject } from '@/lib/render';
+import { cablingForLayer } from '@/lib/cabling';
+import { findProcessor } from '@/lib/processors';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 import { isAnimated } from '@/lib/effects';
 import { cachedLogos, loadLayerLogos } from '@/lib/logos';
@@ -51,6 +53,25 @@ export default function CanvasStage() {
   const selectedIds = useEditor((s) => s.selectedIds);
   const snapEnabled = useEditor((s) => s.snapEnabled);
   const effect = useEditor((s) => s.effect);
+  const cabling = useEditor((s) => s.cabling);
+  const processorId = useEditor((s) => s.processorId);
+  const customProcessors = useEditor((s) => s.customProcessors);
+
+  /*
+   * The signal overlay breaks into one chain per port, so it needs the same
+   * run length the pick list uses. Recomputed only when the plan's inputs
+   * change — this sits inside the render loop, which runs every frame while a
+   * test pattern is playing.
+   */
+  const runLengths = useMemo(() => {
+    const processor = findProcessor(processorId, customProcessors);
+    const map = new Map<string, number>();
+    for (const layer of layers) {
+      if (!layer.showSignalFlow) continue;
+      map.set(layer.id, cablingForLayer(layer, cabling, processor).data.cabinetsPerRun);
+    }
+    return map;
+  }, [layers, cabling, processorId, customProcessors]);
   const setSelection = useEditor((s) => s.setSelection);
   const toggleSelection = useEditor((s) => s.toggleSelection);
   const updateLayer = useEditor((s) => s.updateLayer);
@@ -168,6 +189,7 @@ export default function CanvasStage() {
       effect: isAnimated(effect) ? effect : undefined,
       timeMs: isAnimated(effect) ? performance.now() - startedAt.current : 0,
       logos: cachedLogos(layers),
+      runLengths,
     });
 
     // Canvas outline sits above everything so the frame is always readable.
@@ -187,7 +209,7 @@ export default function CanvasStage() {
       ctx.strokeRect(x, y, marquee.w * view.scale, marquee.h * view.scale);
       ctx.restore();
     }
-  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion]);
+  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths]);
 
   const hitTest = useCallback(
     (point: { x: number; y: number }): Layer | null => {

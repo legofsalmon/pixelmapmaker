@@ -15,6 +15,14 @@ export interface Processor {
   portType: '1G' | '10G';
   /** Nominal total pixel capacity across all ports. */
   totalPixels: number;
+  /**
+   * Most cabinets a manufacturer will address on one output port. This is a
+   * different limit from pixel capacity and neither implies the other: a 10G
+   * port has the pixels for hundreds of small cabinets but will not address
+   * them. Null where the figure is not published — the planning default in
+   * CablingSettings then applies on its own.
+   */
+  maxCabinetsPerPort: number | null;
   /** Null for generic entries and user-defined kit, which are not specs. */
   sourceUrl: string | null;
   note?: string;
@@ -29,8 +37,11 @@ export const PROCESSORS: Processor[] = [
     ports: 4,
     portType: '10G',
     totalPixels: 9_000_000,
+    maxCabinetsPerPort: 50,
     sourceUrl: 'https://www.bromptontech.com/product/sx40/',
-    note: 'Four 10GBASE-T outputs, nominally 9 million pixels at 36 bits per pixel, 60 Hz.',
+    note:
+      'Four 10GBASE-T outputs, nominally 9 million pixels at 36 bits per pixel, 60 Hz. '+
+      'Brompton state a single chain of up to 50 fixtures per output, or up to 500 through switches.',
   },
   {
     id: 'megapixel-helios',
@@ -39,9 +50,11 @@ export const PROCESSORS: Processor[] = [
     ports: 8,
     portType: '10G',
     totalPixels: 35_000_000,
+    maxCabinetsPerPort: null,
     sourceUrl:
       'https://support.megapixelvr.com/support/solutions/articles/103000262246-helios-system-capacity-basics',
-    note: 'Eight 10G fibre SFP+ outputs, processing up to 35 million pixels.',
+    note:
+      'Eight 10G fibre SFP+ outputs, processing up to 35 million pixels. Megapixel publish their daisy-chain limits per panel type rather than as one figure, so none is set here.',
   },
   {
     id: 'novastar-vx2000-pro',
@@ -50,8 +63,11 @@ export const PROCESSORS: Processor[] = [
     ports: 20,
     portType: '1G',
     totalPixels: 13_000_000,
+    maxCabinetsPerPort: 512,
     sourceUrl: 'https://www.novastar.tech/',
-    note: 'Twenty Gigabit Ethernet ports, up to 13 million pixels. Halved in top-and-bottom 3D.',
+    note:
+      'Twenty Gigabit Ethernet ports, up to 13 million pixels. Halved in top-and-bottom 3D. '+
+      'A Gigabit port addresses up to 512 receiving cards, so pixel capacity binds long first.',
   },
   {
     id: 'novastar-mx40-pro',
@@ -60,6 +76,7 @@ export const PROCESSORS: Processor[] = [
     ports: 20,
     portType: '1G',
     totalPixels: 9_000_000,
+    maxCabinetsPerPort: 512,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Twenty Gigabit Ethernet ports, load capacity up to 9 million pixels.',
   },
@@ -71,6 +88,7 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     // 4096 x 2160 at 60 Hz, the loading capacity NovaStar quotes for one unit.
     totalPixels: 4096 * 2160,
+    maxCabinetsPerPort: 512,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Sixteen Gigabit Ethernet ports, loading capacity 4096 × 2160 at 60 Hz.',
   },
@@ -81,6 +99,7 @@ export const PROCESSORS: Processor[] = [
     ports: 10,
     portType: '1G',
     totalPixels: 6_500_000,
+    maxCabinetsPerPort: 512,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Ten Gigabit Ethernet ports, driving up to 6.5 million pixels.',
   },
@@ -91,6 +110,7 @@ export const PROCESSORS: Processor[] = [
     ports: 8,
     portType: '1G',
     totalPixels: 8 * 650_000,
+    maxCabinetsPerPort: null,
     sourceUrl: null,
     note: 'Planning assumption only: 650,000 pixels per Gigabit port at 8-bit. Adjust to your kit.',
   },
@@ -101,6 +121,7 @@ export const PROCESSORS: Processor[] = [
     ports: 4,
     portType: '10G',
     totalPixels: 4 * 2_250_000,
+    maxCabinetsPerPort: null,
     sourceUrl: null,
     note: 'Planning assumption only: 2.25 million pixels per 10G port. Adjust to your kit.',
   },
@@ -120,6 +141,7 @@ export function customProcessor(input: {
   ports: number;
   portType: '1G' | '10G';
   totalPixels: number;
+  maxCabinetsPerPort?: number | null;
 }): Processor {
   return {
     id: `proc-${Date.now().toString(36)}`,
@@ -128,6 +150,10 @@ export function customProcessor(input: {
     ports: Math.max(1, Math.round(input.ports)),
     portType: input.portType,
     totalPixels: Math.max(1, Math.round(input.totalPixels)),
+    maxCabinetsPerPort:
+      input.maxCabinetsPerPort && input.maxCabinetsPerPort > 0
+        ? Math.round(input.maxCabinetsPerPort)
+        : null,
     sourceUrl: null,
     note: 'Your own figures.',
     custom: true,
