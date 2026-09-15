@@ -1,13 +1,38 @@
 :root {
+  /* Surfaces — a deliberately stepped ramp, so grouping by background works
+     without needing a border on top of every fill. */
   --bg: #05070b;
-  --panel: #0e1219;
-  --panel-2: #141a24;
-  --line: #232b38;
-  --ink: #e8edf6;
-  --ink-dim: #8b97ab;
+  --panel: #101620;
+  --panel-2: #1a2230;
+  --panel-3: #242e3e;
+
+  /* Three text levels, and no more. Two cannot rank a dense screen; four stops
+     being a ranking. All three clear 4.5:1 on every surface above. */
+  --ink: #e9eef7;
+  --ink-2: #aab6c8;
+  --ink-3: #8d9bb0;
+
+  /* Two border tokens on purpose. WCAG 1.4.11 exempts decorative dividers but
+     not the boundary that identifies a control, so those cannot share a value:
+     --line is 1.33:1 and fine for a rule, --line-control is 3.18:1 at worst. */
+  --line: #252e3c;
+  --line-control: #6b7b94;
+
   --accent: #38bdf8;
   --accent-ink: #04222e;
+  --accent-soft: #14384d;
   --warn: #fbbf24;
+  --danger: #f87171;
+  --ok: #4ade80;
+
+  /* 4pt spacing scale. Off-grid values are bugs, not taste. */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+
   --radius: 8px;
   --rail: 320px;
   color-scheme: dark;
@@ -39,15 +64,15 @@ a { color: var(--accent); }
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: var(--s4);
   flex-wrap: wrap;
-  padding: 8px 14px;
+  padding: var(--s2) var(--s3);
   background: var(--panel);
   border-bottom: 1px solid var(--line);
 }
 
-.toolbar__brand { display: flex; align-items: center; gap: 10px; }
-.toolbar__brand h1 { font-size: 14px; letter-spacing: -0.01em; }
+.toolbar__brand { display: flex; align-items: center; gap: var(--s2); }
+.toolbar__doc { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
 
 .logo {
   width: 26px;
@@ -60,44 +85,126 @@ a { color: var(--accent); }
 }
 
 .toolbar__name {
-  width: 190px;
+  width: 200px;
   background: transparent;
   border: 0;
-  border-bottom: 1px dashed var(--line);
-  color: var(--ink-dim);
+  border-bottom: 1px dashed transparent;
+  color: var(--ink);
   font: inherit;
-  font-size: 12px;
+  font-weight: 600;
   padding: 1px 0;
 }
-.toolbar__name:focus { outline: none; border-bottom-color: var(--accent); color: var(--ink); }
+.toolbar__name:hover { border-bottom-color: var(--line-control); }
 
-.toolbar__group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.toolbar__group--end { margin-left: auto; }
+/*
+ * Groups are separated by space, not rules. The gap between groups is double
+ * the gap inside one, which is enough to read as a boundary on its own.
+ */
+.toolbar__group { display: flex; align-items: center; gap: var(--s1); }
+.toolbar__group--end { gap: var(--s2); }
+.toolbar__spacer { flex: 1 1 auto; }
+
 .toolbar__error {
   flex-basis: 100%;
   margin: 0;
-  color: #fca5a5;
+  color: var(--danger);
 }
-.times { color: var(--ink-dim); }
+.toolbar__error:empty { display: none; }
+
+/* A toggled mode reads as on without borrowing the accent from selection. */
+.btn.is-on { background: var(--accent-soft); color: var(--ink); }
+
+.split { display: flex; align-items: stretch; }
+.split > .btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.split .menu__trigger {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 0 6px 6px 0;
+  padding: 6px var(--s1);
+  margin-left: 1px;
+}
+.split .menu__trigger:hover { background: var(--accent); filter: brightness(1.08); }
+
+/* ---------- menus and popovers ---------- */
+
+.menu { position: relative; display: inline-flex; }
+.menu__trigger { gap: var(--s1); }
+
+.menu__list,
+.popover {
+  position: absolute;
+  top: calc(100% + var(--s1));
+  z-index: 40;
+  min-width: 230px;
+  background: var(--panel-3);
+  border: 1px solid var(--line-control);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px #000000b0;
+  padding: var(--s1);
+}
+.menu__list--start, .popover { left: 0; }
+.menu__list--end { right: 0; }
+
+.menu__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  width: 100%;
+  background: none;
+  border: 0;
+  border-radius: 5px;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  padding: var(--s2) var(--s2);
+  text-align: left;
+}
+.menu__item:hover:not(:disabled) { background: #ffffff14; }
+.menu__item:disabled { opacity: 0.4; cursor: not-allowed; }
+.menu__item em { color: var(--ink-3); font-style: normal; font-size: 11px; }
+.menu__item--danger { color: var(--danger); }
+.menu__item--separated { margin-top: var(--s1); border-top: 1px solid var(--line); padding-top: var(--s3); }
+
+.popover { width: 260px; display: flex; flex-direction: column; gap: var(--s3); padding: var(--s3); }
+.popover__title {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.times { color: var(--ink-2); }
 
 /* ---------- controls ---------- */
 
 .input {
   background: var(--panel-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: 6px;
   color: var(--ink);
   font: inherit;
-  padding: 5px 7px;
+  padding: 5px 8px;
   min-width: 0;
   width: 100%;
 }
-.input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.input:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+/*
+ * One focus indicator for everything. Previously exactly one element had a
+ * designed focus style and one removed its outline outright.
+ */
+:where(a, button, select, input, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 .input--num { width: 78px; }
 .input--color { width: 38px; height: 30px; padding: 2px; cursor: pointer; }
 
 .field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.field > span { color: var(--ink-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.field > span { color: var(--ink-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
 .field--inline { flex-direction: row; align-items: center; gap: 6px; }
 .field--inline > span { text-transform: none; letter-spacing: 0; font-size: 12px; }
 
@@ -114,10 +221,39 @@ a { color: var(--accent); }
   padding: 6px 11px;
   cursor: pointer;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
 }
 .btn:hover { filter: brightness(1.08); }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn--ghost { background: var(--panel-2); color: var(--ink); border-color: var(--line); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+
+/* Tier 2 — used several times a session. Bordered, quiet, readable. */
+.btn--secondary {
+  background: var(--panel-3);
+  color: var(--ink);
+  border-color: var(--line-control);
+  font-weight: 500;
+}
+.btn--secondary:hover { background: #2b3648; filter: none; }
+
+/* Tier 3 — occasional. No fill at all, so it cannot compete. */
+.btn--quiet {
+  background: none;
+  color: var(--ink-2);
+  border-color: transparent;
+  font-weight: 500;
+}
+.btn--quiet:hover { background: #ffffff12; color: var(--ink); filter: none; }
+
+/* Destructive actions never borrow the accent. */
+.btn--danger { background: none; color: var(--danger); border-color: var(--line-control); }
+.btn--danger:hover { background: #f8717118; filter: none; }
+
+/* Legacy alias — .btn--ghost was doing the work of all three tiers. */
+.btn--ghost { background: var(--panel-3); color: var(--ink); border-color: var(--line-control); font-weight: 500; }
+.btn--ghost:hover { background: #2b3648; filter: none; }
+
 .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -141,7 +277,8 @@ a { color: var(--accent); }
   border-inline: 1px solid var(--line);
 }
 
-.app__centre { min-width: 0; min-height: 0; position: relative; }
+.app__centre { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.app__stage { position: relative; flex: 1; min-height: 0; }
 
 .panel { background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
 .panel__head {
@@ -156,15 +293,15 @@ a { color: var(--accent); }
   background: var(--panel);
   z-index: 2;
 }
-.panel__head h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-dim); }
-.panel__count { color: var(--ink-dim); font-size: 11px; }
+.panel__head h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+.panel__count { color: var(--ink-2); font-size: 11px; }
 .panel__body { padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; }
 
 .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: end; }
 
-.note { margin: 0; color: var(--ink-dim); font-size: 11px; }
+.note { margin: 0; color: var(--ink-2); font-size: 11px; }
 .note--warn { color: var(--warn); }
-.empty { color: var(--ink-dim); padding: 10px 2px; list-style: none; }
+.empty { color: var(--ink-2); padding: 10px 2px; list-style: none; }
 
 /* ---------- cabinet library ---------- */
 
@@ -188,8 +325,8 @@ a { color: var(--accent); }
 }
 .cab__main:hover { border-color: var(--accent); }
 .cab__title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.cab__title em { color: var(--ink-dim); font-style: normal; font-size: 11px; }
-.cab__meta { display: flex; flex-wrap: wrap; gap: 6px; color: var(--ink-dim); font-size: 11px; }
+.cab__title em { color: var(--ink-2); font-style: normal; font-size: 11px; }
+.cab__meta { display: flex; flex-wrap: wrap; gap: 6px; color: var(--ink-2); font-size: 11px; }
 
 .pill {
   background: #1e3a5f;
@@ -203,7 +340,7 @@ a { color: var(--accent); }
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  color: var(--ink-dim);
+  color: var(--ink-2);
   cursor: pointer;
   width: 30px;
   display: flex;
@@ -248,12 +385,12 @@ a { color: var(--accent); }
   flex-direction: column;
 }
 .layer__main strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.layer__main span { color: var(--ink-dim); font-size: 11px; }
+.layer__main span { color: var(--ink-2); font-size: 11px; }
 .layer__actions { display: flex; gap: 1px; }
 .layer__actions button {
   background: none;
   border: 0;
-  color: var(--ink-dim);
+  color: var(--ink-2);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -267,12 +404,12 @@ a { color: var(--accent); }
 
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin: 0; }
 .stats > div { display: flex; flex-direction: column; }
-.stats dt { color: var(--ink-dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+.stats dt { color: var(--ink-2); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
 .stats dd { margin: 0; font-variant-numeric: tabular-nums; }
 .stats--wide { grid-template-columns: repeat(4, 1fr); }
-.stats em { color: var(--ink-dim); font-size: 11px; }
+.stats em { color: var(--ink-2); font-size: 11px; }
 
-.spec-details summary { cursor: pointer; color: var(--ink-dim); padding: 4px 0; }
+.spec-details summary { cursor: pointer; color: var(--ink-2); padding: 4px 0; }
 .spec-details[open] summary { color: var(--ink); }
 .spec-details > * + * { margin-top: 8px; }
 
@@ -301,25 +438,36 @@ a { color: var(--accent); }
   color: var(--ink);
   cursor: pointer;
   font: inherit;
-  padding: 3px 7px;
+  /* 24x24 minimum: SC 2.5.8, and these sit adjacent so the spacing exception
+     does not apply. */
+  min-width: 26px;
+  min-height: 26px;
+  padding: var(--s1) var(--s2);
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 .stage__hud button:hover { background: #ffffff18; }
-.stage__zoom, .stage__coords { color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.stage__zoom, .stage__coords { color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .stage__coords { border-left: 1px solid var(--line); padding-left: 8px; }
 
-.stage__hint {
+.stage__empty {
   position: absolute;
-  right: 12px;
-  bottom: 14px;
-  margin: 0;
-  color: var(--ink-dim);
-  font-size: 11px;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  text-align: center;
+  padding: var(--s5);
+  color: var(--ink-2);
   pointer-events: none;
 }
+.stage__empty p { margin: 0; max-width: 42ch; }
+.stage__empty-title { color: var(--ink); font-size: 15px; font-weight: 600; }
+.stage__empty-hint { color: var(--ink-3); font-size: 11px; margin-top: var(--s3) !important; }
 
 /* ---------- modal + spec sheet ---------- */
 
@@ -354,12 +502,12 @@ a { color: var(--accent); }
 }
 .sheet__body { padding: 18px 20px; display: flex; flex-direction: column; gap: 18px; }
 .sheet__title { font-size: 20px; }
-.sheet__sub { margin: 0; color: var(--ink-dim); }
-.sheet__body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-dim); margin-bottom: 8px; }
+.sheet__sub { margin: 0; color: var(--ink-2); }
+.sheet__body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: 8px; }
 .sheet__table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .sheet__table th, .sheet__table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.sheet__table th { color: var(--ink-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
-.sheet__table small { color: var(--ink-dim); }
+.sheet__table th { color: var(--ink-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.sheet__table small { color: var(--ink-2); }
 
 /* ---------- responsive ---------- */
 
@@ -380,7 +528,7 @@ a { color: var(--accent); }
     background: none;
     border: 0;
     border-bottom: 2px solid transparent;
-    color: var(--ink-dim);
+    color: var(--ink-2);
     font: inherit;
     padding: 9px 6px;
     cursor: pointer;
@@ -495,7 +643,7 @@ a { color: var(--accent); }
   padding: 8px 10px;
 }
 .save__main { display: flex; flex-direction: column; min-width: 0; }
-.save__main span { color: var(--ink-dim); font-size: 11px; }
+.save__main span { color: var(--ink-2); font-size: 11px; }
 
 /* ---------- pick list ---------- */
 
@@ -504,7 +652,7 @@ a { color: var(--accent); }
   background: none;
   border: 0;
   border-bottom: 2px solid transparent;
-  color: var(--ink-dim);
+  color: var(--ink-2);
   cursor: pointer;
   font: inherit;
   padding: 8px 12px;
@@ -515,14 +663,14 @@ a { color: var(--accent); }
 
 .group-row th {
   background: var(--panel-2);
-  color: var(--ink-dim);
+  color: var(--ink-2);
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .patch { margin-bottom: 12px; }
-.patch__runs { margin: 4px 0 0; padding-left: 20px; color: var(--ink-dim); }
+.patch__runs { margin: 4px 0 0; padding-left: 20px; color: var(--ink-2); }
 .patch__runs li { margin-bottom: 2px; }
 
 @media print {
@@ -580,3 +728,109 @@ a { color: var(--accent); }
 svg { flex: none; }
 a svg,
 .note svg { vertical-align: -0.1em; margin-left: 0.15em; }
+
+/* ---------- dialog chrome ---------- */
+
+.btn--icon {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--ink-2);
+  cursor: pointer;
+  padding: var(--s1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+}
+.btn--icon:hover { background: #ffffff14; color: var(--ink); }
+
+/* The heading is the dialog's focus entry point, so it must not show a caret
+   outline when focused programmatically — the ring is enough. */
+.modal__head h2:focus { outline: none; }
+.modal__head h2:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* ---------- skip link, progress, reduced motion ---------- */
+
+.skip-link {
+  position: absolute;
+  left: var(--s2);
+  top: -3rem;
+  z-index: 100;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 0 0 var(--radius) var(--radius);
+  font-weight: 600;
+  padding: var(--s2) var(--s3);
+  text-decoration: none;
+  transition: top 0.12s ease;
+}
+.skip-link:focus-visible { top: 0; }
+
+.progress {
+  height: 6px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-control);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress span { display: block; height: 100%; background: var(--accent); }
+
+/* The canvas is a focus stop now, so it needs to show it. */
+.stage__canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/*
+ * Reduced motion. The animated test patterns are the reason this matters more
+ * here than in most apps — the clock is also stopped in JS, so a pattern holds
+ * its first frame rather than moving.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- status bar ---------- */
+
+/*
+ * Sits over the canvas rather than taking a row from it — the canvas is the
+ * scarce resource. Values are primary, units and conversions tertiary, so the
+ * row scans as six numbers rather than twelve.
+ */
+.statusbar {
+  margin: 0;
+  display: flex;
+  gap: var(--s5);
+  align-items: baseline;
+  justify-content: flex-end;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  padding: var(--s2) var(--s4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: none;
+}
+.statusbar > div { display: flex; flex-direction: column; white-space: nowrap; }
+.statusbar dt {
+  color: var(--ink-3);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.statusbar dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.statusbar em { display: block; color: var(--ink-3); font-style: normal; font-size: 10px; font-weight: 400; }
+
+@media (max-width: 1200px) {
+  .statusbar { gap: var(--s4); padding: var(--s2) var(--s3); justify-content: flex-start; }
+}

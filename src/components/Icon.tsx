@@ -25,6 +25,13 @@ export type IconName =
   | 'plus'
   | 'minus'
   | 'external'
+  | 'chevron-down'
+  | 'arrow-undo'
+  | 'arrow-redo'
+  | 'pattern'
+  | 'frame'
+  | 'settings'
+  | 'document'
   | 'align-left'
   | 'align-hcentre'
   | 'align-right'
@@ -117,6 +124,44 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M14 4h6v6" />
       <path d="m20 4-8.5 8.5" />
       <path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" />
+    </>
+  ),
+  'chevron-down': <path d="m6 9.5 6 6 6-6" />,
+  'arrow-undo': (
+    <>
+      <path d="M4 9.5h11a5 5 0 0 1 0 10h-6" />
+      <path d="m8.5 5 -4.5 4.5 4.5 4.5" />
+    </>
+  ),
+  'arrow-redo': (
+    <>
+      <path d="M20 9.5H9a5 5 0 0 0 0 10h6" />
+      <path d="m15.5 5 4.5 4.5-4.5 4.5" />
+    </>
+  ),
+  pattern: (
+    <>
+      <circle cx="12" cy="12" r="2.5" />
+      <path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5M12 2a10 10 0 0 1 10 10" />
+      <path d="M12 18.5A6.5 6.5 0 0 1 5.5 12M12 22A10 10 0 0 1 2 12" />
+    </>
+  ),
+  frame: (
+    <>
+      <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
+      <path d="M3.5 9.5h17M8 5.5v13" />
+    </>
+  ),
+  settings: (
+    <>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3" />
+    </>
+  ),
+  document: (
+    <>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 3v5h5" />
     </>
   ),
   'align-left': alignIcon('M4 3.5v17', [

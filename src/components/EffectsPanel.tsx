@@ -5,6 +5,7 @@ import { useEditor } from '@/state/store';
 import { DIRECTION_LABELS, EFFECT_LABELS, isAnimated, type EffectDirection, type EffectKind } from '@/lib/effects';
 import { canRecordVideo, exportVideo } from '@/lib/export';
 import NumberInput from './NumberInput';
+import Dialog from './Dialog';
 
 /**
  * Live test patterns for commissioning a wall, and recording them out as
@@ -46,13 +47,7 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
   return (
     /* Docked rather than centred: the whole point is watching the pattern play
        on the canvas while the controls are open. */
-    <div className="modal modal--docked" role="dialog" aria-label="Test patterns">
-      <div className="modal__panel modal__panel--docked">
-        <header className="modal__head">
-          <h2>Test patterns</h2>
-          <button className="btn btn--ghost" type="button" onClick={onClose}>Close</button>
-        </header>
-
+    <Dialog title="Test patterns" onClose={onClose} docked>
         <div className="sheet__body">
           <p className="note">
             Something moving across the wall shows up dead tiles, a mis-patched cabinet and
@@ -193,12 +188,25 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
               time rather than off a wall clock, so the speed is right regardless of how fast the tab
               renders. A long recording at 4K takes a while.
             </p>
+            {progress !== null && (
+              <div
+                className="progress"
+                role="progressbar"
+                aria-valuenow={Math.round(progress * 100)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Recording progress"
+              >
+                <span style={{ width: `${Math.round(progress * 100)}%` }} />
+              </div>
+            )}
             {!isAnimated(effect) && <p className="note note--warn">Choose a pattern above to record.</p>}
-            {done && <p className="note" role="status">{done}</p>}
-            {error && <p className="note note--warn" role="alert">{error}</p>}
+            {/* Rendered always: a live region inserted with its text already in
+                place is announced unreliably. */}
+            <p className="note" role="status">{done ?? ''}</p>
+            <p className="note note--warn" role="alert">{error ?? ''}</p>
           </section>
         </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }

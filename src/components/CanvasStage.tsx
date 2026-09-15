@@ -130,9 +130,12 @@ export default function CanvasStage() {
     };
   }, [layers]);
 
-  // Run the clock only while an effect is actually animating.
+  // Run the clock only while an effect is actually animating — and not at all
+  // when the viewer has asked for reduced motion. The pattern still draws, it
+  // just holds on its first frame rather than moving.
   useEffect(() => {
     if (!isAnimated(effect)) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     let raf = 0;
     startedAt.current = performance.now();
     const tick = () => {
@@ -408,6 +411,19 @@ export default function CanvasStage() {
       <canvas
         ref={canvasRef}
         className="stage__canvas"
+        /*
+         * A drawing surface is not exempt from keyboard operability. Making it
+         * a real focus stop gives the arrow-key nudging an owner — it was bound
+         * to `window`, so nothing ever announced that it existed.
+         */
+        tabIndex={0}
+        role="application"
+        aria-label={
+          layers.length
+            ? `Canvas, ${canvas.width} by ${canvas.height} pixels, ${layers.length} screen${layers.length === 1 ? '' : 's'}. ` +
+              `${selectedIds.length} selected. Arrow keys move the selection, shift for ten pixels.`
+            : `Empty canvas, ${canvas.width} by ${canvas.height} pixels. Add a cabinet from the library to place a screen.`
+        }
         style={{ width: size.width, height: size.height }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -429,7 +445,17 @@ export default function CanvasStage() {
           {cursor ? `${Math.round(cursor.x)}, ${Math.round(cursor.y)} px` : `${canvas.width} × ${canvas.height}`}
         </span>
       </div>
-      <p className="stage__hint">Drag screens to move · Alt-drag or right-drag to pan · Scroll to zoom · Ctrl disables snapping</p>
+      {!layers.length && (
+        /* The only onboarding a professional will tolerate: passive, in the
+           empty space, and gone the moment there is work on the canvas. */
+        <div className="stage__empty">
+          <p className="stage__empty-title">Nothing placed yet</p>
+          <p>Pick a cabinet from the library on the left to drop your first screen.</p>
+          <p className="stage__empty-hint">
+            Then: drag to move · alt-drag to pan · scroll to zoom · hold Ctrl to ignore snapping
+          </p>
+        </div>
+      )}
     </div>
   );
 }

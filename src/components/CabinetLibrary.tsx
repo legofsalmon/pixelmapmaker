@@ -58,7 +58,10 @@ function CabinetRow({
         className={`cab__fav${favourite ? ' is-on' : ''}`}
         type="button"
         onClick={onToggleFavourite}
-        aria-label={favourite ? 'Remove from favourites' : 'Add to favourites'}
+        /* Stable name plus aria-pressed, so state can be queried without
+           activating the control. */
+        aria-pressed={favourite}
+        aria-label={`Favourite ${cabinet.model}`}
       >
         <Icon name="star" filled={favourite} />
       </button>
@@ -98,7 +101,7 @@ export default function CabinetLibrary() {
     <section className="panel">
       <header className="panel__head">
         <h2>Cabinet library</h2>
-        <span className="panel__count">{results.length} of {all.length}</span>
+        <span className="panel__count" role="status">{results.length} of {all.length}</span>
       </header>
 
       <div className="panel__body">
@@ -106,22 +109,24 @@ export default function CabinetLibrary() {
         <input
           className="input"
           type="search"
+          aria-label="Search the cabinet library"
           placeholder="Search brand, series, model or pitch…"
           value={filter.query}
           onChange={(e) => set({ query: e.target.value })}
         />
 
         <div className="filters">
-          <select className="input" value={filter.brand ?? ''} onChange={(e) => set({ brand: e.target.value || null })}>
+          <select className="input" aria-label="Filter by brand" value={filter.brand ?? ''} onChange={(e) => set({ brand: e.target.value || null })}>
             <option value="">All brands</option>
             {BRANDS.map((b) => <option key={b} value={b}>{b}</option>)}
           </select>
-          <select className="input" value={filter.category ?? ''} onChange={(e) => set({ category: e.target.value || null })}>
+          <select className="input" aria-label="Filter by cabinet type" value={filter.category ?? ''} onChange={(e) => set({ category: e.target.value || null })}>
             <option value="">All types</option>
             {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
           <select
             className="input"
+            aria-label="Filter by indoor or outdoor"
             value={filter.environment ?? ''}
             onChange={(e) => set({ environment: (e.target.value || null) as CabinetFilter['environment'] })}
           >

@@ -7,6 +7,7 @@ import Inspector from './Inspector';
 import LayerPanel from './LayerPanel';
 import EffectsPanel from './EffectsPanel';
 import PickList from './PickList';
+import StatusBar from './StatusBar';
 import MultiSelectPanel from './MultiSelectPanel';
 import SaveDialog from './SaveDialog';
 import SpecSheet from './SpecSheet';
@@ -51,6 +52,8 @@ export default function Editor() {
       // Let text fields keep their own undo stack.
       if (el && (el.isContentEditable || el.tagName === 'TEXTAREA' ||
         (el.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'color'].includes((el as HTMLInputElement).type)))) return;
+      // A surface is open: its own keys win, and the canvas behind must not act.
+      if (document.querySelector('[role="dialog"]')) return;
       const mod = e.metaKey || e.ctrlKey;
       const key = e.key.toLowerCase();
       if (mod && key === 'z') {
@@ -80,6 +83,9 @@ export default function Editor() {
 
   return (
     <div className="app">
+      {/* The library can render hundreds of rows between the toolbar and the
+          canvas, so a keyboard user needs a way past it. */}
+      <a className="skip-link" href="#canvas">Skip to the canvas</a>
       <Toolbar
         onShowSpecSheet={() => setShowSpecSheet(true)}
         onShowSave={() => setShowSave(true)}
@@ -94,6 +100,7 @@ export default function Editor() {
             key={tab}
             type="button"
             className={mobilePanel === tab ? 'is-active' : ''}
+            aria-current={mobilePanel === tab}
             onClick={() => setMobilePanel(tab)}
           >
             {tab === 'library' ? 'Library' : tab === 'canvas' ? 'Canvas' : 'Screen'}
@@ -102,15 +109,18 @@ export default function Editor() {
       </nav>
 
       <main className="app__body" data-mobile-panel={mobilePanel}>
-        <aside className="app__rail app__rail--left">
+        <aside className="app__rail app__rail--left" aria-label="Cabinet library">
           <CabinetLibrary />
         </aside>
 
-        <div className="app__centre">
-          <CanvasStage />
+        <div className="app__centre" id="canvas">
+          <div className="app__stage">
+            <CanvasStage />
+          </div>
+          <StatusBar />
         </div>
 
-        <aside className="app__rail app__rail--right">
+        <aside className="app__rail app__rail--right" aria-label="Screen settings">
           {selectedCount > 1 ? <MultiSelectPanel /> : <Inspector />}
           <LayerPanel />
         </aside>

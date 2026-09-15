@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useEditor } from '@/state/store';
 import { CF_PRESETS, TRUSS_PRESETS, supportForProject, type SupportMode } from '@/lib/support';
 import NumberInput from './NumberInput';
+import Dialog from './Dialog';
 
 const MODES: Array<{ value: SupportMode; label: string; blurb: string }> = [
   {
@@ -39,16 +40,12 @@ export default function SupportPanel({ onClose }: { onClose: () => void }) {
   const ballasted = support.mode !== 'hanging';
 
   return (
-    <div className="modal" role="dialog" aria-modal="true" aria-label="Support structure">
-      <div className="modal__panel sheet">
-        <header className="modal__head no-print">
-          <h2>Support structure</h2>
-          <div className="btn-row">
-            <button className="btn" type="button" onClick={() => window.print()}>Print / PDF</button>
-            <button className="btn btn--ghost" type="button" onClick={onClose}>Close</button>
-          </div>
-        </header>
-
+    <Dialog
+      title="Support structure"
+      onClose={onClose}
+      wide
+      actions={<button className="btn" type="button" onClick={() => window.print()}>Print / PDF</button>}
+    >
         <div className="sheet__body">
           <h3 className="sheet__title">{name}</h3>
           <p className="sheet__sub">{mode.blurb}</p>
@@ -221,7 +218,6 @@ export default function SupportPanel({ onClose }: { onClose: () => void }) {
             are signed off against the manufacturer&rsquo;s load data and a wind standard.
           </p>
         </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }

@@ -7,6 +7,7 @@ import { buildPickList, pickListCsv } from '@/lib/picklist';
 import type { LineCategory } from '@/lib/picklist';
 import NumberInput from './NumberInput';
 import Icon from './Icon';
+import Dialog from './Dialog';
 
 const CATEGORY_ORDER: LineCategory[] = ['Cabinets', 'Processing', 'Data', 'Power', 'Transport'];
 
@@ -44,24 +45,24 @@ export default function PickList({ onClose }: { onClose: () => void }) {
   );
 
   return (
-    <div className="modal" role="dialog" aria-modal="true" aria-label="Pick list">
-      <div className="modal__panel sheet">
-        <header className="modal__head no-print">
-          <h2>Pick list</h2>
-          <div className="btn-row">
-            <button className="btn" type="button" onClick={() => window.print()}>Print / PDF</button>
-            <button className="btn btn--ghost" type="button" onClick={() => downloadCsv(name, pickListCsv(lines, name))}>
-              CSV
-            </button>
-            <button className="btn btn--ghost" type="button" onClick={onClose}>Close</button>
-          </div>
-        </header>
-
+    <Dialog
+      title="Pick list"
+      onClose={onClose}
+      wide
+      actions={
+        <>
+          <button className="btn" type="button" onClick={() => window.print()}>Print / PDF</button>
+          <button className="btn btn--secondary" type="button" onClick={() => downloadCsv(name, pickListCsv(lines, name))}>
+            CSV
+          </button>
+        </>
+      }
+    >
         <nav className="tabs no-print">
-          <button type="button" className={tab === 'list' ? 'is-active' : ''} onClick={() => setTab('list')}>
+          <button type="button" className={tab === 'list' ? 'is-active' : ''} aria-current={tab === 'list'} onClick={() => setTab('list')}>
             Pick list
           </button>
-          <button type="button" className={tab === 'cabling' ? 'is-active' : ''} onClick={() => setTab('cabling')}>
+          <button type="button" className={tab === 'cabling' ? 'is-active' : ''} aria-current={tab === 'cabling'} onClick={() => setTab('cabling')}>
             Cabling
           </button>
         </nav>
@@ -335,8 +336,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
             </section>
           )}
         </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }
 

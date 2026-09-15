@@ -2,6 +2,7 @@
 
 import { useEditor } from '@/state/store';
 import { kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
+import Dialog from './Dialog';
 
 /**
  * Printable summary of the whole build. `window.print()` plus the print
@@ -14,16 +15,12 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
   const totals = projectTotals(layers);
 
   return (
-    <div className="modal" role="dialog" aria-modal="true" aria-label="Specification sheet">
-      <div className="modal__panel sheet">
-        <header className="modal__head no-print">
-          <h2>Specification sheet</h2>
-          <div className="btn-row">
-            <button className="btn" type="button" onClick={() => window.print()}>Print / save as PDF</button>
-            <button className="btn btn--ghost" type="button" onClick={onClose}>Close</button>
-          </div>
-        </header>
-
+    <Dialog
+      title="Specification sheet"
+      onClose={onClose}
+      wide
+      actions={<button className="btn" type="button" onClick={() => window.print()}>Print / save as PDF</button>}
+    >
         <div className="sheet__body">
           <h3 className="sheet__title">{name}</h3>
           <p className="sheet__sub">
@@ -111,7 +108,6 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
             qualified rigger before load-in.
           </p>
         </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }

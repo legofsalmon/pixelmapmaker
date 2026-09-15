@@ -12,6 +12,7 @@ import {
   type SaveSummary,
 } from '@/lib/browserStore';
 import { exportProjectJson } from '@/lib/export';
+import Dialog from './Dialog';
 
 const formatBytes = (n: number) => (n < 1024 ? `${n} B` : `${Math.round(n / 1024)} KB`);
 
@@ -61,13 +62,7 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="modal" role="dialog" aria-modal="true" aria-label="Save project">
-      <div className="modal__panel modal__panel--narrow">
-        <header className="modal__head">
-          <h2>Save project</h2>
-          <button className="btn btn--ghost" type="button" onClick={onClose}>Close</button>
-        </header>
-
+    <Dialog title="Save project" onClose={onClose}>
         <div className="sheet__body">
           {!available && (
             <p className="note note--warn">
@@ -142,10 +137,9 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
             </ul>
           </section>
 
-          {message && <p className="note" role="status">{message}</p>}
-          {error && <p className="note note--warn" role="alert">{error}</p>}
+          <p className="note" role="status">{message ?? ''}</p>
+          <p className="note note--warn" role="alert">{error ?? ''}</p>
         </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }

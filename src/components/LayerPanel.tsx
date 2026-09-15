@@ -61,7 +61,8 @@ export default function LayerPanel() {
                   <button
                     type="button"
                     title={layer.visible ? 'Hide' : 'Show'}
-                    aria-label={layer.visible ? 'Hide screen' : 'Show screen'}
+                    aria-pressed={!layer.visible}
+                    aria-label={`Hide ${layer.name}`}
                     onClick={() => updateLayer(layer.id, { visible: !layer.visible })}
                   >
                     <Icon name={layer.visible ? 'eye' : 'eye-off'} />
@@ -69,7 +70,8 @@ export default function LayerPanel() {
                   <button
                     type="button"
                     title={layer.locked ? 'Unlock' : 'Lock'}
-                    aria-label={layer.locked ? 'Unlock screen' : 'Lock screen'}
+                    aria-pressed={layer.locked}
+                    aria-label={`Lock ${layer.name}`}
                     onClick={() => updateLayer(layer.id, { locked: !layer.locked })}
                   >
                     <Icon name={layer.locked ? 'lock' : 'unlock'} />
