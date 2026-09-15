@@ -437,6 +437,16 @@ a { color: var(--accent); }
   justify-content: center;
 }
 .layer__actions button:hover { background: #ffffff14; color: var(--ink); }
+/*
+ * These are toggles with a fixed name, so the pressed state has to be visible
+ * rather than implied by the icon swap alone. Same treatment as .btn.is-on:
+ * reads as on without borrowing the accent that means selection.
+ */
+.layer__actions button[aria-pressed='true'],
+.layer__actions button[aria-pressed='true']:hover {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
 
 /* ---------- stats ---------- */
 

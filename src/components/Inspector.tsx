@@ -38,7 +38,7 @@ export default function Inspector() {
 
   if (!layer) {
     return (
-      <CollapsiblePanel id="screen" title="Screen">
+      <CollapsiblePanel id="screen" title="Screen settings">
         <div className="panel__body">
           <p className="empty">Select a screen on the canvas to edit it.</p>
         </div>
@@ -56,7 +56,7 @@ export default function Inspector() {
   return (
     <CollapsiblePanel
       id="screen"
-      title="Screen"
+      title="Screen settings"
       aside={<span className="panel__count">{spec.brand} {spec.model}</span>}
     >
       <div className="panel__body">

@@ -20,7 +20,7 @@ export default function LayerPanel() {
   return (
     <CollapsiblePanel
       id="screens"
-      title="Screens"
+      title="All screens"
       aside={
         <span className="panel__count">
           {selectedIds.length ? `${selectedIds.length} of ${layers.length} selected` : layers.length}
@@ -62,9 +62,17 @@ export default function LayerPanel() {
                   </span>
                 </button>
                 <div className="layer__actions">
+                  {/*
+                    Toggles, not actions: the name stays put and aria-pressed
+                    carries the state, the way a Bold button does. The tooltip
+                    has to say the same thing as the name — it used to flip to
+                    "Show" while the name stayed "Hide", so a tooltip and a
+                    screen reader described the same button differently. State
+                    is carried by the icon and the pressed styling instead.
+                  */}
                   <button
                     type="button"
-                    title={layer.visible ? 'Hide' : 'Show'}
+                    title="Hide"
                     aria-pressed={!layer.visible}
                     aria-label={`Hide ${layer.name}`}
                     onClick={() => updateLayer(layer.id, { visible: !layer.visible })}
@@ -73,7 +81,7 @@ export default function LayerPanel() {
                   </button>
                   <button
                     type="button"
-                    title={layer.locked ? 'Unlock' : 'Lock'}
+                    title="Lock"
                     aria-pressed={layer.locked}
                     aria-label={`Lock ${layer.name}`}
                     onClick={() => updateLayer(layer.id, { locked: !layer.locked })}

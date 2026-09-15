@@ -121,7 +121,7 @@ export default function Editor() {
           <StatusBar />
         </div>
 
-        <aside className="app__rail app__rail--right" aria-label="Screen settings">
+        <aside className="app__rail app__rail--right" aria-label="Screens">
           {selectedCount > 1 ? <MultiSelectPanel /> : <Inspector />}
           <LayerPanel />
         </aside>
