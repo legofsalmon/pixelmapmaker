@@ -25,13 +25,28 @@
   --danger: #f87171;
   --ok: #4ade80;
 
-  /* 4pt spacing scale. Off-grid values are bugs, not taste. */
+  /*
+   * 4pt spacing scale for layout. Off-grid values are bugs, not taste.
+   * --s0 is the deliberate half-step for optical alignment beside a 1px
+   * border; a bare 1px hairline is the only other allowed exception.
+   */
+  --s0: 2px;
   --s1: 4px;
   --s2: 8px;
   --s3: 12px;
   --s4: 16px;
   --s5: 24px;
   --s6: 32px;
+
+  /*
+   * Control sizing is not layout spacing. Forcing button padding onto the
+   * spacing scale is what left .input at 29px, .btn at 33px and selects at
+   * 31px — three heights for controls that sit in the same row.
+   */
+  --control-h: 32px;
+  --control-px: var(--s3);
+  /* Toolbar height, so the docked panel can clear it without a magic number. */
+  --toolbar-h: 52px;  /* .toolbar is held to this */
 
   --radius: 8px;
   --rail: 320px;
@@ -62,6 +77,10 @@ a { color: var(--accent); }
 /* ---------- toolbar ---------- */
 
 .toolbar {
+  position: relative;
+  /* Authoritative, not descriptive: the docked panel offsets by this, so the
+     bar is held to it rather than the token chasing whatever the bar becomes. */
+  min-height: var(--toolbar-h);
   display: flex;
   align-items: center;
   gap: var(--s4);
@@ -72,7 +91,7 @@ a { color: var(--accent); }
 }
 
 .toolbar__brand { display: flex; align-items: center; gap: var(--s2); }
-.toolbar__doc { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+.toolbar__doc { display: flex; align-items: center; gap: var(--s1); }
 
 .logo {
   width: 26px;
@@ -85,7 +104,8 @@ a { color: var(--accent); }
 }
 
 .toolbar__name {
-  width: 200px;
+  width: 190px;
+  min-height: var(--control-h);
   background: transparent;
   border: 0;
   border-bottom: 1px dashed transparent;
@@ -104,16 +124,30 @@ a { color: var(--accent); }
 .toolbar__group--end { gap: var(--s2); }
 .toolbar__spacer { flex: 1 1 auto; }
 
+
+/*
+ * Never `display: none` — a live region has to be in the tree before it has
+ * content, or the insertion is what gets announced, if anything. Taken out of
+ * the flex flow entirely: with `flex-basis: 100%` these two empty paragraphs
+ * were forcing a wrapped second row and doubling the toolbar's height.
+ */
+.toolbar__status,
 .toolbar__error {
-  flex-basis: 100%;
+  position: absolute;
+  left: var(--s3);
+  top: 100%;
   margin: 0;
-  color: var(--danger);
+  z-index: 20;
 }
-/* Never `display: none` — a live region has to be in the tree before it has
-   content, or the insertion is what gets announced, if anything. */
-.toolbar__error:empty,
-.toolbar__status:empty { margin: 0; height: 0; overflow: hidden; }
-.toolbar__status { flex-basis: 100%; margin: 0; color: var(--ink-2); }
+.toolbar__status { color: var(--ink-2); }
+.toolbar__error { color: var(--danger); }
+.toolbar__status:empty,
+.toolbar__error:empty {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
 
 /* A toggled mode reads as on without borrowing the accent from selection. */
 .btn.is-on,
@@ -125,7 +159,7 @@ a { color: var(--accent); }
   background: var(--accent);
   color: var(--accent-ink);
   border-radius: 0 6px 6px 0;
-  padding: 6px var(--s1);
+  padding: 0 var(--s1);
   margin-left: 1px;
 }
 .split .menu__trigger:hover { background: var(--accent); filter: brightness(1.08); }
@@ -162,7 +196,7 @@ a { color: var(--accent); }
   color: var(--ink);
   cursor: pointer;
   font: inherit;
-  padding: var(--s2) var(--s2);
+  padding: var(--s2);
   text-align: left;
 }
 .menu__item:hover:not(:disabled) { background: #ffffff14; }
@@ -190,7 +224,8 @@ a { color: var(--accent); }
   border-radius: 6px;
   color: var(--ink);
   font: inherit;
-  padding: 5px 8px;
+  min-height: var(--control-h);
+  padding: 0 var(--s2);
   min-width: 0;
   width: 100%;
 }
@@ -206,14 +241,14 @@ a { color: var(--accent); }
   border-radius: 4px;
 }
 .input--num { width: 78px; }
-.input--color { width: 38px; height: 30px; padding: 2px; cursor: pointer; }
+.input--color { width: 40px; min-height: var(--control-h); padding: var(--s0); cursor: pointer; }
 
-.field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.field { display: flex; flex-direction: column; gap: var(--s0); min-width: 0; }
 .field > span { color: var(--ink-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
-.field--inline { flex-direction: row; align-items: center; gap: 6px; }
+.field--inline { flex-direction: row; align-items: center; gap: var(--s2); }
 .field--inline > span { text-transform: none; letter-spacing: 0; font-size: 12px; }
 
-.checkbox { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+.checkbox { display: inline-flex; align-items: center; gap: var(--s2); cursor: pointer; user-select: none; }
 .checkbox input { accent-color: var(--accent); }
 
 .btn {
@@ -223,11 +258,13 @@ a { color: var(--accent); }
   border-radius: 6px;
   font: inherit;
   font-weight: 600;
-  padding: 6px 11px;
+  min-height: var(--control-h);
+  padding: 0 var(--control-px);
   cursor: pointer;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s2);
 }
 .btn:hover { filter: brightness(1.08); }
@@ -255,9 +292,9 @@ a { color: var(--accent); }
 .btn--danger { background: none; color: var(--danger); border-color: var(--line-control); }
 .btn--danger:hover { background: #f8717118; filter: none; }
 
-.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-row { display: flex; gap: var(--s2); flex-wrap: wrap; }
 
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
 
 /* ---------- layout ---------- */
 
@@ -286,8 +323,8 @@ a { color: var(--accent); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 9px 12px;
+  gap: var(--s2);
+  padding: var(--s3);
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
@@ -296,19 +333,19 @@ a { color: var(--accent); }
 }
 .panel__head h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
 .panel__count { color: var(--ink-2); font-size: 11px; }
-.panel__body { padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; }
+.panel__body { padding: var(--s3); display: flex; flex-direction: column; gap: var(--s3); }
 
-.filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: end; }
+.filters { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); align-items: end; }
 
 .note { margin: 0; color: var(--ink-2); font-size: 11px; }
 .note--warn { color: var(--warn); }
-.empty { color: var(--ink-2); padding: 10px 2px; list-style: none; }
+.empty { color: var(--ink-2); padding: var(--s3) var(--s0); list-style: none; }
 
 /* ---------- cabinet library ---------- */
 
-.cab-list, .layer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.cab-list, .layer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s1); }
 
-.cab { display: flex; align-items: stretch; gap: 4px; }
+.cab { display: flex; align-items: stretch; gap: var(--s1); }
 .cab__main {
   flex: 1;
   text-align: left;
@@ -317,23 +354,23 @@ a { color: var(--accent); }
   border-radius: var(--radius);
   color: inherit;
   font: inherit;
-  padding: 7px 9px;
+  padding: var(--s2) var(--s3);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--s0);
   min-width: 0;
 }
 .cab__main:hover { background: var(--panel-3); border-color: var(--line-control); }
-.cab__title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.cab__title { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2); }
 .cab__title em { color: var(--ink-2); font-style: normal; font-size: 11px; }
-.cab__meta { display: flex; flex-wrap: wrap; gap: 6px; color: var(--ink-2); font-size: 11px; }
+.cab__meta { display: flex; flex-wrap: wrap; gap: var(--s2); color: var(--ink-2); font-size: 11px; }
 
 .pill {
   background: #1e3a5f;
   color: #bfe3ff;
   border-radius: 999px;
-  padding: 0 6px;
+  padding: 0 var(--s2);
   font-variant-numeric: tabular-nums;
 }
 
@@ -354,8 +391,8 @@ a { color: var(--accent); }
 .custom-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px;
+  gap: var(--s2);
+  padding: var(--s3);
   border: 1px dashed var(--line);
   border-radius: var(--radius);
 }
@@ -365,11 +402,11 @@ a { color: var(--accent); }
 .layer {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s2);
   background: var(--panel-2);
   border: 1px solid var(--line-control);
   border-radius: var(--radius);
-  padding: 5px 7px;
+  padding: var(--s1) var(--s2);
 }
 .layer.is-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .layer__swatch { width: 12px; height: 26px; border-radius: 3px; flex: none; }
@@ -393,7 +430,7 @@ a { color: var(--accent); }
   border: 0;
   color: var(--ink-2);
   cursor: pointer;
-  padding: 4px;
+  padding: var(--s1);
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
@@ -403,16 +440,16 @@ a { color: var(--accent); }
 
 /* ---------- stats ---------- */
 
-.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin: 0; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2) var(--s3); margin: 0; }
 .stats > div { display: flex; flex-direction: column; }
 .stats dt { color: var(--ink-2); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
 .stats dd { margin: 0; font-variant-numeric: tabular-nums; }
 .stats--wide { grid-template-columns: repeat(4, 1fr); }
 .stats em { color: var(--ink-2); font-size: 11px; }
 
-.spec-details summary { cursor: pointer; color: var(--ink-2); padding: 4px 0; }
+.spec-details summary { cursor: pointer; color: var(--ink-2); padding: var(--s1) 0; }
 .spec-details[open] summary { color: var(--ink); }
-.spec-details > * + * { margin-top: 8px; }
+.spec-details > * + * { margin-top: var(--s2); }
 
 /* ---------- stage ---------- */
 
@@ -422,15 +459,15 @@ a { color: var(--accent); }
 
 .stage__hud {
   position: absolute;
-  left: 12px;
-  bottom: 12px;
+  left: var(--s3);
+  bottom: var(--s3);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s2);
   background: #0e1219dd;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 4px 10px;
+  padding: var(--s1) var(--s3);
   backdrop-filter: blur(6px);
 }
 .stage__hud button {
@@ -451,7 +488,7 @@ a { color: var(--accent); }
 }
 .stage__hud button:hover { background: #ffffff18; }
 .stage__zoom, .stage__coords { color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.stage__coords { border-left: 1px solid var(--line); padding-left: 8px; }
+.stage__coords { border-left: 1px solid var(--line); padding-left: var(--s2); }
 
 .stage__empty {
   position: absolute;
@@ -478,7 +515,7 @@ a { color: var(--accent); }
   background: #000000b0;
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: var(--s5);
   z-index: 50;
 }
 .modal__panel {
@@ -494,19 +531,19 @@ a { color: var(--accent); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
   background: var(--panel);
 }
-.sheet__body { padding: 18px 20px; display: flex; flex-direction: column; gap: 18px; }
+.sheet__body { padding: var(--s4) var(--s5); display: flex; flex-direction: column; gap: var(--s4); }
 .sheet__title { font-size: 20px; }
 .sheet__sub { margin: 0; color: var(--ink-2); }
-.sheet__body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: 8px; }
+.sheet__body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: var(--s2); }
 .sheet__table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.sheet__table th, .sheet__table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.sheet__table th, .sheet__table td { text-align: left; padding: var(--s2); border-bottom: 1px solid var(--line); vertical-align: top; }
 .sheet__table th { color: var(--ink-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
 .sheet__table small { color: var(--ink-2); }
 
@@ -531,7 +568,7 @@ a { color: var(--accent); }
     border-bottom: 2px solid transparent;
     color: var(--ink-2);
     font: inherit;
-    padding: 9px 6px;
+    padding: var(--s3) var(--s2);
     cursor: pointer;
   }
   .mobile-tabs button.is-active { color: var(--ink); border-bottom-color: var(--accent); }
@@ -544,7 +581,7 @@ a { color: var(--accent); }
      height under display:block, taking the canvas with it. */
   .app__body[data-mobile-panel='canvas'] .app__centre { display: flex; }
 
-  .toolbar { gap: 10px; }
+  .toolbar { gap: var(--s3); }
   .toolbar__group--end { margin-left: 0; }
   .stats--wide { grid-template-columns: 1fr 1fr; }
   .stage__hint { display: none; }
@@ -574,7 +611,7 @@ a { color: var(--accent); }
 .cab__main:hover .cab__add,
 .cab__main:focus-visible .cab__add { opacity: 1; }
 
-.icon-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.icon-row { display: flex; gap: var(--s1); flex-wrap: wrap; }
 .icon-row button {
   flex: 1;
   min-width: 34px;
@@ -583,17 +620,17 @@ a { color: var(--accent); }
   border-radius: 6px;
   color: var(--ink);
   cursor: pointer;
-  padding: 6px 4px;
+  padding: var(--s2) var(--s1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 .icon-row button:hover { background: var(--panel-3); border-color: var(--line-control); }
 
-.gap-row { display: flex; gap: 6px; align-items: center; }
+.gap-row { display: flex; gap: var(--s2); align-items: center; }
 .gap-row .input--num { width: 78px; flex: none; }
 
-.swatch-row { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+.swatch-row { display: flex; gap: var(--s1); align-items: center; flex-wrap: wrap; margin-top: var(--s2); }
 .swatch {
   width: 22px;
   height: 22px;
@@ -633,24 +670,24 @@ a { color: var(--accent); }
 
 .modal__panel--narrow { max-width: 620px; }
 
-.save-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.save-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s2); }
 .save {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--s3);
   flex-wrap: wrap;
   background: var(--panel-2);
   border: 1px solid var(--line-control);
   border-radius: var(--radius);
-  padding: 8px 10px;
+  padding: var(--s2) var(--s3);
 }
 .save__main { display: flex; flex-direction: column; min-width: 0; }
 .save__main span { color: var(--ink-2); font-size: 11px; }
 
 /* ---------- pick list ---------- */
 
-.tabs { display: flex; gap: 2px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; gap: var(--s0); padding: 0 var(--s4); border-bottom: 1px solid var(--line); }
 .tabs button {
   background: none;
   border: 0;
@@ -658,11 +695,11 @@ a { color: var(--accent); }
   color: var(--ink-2);
   cursor: pointer;
   font: inherit;
-  padding: 8px 12px;
+  padding: var(--s2) var(--s3);
 }
 .tabs button.is-active { color: var(--ink); border-bottom-color: var(--accent); }
 
-.opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end; }
+.opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s3); align-items: end; }
 
 .group-row th {
   background: var(--panel-2);
@@ -672,9 +709,9 @@ a { color: var(--accent); }
   text-transform: uppercase;
 }
 
-.patch { margin-bottom: 12px; }
-.patch__runs { margin: 4px 0 0; padding-left: 20px; color: var(--ink-2); }
-.patch__runs li { margin-bottom: 2px; }
+.patch { margin-bottom: var(--s3); }
+.patch__runs { margin: var(--s1) 0 0; padding-left: var(--s5); color: var(--ink-2); }
+.patch__runs li { margin-bottom: var(--s0); }
 
 @media print {
   .tabs { display: none !important; }
@@ -683,12 +720,12 @@ a { color: var(--accent); }
 
 /* ---------- support structure ---------- */
 
-.support-result { border-top: 1px solid var(--line); padding-top: 12px; }
-.support-result > * + * { margin-top: 8px; }
+.support-result { border-top: 1px solid var(--line); padding-top: var(--s3); }
+.support-result > * + * { margin-top: var(--s2); }
 
 .verdict {
   margin: 0;
-  padding: 8px 10px;
+  padding: var(--s2) var(--s3);
   border-radius: var(--radius);
   border: 1px solid;
 }
@@ -707,7 +744,7 @@ a { color: var(--accent); }
   /* Clear the toolbar and the left rail — it was covering both. */
   padding: var(--s3);
   padding-left: calc(var(--rail) + var(--s3));
-  padding-top: calc(var(--s3) + 52px);
+  padding-top: calc(var(--s3) + var(--toolbar-h));
   pointer-events: none;
   /* Below the modal layer, so a dialog is never reachable underneath one. */
   z-index: 30;
@@ -891,9 +928,61 @@ a svg,
   .toolbar__group[aria-label='Arrange'] { display: none; }
   .toolbar__spacer { flex-basis: 100%; }
 
-  .modal--docked { padding: var(--s2); padding-top: calc(var(--s2) + 52px); }
+  .modal--docked { padding: var(--s2); padding-top: calc(var(--s2) + var(--toolbar-h)); }
   .modal__panel--docked { max-width: 100%; }
 
   .statusbar { gap: var(--s3); font-size: 12px; }
   .statusbar > div:nth-child(n + 4) { display: none; }
 }
+
+/* ---------- collapsible rail panels ---------- */
+
+/*
+ * The toggle is the whole heading, so it takes the heading's type rather than
+ * restating it. The UA stylesheet resets font, letter-spacing and
+ * text-transform on form controls, so all three have to be inherited back
+ * explicitly or the head loses its small-caps against the library panel's.
+ *
+ * The button carries the head's padding and the heading cancels it again with
+ * equal negative margin. The row keeps the exact height it had before it was
+ * made foldable, but the hit target is now the whole row — 41px tall and the
+ * full width up to the count — rather than the two words of the label
+ * (WCAG 2.5.8 wants 24px; a heading's worth of text alone is about 17px).
+ */
+.panel__heading {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  margin-block: calc(var(--s3) * -1);
+}
+.panel__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: var(--s3) 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.panel__toggle:hover { color: var(--ink); }
+.panel__chevron { flex: none; transition: transform 0.12s ease; }
+.panel:not(.is-open) .panel__chevron { transform: rotate(-90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .panel__chevron { transition: none; }
+}
+
+/*
+ * A collapsed panel is head-only, and `.app__rail > .panel { flex: 0 0 auto }`
+ * above already sizes every panel to its content — so folding one shortens the
+ * rail without any further rule. What is needed is that a collapsed head keeps
+ * its full-width divider rather than collapsing against the next head.
+ */
+.panel:not(.is-open) .panel__head { border-bottom: 0; }

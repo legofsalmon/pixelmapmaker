@@ -1,6 +1,7 @@
 'use client';
 
 import { useEditor } from '@/state/store';
+import CollapsiblePanel from './CollapsiblePanel';
 import { layerRect } from '@/lib/geometry';
 import Icon from './Icon';
 
@@ -17,13 +18,15 @@ export default function LayerPanel() {
   const commit = useEditor((s) => s.commit);
 
   return (
-    <section className="panel">
-      <header className="panel__head">
-        <h2>Screens</h2>
+    <CollapsiblePanel
+      id="screens"
+      title="Screens"
+      aside={
         <span className="panel__count">
           {selectedIds.length ? `${selectedIds.length} of ${layers.length} selected` : layers.length}
         </span>
-      </header>
+      }
+    >
       <div className="panel__body">
         {layers.length > 1 && (
           <div className="btn-row">
@@ -98,6 +101,6 @@ export default function LayerPanel() {
           {!layers.length && <li className="empty">Add a cabinet from the library to start.</li>}
         </ul>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

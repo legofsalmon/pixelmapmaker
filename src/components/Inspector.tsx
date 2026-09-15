@@ -8,6 +8,7 @@ import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
 import Section from './Section';
+import CollapsiblePanel from './CollapsiblePanel';
 import Icon from './Icon';
 
 const SIGNAL_STARTS: Array<{ value: SignalStart; label: string }> = [
@@ -37,12 +38,11 @@ export default function Inspector() {
 
   if (!layer) {
     return (
-      <section className="panel">
-        <header className="panel__head"><h2>Screen</h2></header>
+      <CollapsiblePanel id="screen" title="Screen">
         <div className="panel__body">
           <p className="empty">Select a screen on the canvas to edit it.</p>
         </div>
-      </section>
+      </CollapsiblePanel>
     );
   }
 
@@ -54,11 +54,11 @@ export default function Inspector() {
   };
 
   return (
-    <section className="panel">
-      <header className="panel__head">
-        <h2>Screen</h2>
-        <span className="panel__count">{spec.brand} {spec.model}</span>
-      </header>
+    <CollapsiblePanel
+      id="screen"
+      title="Screen"
+      aside={<span className="panel__count">{spec.brand} {spec.model}</span>}
+    >
       <div className="panel__body">
         <label className="field">
           <span>Name</span>
@@ -274,6 +274,6 @@ export default function Inspector() {
           </button>
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

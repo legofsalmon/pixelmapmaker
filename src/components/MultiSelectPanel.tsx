@@ -8,6 +8,7 @@ import { PALETTES } from '@/lib/palettes';
 import { nextColor } from '@/lib/palettes';
 import NumberInput from './NumberInput';
 import Icon, { type IconName } from './Icon';
+import CollapsiblePanel from './CollapsiblePanel';
 
 const ALIGN: Array<{ edge: AlignEdge; icon: IconName; title: string }> = [
   { edge: 'left', icon: 'align-left', title: 'Align left edges' },
@@ -37,11 +38,11 @@ export default function MultiSelectPanel() {
   const palette = PALETTES.find((p) => p.id === paletteId) ?? PALETTES[0];
 
   return (
-    <section className="panel">
-      <header className="panel__head">
-        <h2>{selected.length} screens selected</h2>
-        <button className="linkish" type="button" onClick={() => setSelection([])}>Deselect</button>
-      </header>
+    <CollapsiblePanel
+      id="screen"
+      title={`${selected.length} screens selected`}
+      aside={<button className="linkish" type="button" onClick={() => setSelection([])}>Deselect</button>}
+    >
       <div className="panel__body">
         <div className="field">
           <span>Align</span>
@@ -151,6 +152,6 @@ export default function MultiSelectPanel() {
           <button className="btn btn--danger" type="button" onClick={removeSelection}>Delete</button>
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

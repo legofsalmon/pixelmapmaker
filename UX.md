@@ -81,6 +81,14 @@ instinct outward rather than disabling controls in place.
 **Disclose in the order work commits:** how big and how much (everyone) → where
 things sit (Map) → how it is wired and held up (Kit) → how it is verified (site).
 
+**Let a stacked region be folded, and remember the fold.** Two panels sharing
+one scroll container is fine until the upper one grows — attach a logo, open the
+datasheet — and pushes the lower one off the bottom, where it has to be hunted
+for. Folding is the cheap fix and a splitter is not: a splitter asks the user to
+manage a number, a fold asks them to answer yes or no. Remember the answer,
+because someone doing the same job all week should not have to give it again
+every morning.
+
 ---
 
 ## 3. Visual language
@@ -95,8 +103,13 @@ reaching for a border, a box or an icon. Chrome is the last resort.
   them at the same size. Reserve size changes for two or three real headlines.
 - **One accent, one meaning.** In a canvas editor that meaning is **selection**.
   An accent doing six jobs cannot win the one that matters.
-- **Spacing on a 4pt grid** — 4, 8, 12, 16, 24, 32, 48. Off-grid values are
-  bugs, not taste.
+- **Spacing on a 4pt grid** — 4, 8, 12, 16, 24, 32. Off-grid values are bugs,
+  not taste, and a scale nothing obeys is decoration. Exactly two exceptions,
+  both about hairlines rather than layout: a 1px rule, and a 2px half-step
+  (`--s0`) where something has to sit optically level with a 1px border.
+- **Control size is not layout spacing.** Forcing button padding onto the
+  spacing scale is what left inputs at 29px, buttons at 33px and selects at
+  31px — three heights in one row. Controls get their own token.
 - **Group with a spacing ratio of about 2×**, not a divider. Tighten inside the
   group before widening between groups.
 - **Borders are a tax.** Prefer proximity and a shared background. Spend a
