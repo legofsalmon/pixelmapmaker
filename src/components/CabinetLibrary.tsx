@@ -15,6 +15,7 @@ import {
 import { useEditor } from '@/state/store';
 import type { CabinetSpec } from '@/lib/types';
 import NumberInput from './NumberInput';
+import Icon from './Icon';
 
 const FAVOURITES_KEY = 'pixelmapmaker.favourites.v1';
 
@@ -59,7 +60,7 @@ function CabinetRow({
         onClick={onToggleFavourite}
         aria-label={favourite ? 'Remove from favourites' : 'Add to favourites'}
       >
-        ★
+        <Icon name="star" filled={favourite} />
       </button>
     </li>
   );

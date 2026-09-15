@@ -206,8 +206,11 @@ a { color: var(--accent); }
   color: var(--ink-dim);
   cursor: pointer;
   width: 30px;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.cab__fav:hover { color: var(--ink); }
 .cab__fav.is-on { color: var(--warn); border-color: var(--warn); }
 
 .custom-form {
@@ -252,9 +255,11 @@ a { color: var(--accent); }
   border: 0;
   color: var(--ink-dim);
   cursor: pointer;
-  font-size: 12px;
-  padding: 3px 4px;
+  padding: 4px;
   border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .layer__actions button:hover { background: #ffffff14; color: var(--ink); }
 
@@ -296,8 +301,11 @@ a { color: var(--accent); }
   color: var(--ink);
   cursor: pointer;
   font: inherit;
-  padding: 2px 6px;
+  padding: 3px 7px;
   border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .stage__hud button:hover { background: #ffffff18; }
 .stage__zoom, .stage__coords { color: var(--ink-dim); font-variant-numeric: tabular-nums; }
@@ -424,9 +432,10 @@ a { color: var(--accent); }
   border-radius: 6px;
   color: var(--ink);
   cursor: pointer;
-  font-size: 15px;
-  line-height: 1;
-  padding: 7px 4px;
+  padding: 6px 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .icon-row button:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -560,3 +569,14 @@ a { color: var(--accent); }
 @media (max-width: 900px) {
   .modal__panel--docked { max-width: 100%; }
 }
+
+/* ---------- icons ---------- */
+
+/*
+ * Icons take their colour from the text around them and sit on the text
+ * baseline, so a small one inside a sentence (an external-link arrow, say)
+ * lines up rather than riding high.
+ */
+svg { flex: none; }
+a svg,
+.note svg { vertical-align: -0.1em; margin-left: 0.15em; }

@@ -7,14 +7,15 @@ import { projectTotals } from '@/lib/calc';
 import { PALETTES } from '@/lib/palettes';
 import { nextColor } from '@/lib/palettes';
 import NumberInput from './NumberInput';
+import Icon, { type IconName } from './Icon';
 
-const ALIGN: Array<{ edge: AlignEdge; label: string; title: string }> = [
-  { edge: 'left', label: '⇤', title: 'Align left edges' },
-  { edge: 'hcentre', label: '⇹', title: 'Align horizontal centres' },
-  { edge: 'right', label: '⇥', title: 'Align right edges' },
-  { edge: 'top', label: '⤒', title: 'Align top edges' },
-  { edge: 'vcentre', label: '⇳', title: 'Align vertical centres' },
-  { edge: 'bottom', label: '⤓', title: 'Align bottom edges' },
+const ALIGN: Array<{ edge: AlignEdge; icon: IconName; title: string }> = [
+  { edge: 'left', icon: 'align-left', title: 'Align left edges' },
+  { edge: 'hcentre', icon: 'align-hcentre', title: 'Align horizontal centres' },
+  { edge: 'right', icon: 'align-right', title: 'Align right edges' },
+  { edge: 'top', icon: 'align-top', title: 'Align top edges' },
+  { edge: 'vcentre', icon: 'align-vcentre', title: 'Align vertical centres' },
+  { edge: 'bottom', icon: 'align-bottom', title: 'Align bottom edges' },
 ];
 
 /** Shown in place of the single-screen inspector when several are selected. */
@@ -47,7 +48,7 @@ export default function MultiSelectPanel() {
           <div className="icon-row">
             {ALIGN.map((a) => (
               <button key={a.edge} type="button" title={a.title} aria-label={a.title} onClick={() => alignLayers(a.edge)}>
-                {a.label}
+                <Icon name={a.icon} size={18} />
               </button>
             ))}
           </div>

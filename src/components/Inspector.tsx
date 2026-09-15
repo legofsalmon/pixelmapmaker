@@ -7,6 +7,7 @@ import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
 import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
+import Icon from './Icon';
 
 const SIGNAL_STARTS: Array<{ value: SignalStart; label: string }> = [
   { value: 'tl', label: 'Top left' },
@@ -252,7 +253,7 @@ export default function Inspector() {
           )}
           {spec.sourceUrl && (
             <p className="note">
-              <a href={spec.sourceUrl} target="_blank" rel="noopener noreferrer">Manufacturer spec page ↗</a>
+              <a href={spec.sourceUrl} target="_blank" rel="noopener noreferrer">Manufacturer spec page <Icon name="external" size={12} /></a>
             </p>
           )}
         </details>

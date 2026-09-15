@@ -2,6 +2,7 @@
 
 import { useEditor } from '@/state/store';
 import { layerRect } from '@/lib/geometry';
+import Icon from './Icon';
 
 export default function LayerPanel() {
   const layers = useEditor((s) => s.layers);
@@ -63,7 +64,7 @@ export default function LayerPanel() {
                     aria-label={layer.visible ? 'Hide screen' : 'Show screen'}
                     onClick={() => updateLayer(layer.id, { visible: !layer.visible })}
                   >
-                    {layer.visible ? '👁' : '🚫'}
+                    <Icon name={layer.visible ? 'eye' : 'eye-off'} />
                   </button>
                   <button
                     type="button"
@@ -71,11 +72,11 @@ export default function LayerPanel() {
                     aria-label={layer.locked ? 'Unlock screen' : 'Lock screen'}
                     onClick={() => updateLayer(layer.id, { locked: !layer.locked })}
                   >
-                    {layer.locked ? '🔒' : '🔓'}
+                    <Icon name={layer.locked ? 'lock' : 'unlock'} />
                   </button>
-                  <button type="button" title="Bring forward" aria-label="Bring forward" onClick={() => reorderLayer(layer.id, 'up')}>↑</button>
-                  <button type="button" title="Send backward" aria-label="Send backward" onClick={() => reorderLayer(layer.id, 'down')}>↓</button>
-                  <button type="button" title="Duplicate" aria-label="Duplicate screen" onClick={() => duplicateLayer(layer.id)}>⧉</button>
+                  <button type="button" title="Bring forward" aria-label="Bring forward" onClick={() => reorderLayer(layer.id, 'up')}><Icon name="arrow-up" /></button>
+                  <button type="button" title="Send backward" aria-label="Send backward" onClick={() => reorderLayer(layer.id, 'down')}><Icon name="arrow-down" /></button>
+                  <button type="button" title="Duplicate" aria-label="Duplicate screen" onClick={() => duplicateLayer(layer.id)}><Icon name="duplicate" /></button>
                   <button
                     type="button"
                     title="Delete"
@@ -85,7 +86,7 @@ export default function LayerPanel() {
                       removeLayer(layer.id);
                     }}
                   >
-                    ✕
+                    <Icon name="close" />
                   </button>
                 </div>
               </li>

@@ -6,6 +6,7 @@ import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib
 import { buildPickList, pickListCsv } from '@/lib/picklist';
 import type { LineCategory } from '@/lib/picklist';
 import NumberInput from './NumberInput';
+import Icon from './Icon';
 
 const CATEGORY_ORDER: LineCategory[] = ['Cabinets', 'Processing', 'Data', 'Power', 'Transport'];
 
@@ -186,7 +187,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
             <p className="note">
               {processor.note}{' '}
               {processor.sourceUrl ? (
-                <a href={processor.sourceUrl} target="_blank" rel="noopener noreferrer">Manufacturer ↗</a>
+                <a href={processor.sourceUrl} target="_blank" rel="noopener noreferrer">Manufacturer <Icon name="external" size={12} /></a>
               ) : null}{' '}
               Port capacity works out at {pixelsPerPort(processor).toLocaleString('en-GB')} pixels — real
               capacity moves with bit depth and refresh rate.

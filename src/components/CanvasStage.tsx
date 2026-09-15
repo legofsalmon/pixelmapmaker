@@ -7,6 +7,7 @@ import { renderProject } from '@/lib/render';
 import { isAnimated } from '@/lib/effects';
 import { cachedLogos, loadLayerLogos } from '@/lib/logos';
 import type { Layer } from '@/lib/types';
+import Icon from './Icon';
 
 interface View {
   /** Screen pixels per canvas pixel. */
@@ -417,8 +418,12 @@ export default function CanvasStage() {
       />
       <div className="stage__hud">
         <button type="button" onClick={fitToCanvas}>Fit</button>
-        <button type="button" onClick={() => setView((v) => ({ ...v, scale: Math.min(MAX_SCALE, v.scale * 1.25) }))}>+</button>
-        <button type="button" onClick={() => setView((v) => ({ ...v, scale: Math.max(MIN_SCALE, v.scale / 1.25) }))}>−</button>
+        <button type="button" aria-label="Zoom in" onClick={() => setView((v) => ({ ...v, scale: Math.min(MAX_SCALE, v.scale * 1.25) }))}>
+          <Icon name="plus" />
+        </button>
+        <button type="button" aria-label="Zoom out" onClick={() => setView((v) => ({ ...v, scale: Math.max(MIN_SCALE, v.scale / 1.25) }))}>
+          <Icon name="minus" />
+        </button>
         <span className="stage__zoom">{zoomPercent < 1 ? view.scale.toFixed(3) : zoomPercent}%</span>
         <span className="stage__coords">
           {cursor ? `${Math.round(cursor.x)}, ${Math.round(cursor.y)} px` : `${canvas.width} × ${canvas.height}`}
