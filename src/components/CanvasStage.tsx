@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { useEditor } from '@/state/store';
 import { layerRect, rectContains, snapPosition, type SnapResult } from '@/lib/geometry';
 import { renderProject } from '@/lib/render';
-import { cablingForLayer } from '@/lib/cabling';
+import { assignPorts, cablingForLayer, cablingForProject, processorsRequired } from '@/lib/cabling';
 import { findProcessor } from '@/lib/processors';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 import { isAnimated } from '@/lib/effects';
@@ -63,14 +63,25 @@ export default function CanvasStage() {
    * change — this sits inside the render loop, which runs every frame while a
    * test pattern is playing.
    */
-  const runLengths = useMemo(() => {
+  const { runLengths, runLabels } = useMemo(() => {
     const processor = findProcessor(processorId, customProcessors);
-    const map = new Map<string, number>();
+    const lengths = new Map<string, number>();
     for (const layer of layers) {
       if (!layer.showSignalFlow) continue;
-      map.set(layer.id, cablingForLayer(layer, cabling, processor).data.cabinetsPerRun);
+      lengths.set(layer.id, cablingForLayer(layer, cabling, processor).data.cabinetsPerRun);
     }
-    return map;
+    // Ports are dealt out over every screen, not just the ones drawing their
+    // run, or the labels on screen would disagree with the pick list.
+    const plan = cablingForProject(layers, cabling, processor);
+    const totalPixels = layers.reduce(
+      (sum, l) => sum + l.cols * l.rows * l.spec.resolution.w * l.spec.resolution.h,
+      0
+    );
+    const boxes = processorsRequired(totalPixels, plan.dataRuns, processor).count;
+    const ports = assignPorts(plan.screens, processor, boxes);
+    const labels = new Map<string, string[]>();
+    for (const [id, list] of ports) labels.set(id, list.map((p) => p.label));
+    return { runLengths: lengths, runLabels: labels };
   }, [layers, cabling, processorId, customProcessors]);
   const setSelection = useEditor((s) => s.setSelection);
   const toggleSelection = useEditor((s) => s.toggleSelection);
@@ -190,6 +201,7 @@ export default function CanvasStage() {
       timeMs: isAnimated(effect) ? performance.now() - startedAt.current : 0,
       logos: cachedLogos(layers),
       runLengths,
+      runLabels,
     });
 
     // Canvas outline sits above everything so the frame is always readable.
@@ -209,7 +221,7 @@ export default function CanvasStage() {
       ctx.strokeRect(x, y, marquee.w * view.scale, marquee.h * view.scale);
       ctx.restore();
     }
-  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths]);
+  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels]);
 
   const hitTest = useCallback(
     (point: { x: number; y: number }): Layer | null => {

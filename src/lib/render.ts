@@ -26,7 +26,29 @@ export interface RenderOptions {
    * ever patched — each run starts again at the processor.
    */
   runLengths?: Map<string, number>;
+  /**
+   * Port label per run, by layer id — "Port 3", or "Processor 2, port 3" once
+   * more than one box is in play. Drawn at each run's first cabinet so the
+   * overlay says which output it belongs to.
+   */
+  runLabels?: Map<string, string[]>;
 }
+
+/**
+ * One colour per data run, so a patch diagram can be traced.
+ *
+ * Breaking the signal overlay at run boundaries made it correct and useless at
+ * the same time: a 16-wide wall on 16-cabinet runs drew nine anonymous
+ * parallel lines, and nothing said which port any of them was. Colour plus a
+ * port label is what turns separate chains back into a diagram.
+ *
+ * Eight hues before repeating, from the app's own accent family. Each carries
+ * a dark halo when drawn, so it stays legible on a light cabinet colour.
+ */
+export const RUN_COLOURS = [
+  '#38bdf8', '#fbbf24', '#4ade80', '#f87171',
+  '#c084fc', '#22d3ee', '#fb923c', '#a3e635',
+];
 
 /** Font size that keeps a label inside a tile at any tile size. */
 function fitFontSize(text: string, tileW: number, tileH: number) {
@@ -74,7 +96,12 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer) {
   }
 }
 
-function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer, runLength?: number) {
+function drawSignalFlow(
+  ctx: CanvasRenderingContext2D,
+  layer: Layer,
+  runLength?: number,
+  runLabels?: string[]
+) {
   const tile = tileSize(layer);
   const rect = layerRect(layer);
   const order = signalOrder(layer);
@@ -91,21 +118,40 @@ function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer, runLength?:
     y: rect.y + row * tile.h + tile.h / 2,
   });
 
-  const ink = contrastInk(layer.color);
   ctx.save();
-  ctx.strokeStyle = ink;
-  ctx.fillStyle = ink;
-  ctx.globalAlpha = 0.85;
-  ctx.lineWidth = Math.max(1, Math.min(tile.w, tile.h) * 0.03);
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
 
-  const dot = Math.min(tile.w, tile.h) * 0.12;
-  const size = Math.min(tile.w, tile.h) * 0.22;
+  const width = Math.max(1, Math.min(tile.w, tile.h) * 0.035);
+  const dot = Math.min(tile.w, tile.h) * 0.15;
+  const head = Math.min(tile.w, tile.h) * 0.22;
+  // A single run keeps the old ink, which reads as part of the screen rather
+  // than as one arbitrary colour out of eight.
+  const single = runs.length < 2;
+  const inkFor = (i: number) => (single ? contrastInk(layer.color) : RUN_COLOURS[i % RUN_COLOURS.length]);
 
-  for (const run of runs) {
+  runs.forEach((run, runIndex) => {
+    const colour = inkFor(runIndex);
+
+    // A dark halo under the line, so a run colour stays readable whatever the
+    // cabinet beneath it is set to.
+    ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+    ctx.lineWidth = width * 2.2;
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath();
+    run.forEach((cell, i) => {
+      const p = centre(cell);
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
     // The line is drawn per run, never between runs: the gap between one run's
     // last cabinet and the next run's first is not a cable.
+    ctx.strokeStyle = colour;
+    ctx.fillStyle = colour;
+    ctx.lineWidth = width;
+    ctx.globalAlpha = 0.95;
     ctx.beginPath();
     run.forEach((cell, i) => {
       const p = centre(cell);
@@ -119,19 +165,74 @@ function drawSignalFlow(ctx: CanvasRenderingContext2D, layer: Layer, runLength?:
     ctx.beginPath();
     ctx.arc(first.x, first.y, dot, 0, Math.PI * 2);
     ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+    ctx.lineWidth = width;
+    ctx.stroke();
 
     // Arrow head on the run's final hop shows the direction of travel.
-    if (run.length < 2) continue;
-    const last = centre(run[run.length - 1]);
-    const prev = centre(run[run.length - 2]);
-    const angle = Math.atan2(last.y - prev.y, last.x - prev.x);
-    ctx.beginPath();
-    ctx.moveTo(last.x, last.y);
-    ctx.lineTo(last.x - size * Math.cos(angle - Math.PI / 6), last.y - size * Math.sin(angle - Math.PI / 6));
-    ctx.lineTo(last.x - size * Math.cos(angle + Math.PI / 6), last.y - size * Math.sin(angle + Math.PI / 6));
-    ctx.closePath();
-    ctx.fill();
-  }
+    if (run.length > 1) {
+      const last = centre(run[run.length - 1]);
+      const prev = centre(run[run.length - 2]);
+      const angle = Math.atan2(last.y - prev.y, last.x - prev.x);
+      ctx.fillStyle = colour;
+      ctx.beginPath();
+      ctx.moveTo(last.x, last.y);
+      ctx.lineTo(last.x - head * Math.cos(angle - Math.PI / 6), last.y - head * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(last.x - head * Math.cos(angle + Math.PI / 6), last.y - head * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Which output this chain belongs to, at the cabinet it starts from.
+    const label = runLabels?.[runIndex];
+    if (!label) return;
+    // Above the start dot, unless that would hang the pill off the top of the
+    // screen — a run starting in the top row puts it below instead.
+    const above = first.y - dot - tile.h * 0.2;
+    const below = first.y + dot + tile.h * 0.2;
+    drawRunLabel(ctx, label, first.x, above - tile.h * 0.2 < rect.y ? below : above, tile, colour, rect);
+  });
+  ctx.restore();
+}
+
+/** A pill carrying a run's port label, kept inside the tile it belongs to. */
+function drawRunLabel(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  tile: { w: number; h: number },
+  colour: string,
+  bounds: { x: number; y: number; width: number; height: number }
+) {
+  const fontSize = Math.max(6, Math.min(tile.h * 0.22, tile.w * 0.62 / Math.max(4, text.length * 0.5)));
+  ctx.save();
+  ctx.font = `600 ${fontSize}px ui-sans-serif, system-ui, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const padX = fontSize * 0.45;
+  const w = ctx.measureText(text).width + padX * 2;
+  const h = fontSize * 1.5;
+  const r = h / 2;
+
+  // A label belongs to its screen, so it stays on it — a run starting in a
+  // corner would otherwise hang its pill out over the canvas background.
+  const cx = Math.min(Math.max(x, bounds.x + w / 2), bounds.x + bounds.width - w / 2);
+  const cy = Math.min(Math.max(y, bounds.y + h / 2), bounds.y + bounds.height - h / 2);
+  x = cx;
+  y = cy;
+
+  ctx.globalAlpha = 0.95;
+  ctx.fillStyle = 'rgba(5,7,11,0.88)';
+  ctx.beginPath();
+  ctx.roundRect(x - w / 2, y - h / 2, w, h, r);
+  ctx.fill();
+  ctx.strokeStyle = colour;
+  ctx.lineWidth = Math.max(0.5, fontSize * 0.08);
+  ctx.stroke();
+
+  ctx.fillStyle = colour;
+  ctx.fillText(text, x, y);
   ctx.restore();
 }
 
@@ -249,6 +350,7 @@ export function renderProject(
     timeMs = 0,
     logos,
     runLengths,
+    runLabels,
   } = options;
   const hairline = 1 / scale;
 
@@ -258,7 +360,7 @@ export function renderProject(
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
     drawTiles(ctx, layer);
-    if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLengths?.get(layer.id));
+    if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
     const logo = logos?.get(layer.id);
     if (logo) drawLogo(ctx, layer, logo);
     drawLayerLabel(ctx, layer);
@@ -304,7 +406,8 @@ export function renderLayerAlone(
   layer: Layer,
   background: string,
   logo?: CanvasImageSource,
-  runLength?: number
+  runLength?: number,
+  runLabels?: string[]
 ) {
   const rect = layerRect(layer);
   ctx.save();
@@ -314,7 +417,7 @@ export function renderLayerAlone(
   }
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
-  if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLength);
+  if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLength, runLabels);
   if (logo) drawLogo(ctx, layer, logo);
   drawLayerLabel(ctx, layer);
   ctx.restore();

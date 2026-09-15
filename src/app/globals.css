@@ -1047,3 +1047,13 @@ a svg,
 @media (max-width: 900px) {
   .fx { gap: var(--s1); }
 }
+
+/* A run's colour, tying a patch line to the chain drawn on the canvas. */
+.patch__swatch {
+  display: inline-block;
+  width: var(--s2);
+  height: var(--s2);
+  border-radius: 2px;
+  margin-right: var(--s2);
+  vertical-align: baseline;
+}

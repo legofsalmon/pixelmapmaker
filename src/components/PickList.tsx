@@ -5,6 +5,7 @@ import { useEditor } from '@/state/store';
 import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib/processors';
 import { buildPickList, pickListCsv } from '@/lib/picklist';
 import { assignPorts } from '@/lib/cabling';
+import { RUN_COLOURS } from '@/lib/render';
 import type { LineCategory } from '@/lib/picklist';
 import NumberInput from './NumberInput';
 import Icon from './Icon';
@@ -340,6 +341,13 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                     <ol className="patch__runs">
                       {s.runOrder.map((run, i) => (
                         <li key={i}>
+                          {/* Same colour the canvas draws this run in, so the
+                              list and the diagram read as one thing. */}
+                          <span
+                            className="patch__swatch"
+                            style={{ background: RUN_COLOURS[i % RUN_COLOURS.length] }}
+                            aria-hidden="true"
+                          />
                           {ports[i]?.label ?? `Port ${i + 1}`}: {run.length} panel
                           {run.length === 1 ? '' : 's'} — from col {run[0][0] + 1}, row {run[0][1] + 1}
                           {' '}to col {run[run.length - 1][0] + 1}, row {run[run.length - 1][1] + 1}
