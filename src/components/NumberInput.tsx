@@ -8,6 +8,14 @@ interface NumberInputProps {
   min?: number;
   max?: number;
   step?: number | string;
+  /**
+   * Quantise a committed value to one the app can actually hold.
+   *
+   * A screen is built from whole cabinets, so a width in metres can only land
+   * on a multiple of the cabinet width. The field commits what it got rather
+   * than what was asked for — 5 m of 600 mm cabinets settles at 4.8.
+   */
+  snap?: (value: number) => number;
   className?: string;
   placeholder?: string;
   required?: boolean;
@@ -38,6 +46,7 @@ export default function NumberInput({
   min,
   max,
   step,
+  snap,
   className = 'input',
   placeholder,
   required,
@@ -65,7 +74,14 @@ export default function NumberInput({
   const commit = () => {
     const parsed = Number(draft);
     // An empty or nonsense field snaps back to the last good value.
-    const next = draft.trim() === '' || !Number.isFinite(parsed) ? value : clamp(parsed);
+    const asked = draft.trim() === '' || !Number.isFinite(parsed) ? value : clamp(parsed);
+    const next = snap ? snap(asked) : asked;
+    /*
+     * Set the draft from the snapped number rather than waiting for the parent
+     * to hand a new `value` back. Asking for 5 m where 4.8 m is already the
+     * nearest whole number of cabinets changes nothing upstream, so the resync
+     * effect would never fire and the field would sit there claiming 5.
+     */
     setDraft(String(next));
     if (next !== value) onChange(next);
   };

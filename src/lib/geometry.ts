@@ -32,6 +32,28 @@ export function layerSizeMm(layer: Layer) {
   };
 }
 
+/**
+ * Cabinets that come closest to a wanted physical size.
+ *
+ * A wall is built from whole cabinets, so a size in metres is a request, not a
+ * measurement: 5 m of 600 mm cabinets is 8 of them and 4.8 m. Nearest rather
+ * than floor, because asking for 5 m and being handed 4.4 m would be a strange
+ * reading of the request — and never zero, since a screen with no cabinets is
+ * not a screen.
+ */
+export function cabinetsForMetres(metres: number, cabinetMm: number, maxCabinets = 200) {
+  if (!Number.isFinite(metres) || !Number.isFinite(cabinetMm) || cabinetMm <= 0) return 1;
+  return Math.max(1, Math.min(maxCabinets, Math.round((metres * 1000) / cabinetMm)));
+}
+
+/**
+ * Physical size of a whole number of cabinets, in metres, rounded off the
+ * float noise so the field shows 4.8 rather than 4.800000000000001.
+ */
+export function metresForCabinets(cabinets: number, cabinetMm: number) {
+  return Math.round(cabinets * cabinetMm) / 1000;
+}
+
 export const rectContains = (rect: Rect, x: number, y: number) =>
   x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
 

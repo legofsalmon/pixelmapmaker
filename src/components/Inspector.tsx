@@ -4,12 +4,16 @@ import { useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
 import { readLogoFile } from '@/lib/logos';
 import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
+import { cabinetsForMetres, metresForCabinets } from '@/lib/geometry';
 import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
 import Section from './Section';
 import CollapsiblePanel from './CollapsiblePanel';
 import Icon from './Icon';
+
+/** Cap on cabinets per side, shared by both ways of sizing a screen. */
+const MAX_CABINETS = 200;
 
 const SIGNAL_STARTS: Array<{ value: SignalStart; label: string }> = [
   { value: 'tl', label: 'Top left' },
@@ -48,6 +52,8 @@ export default function Inspector() {
 
   const totals = layerTotals(layer);
   const spec = layer.spec;
+  const cabWidth = spec.cabinet.width;
+  const cabHeight = spec.cabinet.height;
   const change = <K extends keyof typeof layer>(key: K, value: (typeof layer)[K]) => {
     commit();
     updateLayer(layer.id, { [key]: value } as Partial<typeof layer>);
@@ -68,11 +74,39 @@ export default function Inspector() {
         <div className="grid2">
           <label className="field">
             <span>Cabinets across</span>
-            <NumberInput min={1} max={200} value={layer.cols} onChange={(cols) => change('cols', cols)} />
+            <NumberInput min={1} max={MAX_CABINETS} value={layer.cols} onChange={(cols) => change('cols', cols)} />
           </label>
           <label className="field">
             <span>Cabinets down</span>
-            <NumberInput min={1} max={200} value={layer.rows} onChange={(rows) => change('rows', rows)} />
+            <NumberInput min={1} max={MAX_CABINETS} value={layer.rows} onChange={(rows) => change('rows', rows)} />
+          </label>
+          {/*
+            Sizing by the metre is how a wall is asked for — "five by three" —
+            while cabinets across and down are how it is built. Both are here
+            because both are the real unit for someone: the salesperson quotes
+            metres, the crew counts cabinets. Typing either updates the other.
+          */}
+          <label className="field">
+            <span>Width (m)</span>
+            <NumberInput
+              min={metresForCabinets(1, cabWidth)}
+              max={metresForCabinets(MAX_CABINETS, cabWidth)}
+              step={0.1}
+              value={metresForCabinets(layer.cols, cabWidth)}
+              snap={(m) => metresForCabinets(cabinetsForMetres(m, cabWidth, MAX_CABINETS), cabWidth)}
+              onChange={(m) => change('cols', cabinetsForMetres(m, cabWidth, MAX_CABINETS))}
+            />
+          </label>
+          <label className="field">
+            <span>Height (m)</span>
+            <NumberInput
+              min={metresForCabinets(1, cabHeight)}
+              max={metresForCabinets(MAX_CABINETS, cabHeight)}
+              step={0.1}
+              value={metresForCabinets(layer.rows, cabHeight)}
+              snap={(m) => metresForCabinets(cabinetsForMetres(m, cabHeight, MAX_CABINETS), cabHeight)}
+              onChange={(m) => change('rows', cabinetsForMetres(m, cabHeight, MAX_CABINETS))}
+            />
           </label>
           <label className="field">
             <span>X offset (px)</span>
