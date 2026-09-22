@@ -20,6 +20,12 @@ export interface CabinetSpec {
   serviceability?: string | null;
   maxHanging?: number | null;
   maxStacking?: number | null;
+  /**
+   * Largest bend the panel's own curve-locks allow at one joint, degrees.
+   * No manufacturer in the scraped library publishes it, so this is null on
+   * every entry that came from a spec page and the curve check is advisory.
+   */
+  maxCurveAngle?: number | null;
   environment: 'indoor' | 'outdoor';
   category: 'rental' | 'outdoor' | 'fine-pitch' | 'transparent' | 'floor';
   sourceUrl: string;
@@ -30,6 +36,33 @@ export interface CabinetSpec {
   powerPerM2: number | null;
   /** Set on panels the user created rather than ones from the scraped library. */
   custom?: boolean;
+}
+
+export type WallShapeKind = 'flat' | 'arc' | 'fold';
+
+/**
+ * How a screen's columns are hinged to each other, in plan.
+ *
+ * The pixel map of a curved wall is still a flat rectangle — the wall unrolls
+ * the content and any warping is done in the media server — so a shape never
+ * touches a layer's pixel geometry. It describes the physical wall only:
+ * where the cabinets stand, how much floor the screen takes and how far it
+ * reaches toward the audience.
+ *
+ * An arc bends by the same angle at every joint; a fold bends at named joints
+ * and stays straight between them, which is how an L, a U or a three-sided box
+ * is built. They are one model rather than two because a fold with every joint
+ * set is an arc.
+ *
+ * Every field is carried whatever the kind, so switching between them does not
+ * throw away what was already set up.
+ */
+export interface WallShape {
+  kind: WallShapeKind;
+  /** Arc: degrees of bend at each joint. Positive wraps toward the viewer. */
+  anglePerJoint: number;
+  /** Fold: bend at individual joints. Joint `n` sits between column n and n+1. */
+  folds: Array<{ joint: number; angle: number }>;
 }
 
 export type SignalStart = 'tl' | 'tr' | 'bl' | 'br';
@@ -43,6 +76,8 @@ export interface Layer {
   /** Cabinet count. */
   cols: number;
   rows: number;
+  /** How the wall is bent in plan. Absent on projects saved before shapes. */
+  shape?: WallShape;
   /** Top-left position in canvas pixels. */
   x: number;
   y: number;

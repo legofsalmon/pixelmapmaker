@@ -23,6 +23,15 @@ for the full feature review those two drove.
 - Pan with <kbd>Space</kbd>-drag, alt-drag or right-drag; scroll to zoom
 - Layer list with show/hide, lock, reorder, duplicate
 
+**Curved and angled walls**
+- Set a screen on a radius, typed either as a bend per joint or as the radius
+  itself — the two fields drive each other
+- Or fold it at named cabinets into an L, a U or a three-sided box
+- A plan view of the footprint, with the span across the ends, how far the wall
+  reaches back, the turn and the radius
+- The pixel map is unchanged by any of it: a curved wall unrolls a flat
+  rectangle of pixels, so the canvas, the export and the signal order stay put
+
 **Cabinet library**
 - 256 real cabinets scraped from manufacturer spec pages and datasheets
 - Filter by brand, type, indoor/outdoor and pitch range; search; favourites
@@ -112,7 +121,7 @@ npm run dev        # http://localhost:3000
 npm run build      # production build
 npm run typecheck
 npm run lint
-npm test           # the maths, against published figures
+npm test           # every scripts/test-*.mjs: the maths, against published figures
 ```
 
 ## The cabinet library
@@ -146,6 +155,10 @@ commit it copied into the file header.
 It is a first pass and a sanity check, not a substitute for a structural
 engineer. Ground support is life-safety kit and real designs are signed off
 against the manufacturer's load data and a wind standard.
+
+The solver is flat-wall only, so a curved or angled screen is currently assessed
+as though it were straight — which understates the footprint and overstates the
+wind area. The support panel says so on any project that has one.
 
 ### Viewing distance
 
@@ -282,6 +295,8 @@ saves sit alongside it — so nothing leaves the browser.
 src/lib/render.ts      canvas renderer, shared by the viewport and PNG export
 src/lib/effects.ts     animated test patterns, pure functions of time
 src/lib/geometry.ts    layer bounds, snapping, signal-run ordering
+src/lib/curve.ts       curved and angled walls in plan
+src/lib/plan.ts        the plan-view drawing
 src/lib/calc.ts        size / weight / power / current maths
 src/lib/cabinets.ts    library loading and filtering
 src/lib/picklist.ts    prep-list aggregation, contingency and pack rounding

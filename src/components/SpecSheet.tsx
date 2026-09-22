@@ -2,6 +2,8 @@
 
 import { useEditor } from '@/state/store';
 import { kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
+import { planForLayer } from '@/lib/curve';
+import { mmLabel } from '@/lib/plan';
 import { SMPTE_MIN_ANGLE_DEG, VIEWING_GRADES, viewingForProject } from '@/lib/viewing';
 import { contrastForProject } from '@/lib/contrast';
 import Dialog from './Dialog';
@@ -80,6 +82,7 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
                   <th>Grid</th>
                   <th>Resolution</th>
                   <th>Size</th>
+                  <th>Shape</th>
                   <th>Position</th>
                   <th>Weight</th>
                   <th>Max power</th>
@@ -88,6 +91,7 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
               <tbody>
                 {layers.map((layer) => {
                   const t = layerTotals(layer);
+                  const plan = planForLayer(layer);
                   return (
                     <tr key={layer.id}>
                       <td>{layer.name}</td>
@@ -99,6 +103,30 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
                         {(t.widthMm / 1000).toFixed(2)} × {(t.heightMm / 1000).toFixed(2)} m
                         <br />
                         <small>{mmToFeetInches(t.widthMm)} × {mmToFeetInches(t.heightMm)}</small>
+                      </td>
+                      {/*
+                        Width in the column before this one is measured along
+                        the wall, which for a curve is not the space it needs on
+                        the floor. A crew marking out a room wants both, so a
+                        shaped screen carries its footprint here.
+                      */}
+                      <td>
+                        {plan.flat ? (
+                          'Flat'
+                        ) : (
+                          <>
+                            {plan.radiusMm != null
+                              ? `Curved, R ${mmLabel(plan.radiusMm)}`
+                              : `Angled, ${plan.jointAngles.filter((a) => a !== 0).length} corner${
+                                  plan.jointAngles.filter((a) => a !== 0).length === 1 ? '' : 's'
+                                }`}
+                            <br />
+                            <small>
+                              {mmLabel(plan.spanMm)} across, {mmLabel(plan.footprintMm.depth)} deep,{' '}
+                              {plan.includedAngleDeg.toFixed(0)}° turn
+                            </small>
+                          </>
+                        )}
                       </td>
                       <td>{layer.x}, {layer.y}</td>
                       <td>{t.weightKg != null ? `${t.weightKg.toFixed(0)} kg` : '—'}</td>

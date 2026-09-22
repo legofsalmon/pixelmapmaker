@@ -57,6 +57,7 @@ export function customCabinet(input: {
   resH: number;
   weightKg: number | null;
   powerMaxW: number | null;
+  maxCurveAngle: number | null;
 }): CabinetSpec {
   const areaM2 = (input.width / 1000) * (input.height / 1000);
   return {
@@ -72,6 +73,7 @@ export function customCabinet(input: {
     brightnessNits: null,
     refreshHz: null,
     ipRating: null,
+    maxCurveAngle: input.maxCurveAngle,
     environment: 'indoor',
     category: 'rental',
     sourceUrl: '',
