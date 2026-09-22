@@ -34,6 +34,15 @@ for the full feature review those two drove.
 - Cabinet count, surface area, megapixels
 - Weight, maximum and average power, current at 230 V and 120 V, heat load
 
+**Viewing**
+- Set where the nearest and furthest of the audience stand and every screen is
+  read against it: how many arcminutes a pixel takes up from each, how far back
+  the pixels stop being separable, and how much of the field of view the screen
+  fills
+- Says when a pitch is finer than anyone in the room can resolve, and names the
+  pitch that would look the same — the most expensive mistake on a quote
+- On the spec sheet as well as in the inspector, so it goes out with the price
+
 **Pick list**
 - Choose a processor and it works out how many you need — by pixel count and by
   port count, telling you which one decides
@@ -95,6 +104,7 @@ npm run dev        # http://localhost:3000
 npm run build      # production build
 npm run typecheck
 npm run lint
+npm test           # the maths, against published figures
 ```
 
 ## The cabinet library
@@ -128,6 +138,26 @@ commit it copied into the file header.
 It is a first pass and a sanity check, not a substitute for a structural
 engineer. Ground support is life-safety kit and real designs are signed off
 against the manufacturer's load data and a wind standard.
+
+### Viewing distance
+
+`src/lib/viewing.ts` works from one published constant: a person with 20/20
+vision resolves detail down to about one arcminute. Planar's white paper on
+direct-view LED states it as a multiplier — pitch in mm × 3438 gives the
+distance in mm at which pixels stop being distinguishable — which is
+1 / tan(1 arcminute), and is what the module computes.
+
+- [Planar, *Recommended Viewing Distance & Direct View LED*](https://www.planar.com/media/439462/understanding-viewing-distance.pdf)
+
+The rules of thumb layered on top of that are labelled as rules of thumb,
+because they disagree with each other by 10–15%: the 10× rule (pitch in mm × 10
+= feet) lands about 11% short of the real figure, and "stand no closer than the
+pitch in metres" puts a pixel at 3.4 arcminutes rather than 1. Both are shown
+next to the number they approximate rather than instead of it.
+
+The field-of-view line quotes SMPTE EG-18's 30° minimum. That is a guideline
+for a seated cinema audience watching a projected picture, not a standard for a
+wall at a gig, so it is a reference line and not a pass mark.
 
 ### Processors
 
@@ -219,9 +249,11 @@ src/lib/cabinets.ts    library loading and filtering
 src/lib/picklist.ts    prep-list aggregation, contingency and pack rounding
 src/lib/cabling.ts     data and power runs, auto or manual
 src/lib/support.ts     support structure, wrapping the vendored solver
+src/lib/viewing.ts     viewing distance, pitch suitability, field of view
 src/state/store.ts     editor state, history, persistence
 src/components/        canvas stage, library, inspector, layers, toolbar, spec sheet
 scripts/scraper/       cabinet library scraper
+scripts/test-*.mjs     tests, run with npm test
 data/cabinets.json     generated library
 ```
 

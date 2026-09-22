@@ -3,6 +3,20 @@
 Release notes for tagged versions. GitHub releases are cut by hand from
 these, so this file is the source rather than a copy of them.
 
+## Unreleased
+
+- **Viewing distance.** Set where the nearest and furthest of the audience
+  stand, and every screen says how it reads from both: arcminutes per pixel,
+  the distance at which pixels stop being separable, how much of the field of
+  view it fills, and how much of its own resolution reaches the back of the
+  room. It also says when a pitch is finer than anyone present can resolve, and
+  what pitch would look the same — the most expensive thing to get wrong on a
+  quote. On the spec sheet too, so it goes out with the price.
+- **The first tests in the repo.** `npm test` runs the viewing maths against
+  the published figures it claims to reproduce. No framework: Node strips the
+  types and a thirty-line loader resolves the app's own imports, so a test
+  exercises the module that ships.
+
 ## 0.2.0
 
 Pixel Map Maker plans LED video walls: drag screens on a canvas, size them in cabinets or metres, and get the cabling, processors, support structure and paperwork that follow from the layout.
