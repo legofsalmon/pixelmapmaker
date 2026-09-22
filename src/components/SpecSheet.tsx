@@ -3,6 +3,7 @@
 import { useEditor } from '@/state/store';
 import { kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
 import { SMPTE_MIN_ANGLE_DEG, VIEWING_GRADES, viewingForProject } from '@/lib/viewing';
+import { contrastForProject } from '@/lib/contrast';
 import Dialog from './Dialog';
 
 /**
@@ -16,6 +17,8 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
   const audience = useEditor((s) => s.audience);
   const totals = projectTotals(layers);
   const viewing = viewingForProject(layers, audience);
+  const ambient = useEditor((s) => s.ambient);
+  const contrast = contrastForProject(layers, ambient);
   const nearestM = Math.min(audience.nearestM, audience.furthestM);
   const furthestM = Math.max(audience.nearestM, audience.furthestM);
 
@@ -149,6 +152,63 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
                         <small>SMPTE asks {SMPTE_MIN_ANGLE_DEG}&deg;</small>
                       </td>
                       <td>{Math.round(v.far.resolvedFraction * 100)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
+
+          {contrast.length > 0 && (
+            <section>
+              <h4>Brightness</h4>
+              <p className="sheet__sub">
+                Read at {ambient.lux.toLocaleString('en-GB')} lux on the screen face, a{' '}
+                {(ambient.reflectance * 100).toFixed(1)}% reflectance and a {ambient.targetContrast}:1
+                target. Reflected light lands under the blacks, so it is what sets the contrast.
+              </p>
+              <table className="sheet__table">
+                <thead>
+                  <tr>
+                    <th>Screen</th>
+                    <th>Panel brightness</th>
+                    <th>Reflected floor</th>
+                    <th>Contrast here</th>
+                    <th>Needed for {ambient.targetContrast}:1</th>
+                    <th>Holds to</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {contrast.map((c) => (
+                    <tr key={c.layerId}>
+                      <td>{c.layerName}</td>
+                      <td>
+                        {c.peakNits != null ? `${c.peakNits.toLocaleString('en-GB')} nits` : '—'}
+                        {c.peakNits == null && (
+                          <>
+                            <br />
+                            <small>{c.implausibleNits != null ? 'published figure not credible' : 'not published'}</small>
+                          </>
+                        )}
+                      </td>
+                      <td>{Math.round(c.floorNits).toLocaleString('en-GB')} nits</td>
+                      <td>
+                        {c.contrast != null ? `${c.contrast.toFixed(1)}:1` : '—'}
+                        {c.meetsTarget === false && (
+                          <>
+                            <br />
+                            <small>under target</small>
+                          </>
+                        )}
+                      </td>
+                      <td>{Math.round(c.nitsForTarget).toLocaleString('en-GB')} nits</td>
+                      <td>
+                        {c.luxAtTarget == null
+                          ? '—'
+                          : Number.isFinite(c.luxAtTarget)
+                            ? `${Math.round(c.luxAtTarget).toLocaleString('en-GB')} lux`
+                            : 'any light'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

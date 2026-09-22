@@ -12,6 +12,21 @@ these, so this file is the source rather than a copy of them.
   room. It also says when a pitch is finer than anyone present can resolve, and
   what pitch would look the same — the most expensive thing to get wrong on a
   quote. On the spec sheet too, so it goes out with the price.
+- **Brightness against the light in the room.** A panel's nit figure says
+  nothing on its own: what decides whether an image survives is the light
+  bouncing off the screen face, because it lands under the blacks and no panel
+  can emit negative light. Set the ambient level and each screen reports the
+  floor reflection puts under it, the contrast it actually reaches there, the
+  peak brightness that would hold the contrast you need, and the brightest room
+  it holds that in. The required ratio is yours to set — the app computes the
+  physics and does not invent the requirement.
+- **Six outdoor panels were in the library at 5 and 50 nits.** Absen's spec
+  PDFs break a number across two runs of glyphs, and the parser joined every
+  run with a space, so `num()` read the first piece: 5000 became 5. Runs are
+  now rejoined by whether they sit flush. The same bug had been quietly taking
+  a digit off three cabinet depths and two weights, and had been dropping ten
+  cabinets whose dimensions it mangled past the validator. The library is
+  rebuilt: 246 cabinets to 256, with 13 corrected figures.
 - **The first tests in the repo.** `npm test` runs the viewing maths against
   the published figures it claims to reproduce. No framework: Node strips the
   types and a thirty-line loader resolves the app's own imports, so a test

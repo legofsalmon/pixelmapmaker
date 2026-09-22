@@ -10,6 +10,7 @@ import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
 import Section from './Section';
 import ViewingSection from './ViewingSection';
+import ContrastSection from './ContrastSection';
 import CollapsiblePanel from './CollapsiblePanel';
 import Icon from './Icon';
 
@@ -123,6 +124,10 @@ export default function Inspector() {
             room" is the same conversation as "how big is it" and happens long
             before anyone thinks about colour or cabling. */}
         <ViewingSection layer={layer} />
+
+        {/* The other half of "will this read": distance settles the pitch,
+            light settles whether there is a picture left to look at. */}
+        <ContrastSection layer={layer} />
 
         <Section id="appearance" title="Appearance" hint="colour, label, logo">
           <div className="grid2">
