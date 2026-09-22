@@ -9,6 +9,7 @@ import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
 import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
+import { DEFAULT_AUDIENCE, type AudienceSettings } from '@/lib/viewing';
 import type { Processor } from '@/lib/processors';
 
 const CANVAS_PRESETS = [
@@ -78,6 +79,7 @@ interface EditorState extends Project {
   pickList: PickListOptions;
   support: SupportSettings;
   effect: EffectSettings;
+  audience: AudienceSettings;
   customProcessors: Processor[];
   past: Snapshot[];
   future: Snapshot[];
@@ -108,6 +110,7 @@ interface EditorState extends Project {
   setPickList: (patch: Partial<PickListOptions>) => void;
   setSupport: (patch: Partial<SupportSettings>) => void;
   setEffect: (patch: Partial<EffectSettings>) => void;
+  setAudience: (patch: Partial<AudienceSettings>) => void;
   addCustomProcessor: (processor: Processor) => void;
   removeCustomProcessor: (id: string) => void;
 
@@ -151,6 +154,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   pickList: DEFAULT_PICKLIST_OPTIONS,
   support: DEFAULT_SUPPORT,
   effect: DEFAULT_EFFECT,
+  audience: DEFAULT_AUDIENCE,
   customProcessors: [],
   past: [],
   future: [],
@@ -370,6 +374,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   setPickList: (patch) => set((s) => ({ pickList: { ...s.pickList, ...patch } })),
   setSupport: (patch) => set((s) => ({ support: { ...s.support, ...patch } })),
   setEffect: (patch) => set((s) => ({ effect: { ...s.effect, ...patch } })),
+  setAudience: (patch) => set((s) => ({ audience: { ...s.audience, ...patch } })),
 
   addCustomProcessor: (processor) =>
     set((s) => ({
@@ -437,6 +442,7 @@ export const useEditor = create<EditorState>((set, get) => ({
       pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
       support: { ...s.support, ...(project as { support?: Partial<SupportSettings> }).support },
       effect: { ...s.effect, ...(project as { effect?: Partial<EffectSettings> }).effect },
+      audience: { ...s.audience, ...(project as { audience?: Partial<AudienceSettings> }).audience },
       customProcessors:
         (project as { customProcessors?: Processor[] }).customProcessors ?? s.customProcessors,
     }));
@@ -454,7 +460,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList, support, effect, customProcessors } =
+    const { name, canvas, layers, processorId, cabling, pickList, support, effect, audience, customProcessors } =
       get();
     return JSON.stringify(
       {
@@ -468,6 +474,7 @@ export const useEditor = create<EditorState>((set, get) => ({
         pickList,
         support,
         effect,
+        audience,
         customProcessors,
       },
       null,
@@ -505,6 +512,7 @@ export function restoreProject() {
       pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
       support: { ...DEFAULT_SUPPORT, ...parsed.support },
       effect: { ...DEFAULT_EFFECT, ...parsed.effect },
+      audience: { ...DEFAULT_AUDIENCE, ...parsed.audience },
       customProcessors: parsed.customProcessors ?? [],
       past: [],
       future: [],

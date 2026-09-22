@@ -2,6 +2,7 @@
 
 import { useEditor } from '@/state/store';
 import { kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
+import { SMPTE_MIN_ANGLE_DEG, VIEWING_GRADES, viewingForProject } from '@/lib/viewing';
 import Dialog from './Dialog';
 
 /**
@@ -12,7 +13,11 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
   const name = useEditor((s) => s.name);
   const canvas = useEditor((s) => s.canvas);
   const layers = useEditor((s) => s.layers);
+  const audience = useEditor((s) => s.audience);
   const totals = projectTotals(layers);
+  const viewing = viewingForProject(layers, audience);
+  const nearestM = Math.min(audience.nearestM, audience.furthestM);
+  const furthestM = Math.max(audience.nearestM, audience.furthestM);
 
   return (
     <Dialog
@@ -101,6 +106,55 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
               </tbody>
             </table>
           </section>
+
+          {viewing.length > 0 && (
+            <section>
+              <h4>Viewing</h4>
+              <p className="sheet__sub">
+                Read against an audience from {nearestM.toFixed(1)} m to {furthestM.toFixed(0)} m.
+                Arcminutes are how much of the field of view one pixel takes up; 20/20 vision
+                separates detail down to one.
+              </p>
+              <table className="sheet__table">
+                <thead>
+                  <tr>
+                    <th>Screen</th>
+                    <th>Pitch</th>
+                    <th>At {nearestM.toFixed(1)} m</th>
+                    <th>At {furthestM.toFixed(0)} m</th>
+                    <th>Pixels vanish at</th>
+                    <th>Fills the view</th>
+                    <th>Detail at the back</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {viewing.map((v) => (
+                    <tr key={v.layerId}>
+                      <td>{v.layerName}</td>
+                      <td>{v.pitchMm} mm</td>
+                      <td>
+                        {v.near.arcminutesPerPixel.toFixed(1)}&#8242;
+                        <br />
+                        <small>{VIEWING_GRADES[v.near.grade].label}</small>
+                      </td>
+                      <td>
+                        {v.far.arcminutesPerPixel.toFixed(1)}&#8242;
+                        <br />
+                        <small>{VIEWING_GRADES[v.far.grade].label}</small>
+                      </td>
+                      <td>{v.acuityDistanceM.toFixed(1)} m</td>
+                      <td>
+                        {v.near.angleDeg.toFixed(1)}&deg; &rarr; {v.far.angleDeg.toFixed(1)}&deg;
+                        <br />
+                        <small>SMPTE asks {SMPTE_MIN_ANGLE_DEG}&deg;</small>
+                      </td>
+                      <td>{Math.round(v.far.resolvedFraction * 100)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
 
           <p className="note">
             Figures come from published manufacturer specifications and are for planning only.

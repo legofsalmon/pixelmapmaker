@@ -456,6 +456,9 @@ a { color: var(--accent); }
 .stats dd { margin: 0; font-variant-numeric: tabular-nums; }
 .stats--wide { grid-template-columns: repeat(4, 1fr); }
 .stats em { color: var(--ink-2); font-size: 11px; }
+/* A second line under the figure rather than trailing it — for a stat whose
+   qualifier is its own fact ("10× rule says 8.7 m"), not an aside. */
+.stats--stacked em { display: block; color: var(--ink-3); font-style: normal; line-height: 1.35; }
 
 .spec-details summary { cursor: pointer; color: var(--ink-2); padding: var(--s1) 0; }
 .spec-details[open] summary { color: var(--ink); }
@@ -740,6 +743,7 @@ a { color: var(--accent); }
   border: 1px solid;
 }
 .verdict--ok { background: #0d2a1a; border-color: #1f6d43; color: #9ff0c4; }
+.verdict--warn { background: #2b2410; border-color: #7a6320; color: #f2d99a; }
 .verdict--bad { background: #2c1113; border-color: #7d2a30; color: #ffb4b8; }
 
 /* ---------- docked panel (test patterns) ---------- */
