@@ -33,7 +33,7 @@ for the full feature review those two drove.
   rectangle of pixels, so the canvas, the export and the signal order stay put
 
 **Cabinet library**
-- 256 real cabinets scraped from manufacturer spec pages and datasheets
+- 541 real cabinets scraped from manufacturer spec pages and datasheets
 - Filter by brand, type, indoor/outdoor and pitch range; search; favourites
 - Add your own panels when a model is not in the list
 - Every entry links back to the manufacturer page it came from
@@ -145,10 +145,24 @@ npm run scrape                        # all sources
 node scripts/scraper/index.mjs --source roevisual
 ```
 
+One source at a time tops that brand up and leaves the rest of the library
+alone, so a vendor can be re-read without re-reading all of them.
+
 Each source in `scripts/scraper/sources/` exports `brand` and `scrape()`, and
 returns records that `scripts/scraper/index.mjs` normalises, validates and
 de-duplicates. To add a manufacturer, drop in another module and register it in
 the `SOURCES` map.
+
+Unilumin and INFiLED publish their specs only to a JavaScript client, so those
+two sources drive a headless Chromium through `scripts/scraper/browser.mjs`.
+Playwright is a devDependency; the browser binary is not, so fetch it once:
+
+```bash
+npx playwright install chromium
+```
+
+Everything else about those sources is ordinary — they export `brand` and
+`scrape()` like the rest, and return the same records.
 
 ### Support structure
 
@@ -269,6 +283,8 @@ with the project.
 | [ROE Visual](https://www.roevisual.com/en/products) | 76 | Full published specs including weight, power, BTU, hanging and stacking limits |
 | [GLOSHINE](https://gloshine.com/products) | 91 | Publishes size, pitch and weight; panel resolution is derived from size ÷ pitch |
 | [Absen](https://www.usabsen.com/) | 89 | Parsed from the specification PDFs linked on each product page; power is quoted per m² and converted per panel |
+| [INFiLED](https://www.infiled.com/) | 285 | Spec panel rendered client-side, read with a headless browser; numbers arrive in both decimal conventions on one page |
+| [Unilumin](https://unilumin.com/products/professional/) | 0 so far | Source written and tested, but see the note below — the product pages have not been reachable long enough to complete a crawl |
 
 ### Data quality
 
@@ -288,25 +304,69 @@ The scraper validates every record before it ships:
   inserting a space between everything — that bug had 5000 nit outdoor panels
   shipping as 5.
 
+- A weight, power or brightness figure that no cabinet has — a misread
+  separator moves one by a factor of a hundred, not a little — is dropped from
+  that record and logged, rather than shipped. The rest of the record is kept.
+
 Specifications change. Confirm against the current datasheet before ordering or
 rigging anything.
+
+### Telling a spec change from a broken scrape
+
+A later run has to answer one question: did the vendor change a spec, or did
+the scrape break? The run reports three things separately so that it can.
+
+- **Pages that never loaded** are counted as unreachable. The run is short, not
+  wrong — retry it.
+- **Pages that loaded without a recognisable spec table** are counted
+  separately. That is the site having been rebuilt under the parser, and it is
+  a bug to fix rather than a retry.
+- **A brand whose count collapses** — more than 25% below what the shipped
+  library already holds for it — stops the run. `data/cabinets.json` is left
+  exactly as it was and the script exits non-zero, naming the brand and how
+  many of its pages were unreachable versus unparseable.
+- **A brand read only in part** — more than a third of its pages unreachable —
+  stops the run too. A brand appearing for the first time has no count to
+  collapse from, so without this a half-finished first crawl would ship as
+  though it were the whole catalogue.
+
+Pass `--allow-shrink` to write the result anyway, when the catalogue really is
+smaller or the gaps are expected.
+
+A spec that merely *changed* trips none of those counters. It lands in the diff
+of `data/cabinets.json`, which is where a person should read it: the file is
+committed, so `git diff` after a scrape is the changelog for the catalogue.
 
 ### Manufacturers not included
 
 `absen.com` is bot-protected, but Absen's US site publishes the same
 specification PDFs and is reachable, so that is where the Absen source reads
-from. The same trick was tried on the others and does not work:
+from.
+
+Unilumin and INFiLED were on this list until a headless browser was wired in,
+which is what both of them needed. What is left:
 
 | Brand | What happens |
 |---|---|
-| Unilumin | Site loads, but specs render client-side. No spec PDFs anywhere on it, and `products` is not exposed through the WordPress REST API. |
-| INFiLED | Host does not resolve or answer. |
-| Desay | Host does not resolve or answer. |
+| Desay | Host does not resolve or answer. Every name it trades under was tried — `desayled.com`, `desay-led.com`, `en.desayled.com`, `desayoptics.com`, `sz-desay.com` — and none of them completes a connection, so there is nothing for a browser to render. |
 | Chauvet Professional | Site and WooCommerce Store API both reachable, but the API carries only pitch and IP rating — `dimensions` and `weight` are empty, and the linked PDFs are marketing one-pagers with no cabinet size or resolution. |
 
-The common blocker is that these publish specs only to a JavaScript client. A
-headless browser would solve it, and the source interface is ready for one —
-run the scraper somewhere the browser has ordinary TLS to the open internet.
+Two notes on the two that are now in, because both will bite whoever runs the
+scraper next:
+
+- **Unilumin** answers 502 to a crawl that does not pause, and goes on
+  refusing an address long afterwards. The source waits between pages, but no
+  Unilumin records have shipped yet: its product pages have been reachable in
+  windows too short to finish 39 of them, while `unilumin.com/` itself keeps
+  answering. The parser is written against a table captured while they were
+  up and is covered by `scripts/test-browser-sources.mjs`; what it needs is a
+  run from an address the site has not tired of. Until then the run audit
+  refuses the empty result rather than shipping it.
+- **INFiLED** puts a SiteGround interstitial in front of a first visit. An
+  ordinary browser sits through it for a few seconds and is let past, which is
+  all the source does — it waits, sometimes across two or three loads. Its
+  `robots.txt` (read 2026-09-22) is Yoast's default, `Disallow:` with nothing
+  after it, so nothing on the site is off limits.
 
 [LED Wall Central](https://www.ledwallcentral.com/) has a large multi-brand
 database and would be an obvious shortcut. Its `robots.txt` disallows
