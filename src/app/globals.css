@@ -460,6 +460,15 @@ a { color: var(--accent); }
    qualifier is its own fact ("10× rule says 8.7 m"), not an aside. */
 .stats--stacked em { display: block; color: var(--ink-3); font-style: normal; line-height: 1.35; }
 
+/* The wall from above. A background one step up from the panel rather than a
+   border, because a drawing reads as a figure when it sits on its own ground. */
+.plan-view {
+  display: block;
+  width: 100%;
+  background: var(--panel-2);
+  border-radius: var(--radius);
+}
+
 .spec-details summary { cursor: pointer; color: var(--ink-2); padding: var(--s1) 0; }
 .spec-details[open] summary { color: var(--ink); }
 .spec-details > * + * { margin-top: var(--s2); }

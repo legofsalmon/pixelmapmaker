@@ -6,6 +6,7 @@ import { CABINETS } from '@/lib/cabinets';
 import { DEFAULT_PALETTE, PALETTES, nextColor } from '@/lib/palettes';
 import { contentBounds, layerRect } from '@/lib/geometry';
 import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
+import { FLAT_SHAPE, normaliseShape } from '@/lib/curve';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
 import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
@@ -47,6 +48,8 @@ export function makeLayer(
     spec,
     cols: 8,
     rows: 4,
+    // Its own copy, since the inspector edits a layer's shape in place.
+    shape: { ...FLAT_SHAPE, folds: [] },
     x: 0,
     y: 0,
     visible: true,
@@ -440,7 +443,11 @@ export const useEditor = create<EditorState>((set, get) => ({
     set((s) => ({
       name: project.name ?? s.name,
       canvas: { ...s.canvas, ...project.canvas },
-      layers: (project.layers ?? s.layers).map((l) => ({ ...l, id: l.id || newId() })),
+      layers: (project.layers ?? s.layers).map((l) => ({
+        ...l,
+        id: l.id || newId(),
+        shape: normaliseShape(l.shape),
+      })),
       selectedIds: [],
       processorId: (project as { processorId?: string }).processorId ?? s.processorId,
       cabling: { ...s.cabling, ...(project as { cabling?: Partial<CablingSettings> }).cabling },
@@ -512,7 +519,9 @@ export function restoreProject() {
     useEditor.setState({
       name: parsed.name ?? 'Untitled map',
       canvas: { ...initialCanvas, ...parsed.canvas },
-      layers: parsed.layers,
+      // A project saved before shapes existed has no shape on its layers, and
+      // a hand-edited one may have a half-written shape. Both come back flat.
+      layers: (parsed.layers as Layer[]).map((l) => ({ ...l, shape: normaliseShape(l.shape) })),
       selectedIds: [],
       processorId: parsed.processorId ?? 'brompton-sx40',
       cabling: { ...DEFAULT_CABLING, ...parsed.cabling },

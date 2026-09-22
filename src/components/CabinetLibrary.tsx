@@ -216,6 +216,7 @@ function CustomPanelForm({ onCreate }: { onCreate: (spec: CabinetSpec) => void }
   const [resH, setResH] = useState(128);
   const [weight, setWeight] = useState('');
   const [power, setPower] = useState('');
+  const [curve, setCurve] = useState('');
 
   const pitchW = impliedPitch(width, resW);
   const pitchH = impliedPitch(height, resH);
@@ -236,6 +237,7 @@ function CustomPanelForm({ onCreate }: { onCreate: (spec: CabinetSpec) => void }
             resH,
             weightKg: weight ? Number(weight) : null,
             powerMaxW: power ? Number(power) : null,
+            maxCurveAngle: curve ? Number(curve) : null,
           })
         );
       }}
@@ -268,6 +270,15 @@ function CustomPanelForm({ onCreate }: { onCreate: (spec: CabinetSpec) => void }
         <label className="field">
           <span>Max power (W)</span>
           <input className="input" type="number" min="0" value={power} onFocus={(e) => e.target.select()} onChange={(e) => setPower(e.target.value)} />
+        </label>
+        {/*
+          The one spec no manufacturer in the library publishes, so this is the
+          only way a curve check gets a figure to test against. Left blank, a
+          curved wall says its bend is unchecked rather than claiming a pass.
+        */}
+        <label className="field">
+          <span>Max bend per joint (°)</span>
+          <input className="input" type="number" min="0" max="90" step="0.5" value={curve} onFocus={(e) => e.target.select()} onChange={(e) => setCurve(e.target.value)} />
         </label>
       </div>
       <p className={`note${square ? '' : ' note--warn'}`}>

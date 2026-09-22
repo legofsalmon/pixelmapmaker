@@ -20,6 +20,13 @@ these, so this file is the source rather than a copy of them.
   peak brightness that would hold the contrast you need, and the brightest room
   it holds that in. The required ratio is yours to set — the app computes the
   physics and does not invent the requirement.
+- **Curved and angled walls.** A screen can be set on a radius or folded into an
+  L or a U, with a plan view of the footprint beside the controls and the span,
+  depth, turn and radius on the spec sheet. The pixel map does not change: a
+  curved wall unrolls a flat rectangle, and any warping belongs in the media
+  server. No manufacturer in the library publishes a maximum bend per joint, so
+  the check says the angle is unchecked rather than claiming a pass; enter one
+  on a custom panel to have it tested.
 - **Six outdoor panels were in the library at 5 and 50 nits.** Absen's spec
   PDFs break a number across two runs of glyphs, and the parser joined every
   run with a space, so `num()` read the first piece: 5000 became 5. Runs are
@@ -27,10 +34,11 @@ these, so this file is the source rather than a copy of them.
   a digit off three cabinet depths and two weights, and had been dropping ten
   cabinets whose dimensions it mangled past the validator. The library is
   rebuilt: 246 cabinets to 256, with 13 corrected figures.
-- **The first tests in the repo.** `npm test` runs the viewing maths against
-  the published figures it claims to reproduce. No framework: Node strips the
-  types and a thirty-line loader resolves the app's own imports, so a test
-  exercises the module that ships.
+- **The first tests in the repo.** `npm test` finds and runs every
+  `scripts/test-*.mjs`, checking each piece of maths against the published
+  figures it claims to reproduce. No framework: Node strips the types and a
+  thirty-line loader resolves the app's own imports, so a test exercises the
+  module that ships.
 
 ## 0.2.0
 
