@@ -53,13 +53,60 @@ export function num(value) {
 }
 
 /**
+ * First number in a string that may be written in either convention.
+ * INFiLED puts "5,95mm" and "14.400 pixels/m2" on the same spec sheet, so a
+ * separator cannot be read as decimal or thousands by which character it is.
+ *
+ * The rule: a separator followed by exactly three digits, with no digit after
+ * them, groups thousands; anything else is the decimal point. Where a number
+ * carries both, the last separator is the decimal one ("1.234,5" -> 1234.5).
+ *
+ * "2.500" is genuinely ambiguous and reads as 2500 here. That is the safer way
+ * round for this scraper: a pitch of 2500mm fails `isValid` loudly, where 2.5
+ * would ship a panel with a plausible and wrong pitch.
+ */
+export function localeNum(value) {
+  if (value == null) return null;
+  const m = String(value).match(/-?\d[\d.,]*/);
+  if (!m) return null;
+  const raw = m[0];
+  const last = Math.max(raw.lastIndexOf('.'), raw.lastIndexOf(','));
+  if (last === -1) return parseFloat(raw);
+  const tail = raw.slice(last + 1);
+  const grouped = /^\d{3}$/.test(tail);
+  const digits = raw.replace(/[.,]/g, '');
+  return grouped ? parseFloat(digits) : parseFloat(`${raw.slice(0, last).replace(/[.,]/g, '')}.${tail}`);
+}
+
+/**
+ * Unilumin writes series generations as Unicode Roman numerals — "UpadIV" is
+ * really "Upad\u2163". Those characters slug away to nothing, so UpadIV and
+ * UpadIII would collide on one id, and nobody searching the library types
+ * them. Fold them to ASCII in the model name itself, not only in the id, so
+ * the name stays searchable.
+ */
+const ROMAN = {
+  '\u2160': 'I', '\u2161': 'II', '\u2162': 'III', '\u2163': 'IV', '\u2164': 'V', '\u2165': 'VI',
+  '\u2166': 'VII', '\u2167': 'VIII', '\u2168': 'IX', '\u2169': 'X', '\u216a': 'XI', '\u216b': 'XII',
+  '\u2170': 'I', '\u2171': 'II', '\u2172': 'III', '\u2173': 'IV', '\u2174': 'V', '\u2175': 'VI',
+  '\u2176': 'VII', '\u2177': 'VIII', '\u2178': 'IX', '\u2179': 'X', '\u217a': 'XI', '\u217b': 'XII',
+};
+
+export function asciiRomanNumerals(value) {
+  if (value == null) return value;
+  return String(value).replace(/[\u2160-\u217b]/g, (c) => ROMAN[c] ?? c);
+}
+
+/**
  * Parse a physical dimension string into millimetres.
  * Handles "500mm x 500mm x 90mm", "500 x 500 x 90 mm", "0.5m x 0.5m".
  */
 export function dimsMm(value) {
   if (!value) return null;
-  // Only consider the metric half of dual-unit strings ("500mm x 500mm | 19.69" x ...").
-  const metric = String(value).split('\n')[0].split('|')[0];
+  // Only consider the metric half of dual-unit strings, however it is fenced
+  // off: "500mm x 500mm | 19.69\" x ..." and "1000x1000mm (39,37x39,37inch)"
+  // both put the imperial figures second.
+  const metric = String(value).split('\n')[0].split('|')[0].split('(')[0];
   const parts = metric.match(/\d+(?:\.\d+)?\s*(?:mm|cm|m)?/gi);
   if (!parts || parts.length < 2) return null;
   const toMm = (p) => {

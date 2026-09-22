@@ -49,6 +49,27 @@ these, so this file is the source rather than a copy of them.
   figures it claims to reproduce. No framework: Node strips the types and a
   thirty-line loader resolves the app's own imports, so a test exercises the
   module that ships.
+- **Unilumin and INFiLED, read with a headless browser.** Both publish their
+  specs only to a JavaScript client, which is the whole reason neither was in
+  the library: fetch a product page and you get every label and not one value.
+  `scripts/scraper/browser.mjs` drives Chromium so a source can read what the
+  page actually draws. INFiLED brings 285 cabinets, 256 to 541. The Unilumin
+  source is written and covered by tests but has no records in yet — its
+  product pages have not stayed reachable long enough to finish a crawl.
+- **Desay is still out**, and not for want of JavaScript: no name the company
+  trades under answers at all.
+- **A scrape that goes wrong no longer overwrites a good library.** A run now
+  counts pages that never loaded apart from pages that loaded without their
+  spec table — the first is a short run, the second is the site having moved
+  under the parser — and stops before writing when a brand's count collapses.
+  A spec that merely changed trips none of that and lands in the diff, which is
+  where someone should read it. Scraping one source now tops that brand up
+  instead of truncating the library to it.
+- **Figures no cabinet has are dropped rather than shipped.** INFiLED writes
+  "8,09kg" where Absen writes "20.4kg", and read the old way that panel weighed
+  809kg. Weight, power and brightness are now checked against what a cabinet
+  can physically be, and a figure outside that is dropped and logged rather
+  than quietly rigged.
 
 ## 0.2.0
 
