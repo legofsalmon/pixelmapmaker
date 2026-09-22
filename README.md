@@ -24,7 +24,7 @@ for the full feature review those two drove.
 - Layer list with show/hide, lock, reorder, duplicate
 
 **Cabinet library**
-- 246 real cabinets scraped from manufacturer spec pages and datasheets
+- 256 real cabinets scraped from manufacturer spec pages and datasheets
 - Filter by brand, type, indoor/outdoor and pitch range; search; favourites
 - Add your own panels when a model is not in the list
 - Every entry links back to the manufacturer page it came from
@@ -42,6 +42,14 @@ for the full feature review those two drove.
 - Says when a pitch is finer than anyone in the room can resolve, and names the
   pitch that would look the same — the most expensive mistake on a quote
 - On the spec sheet as well as in the inspector, so it goes out with the price
+
+**Brightness**
+- Set the light falling on the screen face and it works out the floor that
+  reflection puts under every black pixel, and the contrast ratio the panel
+  actually reaches in that room — not the one on the datasheet
+- Says what peak brightness would hold the contrast you need, and the brightest
+  ambient the panel holds it in before the room wins
+- Brightness figures that cannot be true are refused rather than used
 
 **Pick list**
 - Choose a processor and it works out how many you need — by pixel count and by
@@ -159,6 +167,31 @@ The field-of-view line quotes SMPTE EG-18's 30° minimum. That is a guideline
 for a seated cinema audience watching a projected picture, not a standard for a
 wall at a gig, so it is a reference line and not a pass mark.
 
+### Brightness and ambient light
+
+`src/lib/contrast.ts` is the same shape as the viewing maths: physics the app
+computes, and a requirement the user sets.
+
+The physics is the standard ambient-contrast relation. Light falling on the
+screen face comes back off it as `lux × reflectance / π` cd/m², that reflected
+luminance lands under the blacks, and the contrast the panel reaches is
+`(peak + reflected) / reflected`. The panel's own black is taken as zero — it is
+far below the reflected floor in any lit room, and the error is on the
+optimistic side.
+
+Two numbers in there are assumptions and are labelled as such in the interface:
+face reflectance, which no manufacturer publishes and which is settable, and
+the ambient level, which has presets. Only the office preset comes from a
+standard — EN 12464-1 puts 500 lux on the task area for ordinary office work.
+
+What the app deliberately does not ship is a table of *required* contrast
+ratios. [ANSI/AVIXA V201.01:2021 Image System Contrast
+Ratio](https://www.avixa.org/standards/image-system-contrast-ratio) defines four
+of them by viewing category and covers direct-view LED rather than only
+projection, but the figures sit behind the standard and the numbers circulating
+for them disagree. So the target is a field you fill in, and the standard is
+named as where a real one comes from.
+
 ### Processors
 
 `src/lib/processors.ts` carries the processor list. Only entries with a
@@ -183,9 +216,9 @@ with the project.
 
 | Brand | Cabinets | Notes |
 |---|---:|---|
-| [ROE Visual](https://www.roevisual.com/en/products) | 74 | Full published specs including weight, power, BTU, hanging and stacking limits |
+| [ROE Visual](https://www.roevisual.com/en/products) | 76 | Full published specs including weight, power, BTU, hanging and stacking limits |
 | [GLOSHINE](https://gloshine.com/products) | 91 | Publishes size, pitch and weight; panel resolution is derived from size ÷ pitch |
-| [Absen](https://www.usabsen.com/) | 81 | Parsed from the specification PDFs linked on each product page; power is quoted per m² and converted per panel |
+| [Absen](https://www.usabsen.com/) | 89 | Parsed from the specification PDFs linked on each product page; power is quoted per m² and converted per panel |
 
 ### Data quality
 
@@ -198,7 +231,12 @@ The scraper validates every record before it ships:
   `derivedResolution`. The inspector shows a warning on those panels.
 - Indoor/outdoor comes from the weakest IP rating quoted, not the strongest.
 - Missing weight or power stays missing — totals say "partial" rather than
-  quietly summing zeros.
+  quietly summing zeros. A brightness figure that cannot be true is treated the
+  same way by the app rather than used.
+- Text in a spec PDF arrives as runs of glyphs, and a number can be split
+  across two of them. Runs are rejoined by whether they sit flush, not by
+  inserting a space between everything — that bug had 5000 nit outdoor panels
+  shipping as 5.
 
 Specifications change. Confirm against the current datasheet before ordering or
 rigging anything.
@@ -250,6 +288,7 @@ src/lib/picklist.ts    prep-list aggregation, contingency and pack rounding
 src/lib/cabling.ts     data and power runs, auto or manual
 src/lib/support.ts     support structure, wrapping the vendored solver
 src/lib/viewing.ts     viewing distance, pitch suitability, field of view
+src/lib/contrast.ts    ambient light, reflected floor, achieved contrast
 src/state/store.ts     editor state, history, persistence
 src/components/        canvas stage, library, inspector, layers, toolbar, spec sheet
 scripts/scraper/       cabinet library scraper
