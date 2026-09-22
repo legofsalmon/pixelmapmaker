@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-14T18:43:21.054Z",
-  "count": 246,
+  "generatedAt": "2026-09-22T10:59:05.962Z",
+  "count": 256,
   "cabinets": [
     {
       "id": "absen-a1021d-1280x960",
@@ -770,7 +770,7 @@
         "max": 690,
         "avg": 230
       },
-      "brightnessNits": 50,
+      "brightnessNits": 5000,
       "refreshHz": 7680,
       "ipRating": "IP65/IP54",
       "scanRate": "1/6",
@@ -804,7 +804,7 @@
         "max": 173,
         "avg": 58
       },
-      "brightnessNits": 50,
+      "brightnessNits": 5000,
       "refreshHz": 7680,
       "ipRating": "IP65/IP54",
       "scanRate": "1/6",
@@ -838,7 +838,7 @@
         "max": 690,
         "avg": 230
       },
-      "brightnessNits": 50,
+      "brightnessNits": 5000,
       "refreshHz": 7680,
       "ipRating": "IP65/IP54",
       "scanRate": "1/6",
@@ -872,7 +872,7 @@
         "max": 173,
         "avg": 58
       },
-      "brightnessNits": 5,
+      "brightnessNits": 5000,
       "refreshHz": 7680,
       "ipRating": "IP65/IP54",
       "scanRate": "1/6",
@@ -906,7 +906,7 @@
         "max": 480,
         "avg": 160
       },
-      "brightnessNits": 5,
+      "brightnessNits": 5000,
       "refreshHz": 7680,
       "ipRating": "IP65/IP54",
       "scanRate": "1/4",
@@ -940,7 +940,7 @@
         "max": 480,
         "avg": 160
       },
-      "brightnessNits": 5,
+      "brightnessNits": 5000,
       "refreshHz": 7680,
       "ipRating": "IP65/IP54",
       "scanRate": "1/4",
@@ -1227,6 +1227,74 @@
       "category": "rental"
     },
     {
+      "id": "absen-fl1-9-pro-v2-500x500",
+      "brand": "Absen",
+      "series": "Nt Pro V2 Series",
+      "model": "FL1.9 Pro V2",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 73
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 161,
+        "avg": 54
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "IMD 2in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/nt-pro-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 28,
+      "powerPerM2": 644,
+      "category": "rental"
+    },
+    {
+      "id": "absen-nt1-9-pro-v2-500x500",
+      "brand": "Absen",
+      "series": "Nt Pro V2 Series",
+      "model": "NT1.9 Pro V2",
+      "pixelPitch": 1.95,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 75
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 7.3,
+      "power": {
+        "max": 161,
+        "avg": 54
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "IMD 2in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/nt-pro-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 29.2,
+      "powerPerM2": 644,
+      "category": "rental"
+    },
+    {
       "id": "absen-fl2-6-pro-v2-500x500",
       "brand": "Absen",
       "series": "Nt Pro V2 Series",
@@ -1235,7 +1303,7 @@
       "cabinet": {
         "width": 500,
         "height": 500,
-        "depth": 7
+        "depth": 73
       },
       "resolution": {
         "w": 192,
@@ -1258,6 +1326,74 @@
       "pixelsPerCabinet": 36864,
       "weightPerM2": null,
       "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "absen-nt2-6-pro-v2-500x1000",
+      "brand": "Absen",
+      "series": "Nt Pro V2 Series",
+      "model": "NT2.6 Pro V2 (500×1000)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 75
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 10,
+      "power": {
+        "max": 300,
+        "avg": 100
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/24",
+      "ledConfig": "IMD 2in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/nt-pro-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 20,
+      "powerPerM2": 600,
+      "category": "rental"
+    },
+    {
+      "id": "absen-nt2-6-pro-v2-500x500",
+      "brand": "Absen",
+      "series": "Nt Pro V2 Series",
+      "model": "NT2.6 Pro V2 (500×500)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 75
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 7.1,
+      "power": {
+        "max": 150,
+        "avg": 50
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/24",
+      "ledConfig": "IMD 2in1",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/nt-pro-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 28.4,
+      "powerPerM2": 600,
       "category": "rental"
     },
     {
@@ -1461,6 +1597,40 @@
       "areaM2": 0.25,
       "pixelsPerCabinet": 40000,
       "weightPerM2": 36,
+      "powerPerM2": 700,
+      "category": "rental"
+    },
+    {
+      "id": "absen-pl1-9-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL1.9 Plus V2 (NovaStar)",
+      "pixelPitch": 1.953,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 7.8,
+      "power": {
+        "max": 175,
+        "avg": 59
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/16",
+      "ledConfig": "Black SMD 3in1 1212",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 31.2,
       "powerPerM2": 700,
       "category": "rental"
     },
@@ -2077,10 +2247,44 @@
       "category": "outdoor"
     },
     {
+      "id": "absen-pl4-8-pro-v2-novastar-500x1000",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL4.8 Pro V2 (NovaStar) (500×1000)",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 104,
+        "h": 208
+      },
+      "weightKg": 13,
+      "power": {
+        "max": 400,
+        "avg": 134
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/7",
+      "ledConfig": "Black SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 21632,
+      "weightPerM2": 26,
+      "powerPerM2": 800,
+      "category": "outdoor"
+    },
+    {
       "id": "absen-pl4-8-pro-v2-novastar-500x500",
       "brand": "Absen",
       "series": "Pl V2 Series",
-      "model": "PL4.8 Pro V2 (NovaStar)",
+      "model": "PL4.8 Pro V2 (NovaStar) (500×500)",
       "pixelPitch": 4.8,
       "cabinet": {
         "width": 500,
@@ -2114,7 +2318,7 @@
       "id": "absen-pl4-8w-plus-v2-novastar-500x1000",
       "brand": "Absen",
       "series": "Pl V2 Series",
-      "model": "PL4.8W Plus V2 (NovaStar)",
+      "model": "PL4.8W Plus V2 (NovaStar) (500×1000)",
       "pixelPitch": 4.8,
       "cabinet": {
         "width": 500,
@@ -2141,6 +2345,40 @@
       "areaM2": 0.5,
       "pixelsPerCabinet": 21632,
       "weightPerM2": 26,
+      "powerPerM2": 600,
+      "category": "outdoor"
+    },
+    {
+      "id": "absen-pl4-8w-plus-v2-novastar-500x500",
+      "brand": "Absen",
+      "series": "Pl V2 Series",
+      "model": "PL4.8W Plus V2 (NovaStar) (500×500)",
+      "pixelPitch": 4.8,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 78
+      },
+      "resolution": {
+        "w": 104,
+        "h": 104
+      },
+      "weightKg": 8,
+      "power": {
+        "max": 150,
+        "avg": 50
+      },
+      "brightnessNits": 4500,
+      "refreshHz": 7680,
+      "ipRating": "IP65/IP54",
+      "scanRate": "1/7",
+      "ledConfig": "SMD 3in1 1921",
+      "environment": "outdoor",
+      "sourceUrl": "https://www.usabsen.com/product/pl-v2-series/",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 10816,
+      "weightPerM2": 32,
       "powerPerM2": 600,
       "category": "outdoor"
     },
@@ -2357,7 +2595,7 @@
       "cabinet": {
         "width": 500,
         "height": 500,
-        "depth": 10
+        "depth": 107
       },
       "resolution": {
         "w": 192,
@@ -2465,7 +2703,7 @@
         "w": 256,
         "h": 256
       },
-      "weightKg": 5,
+      "weightKg": 5.5,
       "power": {
         "max": 110,
         "avg": 37
@@ -2480,7 +2718,7 @@
       "aspect": 1,
       "areaM2": 0.25,
       "pixelsPerCabinet": 65536,
-      "weightPerM2": 20,
+      "weightPerM2": 22,
       "powerPerM2": 440,
       "category": "rental"
     },
@@ -2626,7 +2864,7 @@
       "cabinet": {
         "width": 500,
         "height": 500,
-        "depth": 1
+        "depth": 107
       },
       "resolution": {
         "w": 192,
@@ -2652,6 +2890,40 @@
       "category": "rental"
     },
     {
+      "id": "absen-sa2-6-r-brompton-novastar-250x500",
+      "brand": "Absen",
+      "series": "Sa Series",
+      "model": "SA2.6-R (Brompton/NovaStar)",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 250,
+        "height": 500,
+        "depth": 95
+      },
+      "resolution": {
+        "w": 96,
+        "h": 192
+      },
+      "weightKg": 4.5,
+      "power": {
+        "max": 60,
+        "avg": 20
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40/IP21",
+      "scanRate": "1/12",
+      "ledConfig": "Black SMD 3in1 1515",
+      "environment": "indoor",
+      "sourceUrl": "https://www.usabsen.com/product/sa-series/",
+      "aspect": 0.5,
+      "areaM2": 0.125,
+      "pixelsPerCabinet": 18432,
+      "weightPerM2": 36,
+      "powerPerM2": 480,
+      "category": "rental"
+    },
+    {
       "id": "absen-sa3-9-b-brompton-500x500",
       "brand": "Absen",
       "series": "Sa Series",
@@ -2666,7 +2938,7 @@
         "w": 128,
         "h": 128
       },
-      "weightKg": 7,
+      "weightKg": 7.2,
       "power": {
         "max": 113,
         "avg": 38
@@ -2681,7 +2953,7 @@
       "aspect": 1,
       "areaM2": 0.25,
       "pixelsPerCabinet": 16384,
-      "weightPerM2": 28,
+      "weightPerM2": 28.8,
       "powerPerM2": 452,
       "category": "rental"
     },
@@ -6979,6 +7251,78 @@
       "pixelsPerCabinet": 16384,
       "weightPerM2": 23,
       "powerPerM2": 600,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp1-9-4-in-1",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "GP1.9(4 in 1)",
+      "pixelPitch": 1.953,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 256,
+        "h": 512
+      },
+      "weightKg": 9.32,
+      "power": {
+        "max": 250,
+        "avg": 125
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "4 in 1 Common Anode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 12,
+      "maxStacking": 6,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 131072,
+      "weightPerM2": 18.6,
+      "powerPerM2": 500,
+      "category": "rental"
+    },
+    {
+      "id": "roe-gp1-9-4-in-1-half",
+      "brand": "ROE Visual",
+      "series": "Graphite",
+      "model": "Gp1.9(4 in 1)Half",
+      "pixelPitch": 1.953,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 80
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 5.51,
+      "power": {
+        "max": 125,
+        "avg": 62
+      },
+      "brightnessNits": 1500,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "ledConfig": "4 in 1 Common Anode",
+      "serviceability": "Front / Rear",
+      "maxHanging": 24,
+      "maxStacking": 12,
+      "environment": "indoor",
+      "sourceUrl": "https://www.roevisual.com/en/products/graphite",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 22,
+      "powerPerM2": 500,
       "category": "rental"
     },
     {
