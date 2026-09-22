@@ -269,7 +269,7 @@ console.log('\nTelling a site rebuild from a bad afternoon');
     results: [{ brand: 'Unilumin', cabinets: 10, transportFailures: 34, shapeFailures: 0, pagesVisited: 44 }],
     previous,
   });
-  check('a collapse is refused', unreachable.length === 1);
+  check('a collapse is refused', unreachable.length > 0);
   check(
     'and it says the pages were unreachable, so the run was short rather than wrong',
     /34 pages were unreachable/.test(unreachable[0]),
@@ -291,6 +291,23 @@ console.log('\nTelling a site rebuild from a bad afternoon');
     'a new brand with no history is not compared against nothing',
     auditRun({
       results: [{ brand: 'INFiLED', cabinets: 12, transportFailures: 0, shapeFailures: 0, pagesVisited: 12 }],
+      previous,
+    }).length === 0
+  );
+
+  // ...but it cannot collapse either, so a first run that only half happened
+  // would otherwise ship as though it were the whole catalogue.
+  const holes = auditRun({
+    results: [{ brand: 'INFiLED', cabinets: 12, transportFailures: 20, shapeFailures: 0, pagesVisited: 32 }],
+    previous,
+  });
+  check('a first run full of holes is refused', holes.length === 1);
+  check('and says how much of the site it actually read', /20 of 32 pages never loaded/.test(holes[0]), holes[0]);
+
+  check(
+    'a couple of dead pages in a catalogue is not a hole',
+    auditRun({
+      results: [{ brand: 'INFiLED', cabinets: 30, transportFailures: 2, shapeFailures: 0, pagesVisited: 32 }],
       previous,
     }).length === 0
   );

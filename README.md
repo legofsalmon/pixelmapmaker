@@ -324,8 +324,14 @@ the scrape break? The run reports three things separately so that it can.
 - **A brand whose count collapses** — more than 25% below what the shipped
   library already holds for it — stops the run. `data/cabinets.json` is left
   exactly as it was and the script exits non-zero, naming the brand and how
-  many of its pages were unreachable versus unparseable. Pass `--allow-shrink`
-  when the catalogue really did get smaller.
+  many of its pages were unreachable versus unparseable.
+- **A brand read only in part** — more than a third of its pages unreachable —
+  stops the run too. A brand appearing for the first time has no count to
+  collapse from, so without this a half-finished first crawl would ship as
+  though it were the whole catalogue.
+
+Pass `--allow-shrink` to write the result anyway, when the catalogue really is
+smaller or the gaps are expected.
 
 A spec that merely *changed* trips none of those counters. It lands in the diff
 of `data/cabinets.json`, which is where a person should read it: the file is

@@ -118,6 +118,7 @@ export const countByBrand = (cabinets) =>
  *   a page that never loaded          the run is short, not wrong — retry
  *   a page that loaded with no specs  the parser no longer fits the site
  *   a brand that collapsed            either of the above, at scale
+ *   a brand full of holes             a first run that only half happened
  *
  * A spec that merely changed — a new pitch, a heavier panel — moves none of
  * these counters and lands in the diff instead, which is where a person should
@@ -147,6 +148,14 @@ export function auditRun({ results, previous = {}, tolerance = 0.25 }) {
       problems.push(
         `${r.brand}: ${r.cabinets} cabinets, down ${drop}% from ${before}. ` +
           `${r.transportFailures} pages were unreachable and ${r.shapeFailures} had no spec table.`
+      );
+    }
+    // A brand with no history cannot collapse, so a first run that reached
+    // only part of the catalogue would otherwise ship as if it were the whole
+    // of it. Judge that one on how much of the site was actually read.
+    if (r.transportFailures > r.pagesVisited / 3) {
+      problems.push(
+        `${r.brand}: ${r.transportFailures} of ${r.pagesVisited} pages never loaded, so this is a fraction of the catalogue rather than the catalogue.`
       );
     }
   }
@@ -258,7 +267,8 @@ async function main() {
     if (!allowShrink) {
       console.error(
         `\n${OUT} left as it was. Fix the source, or re-run with --allow-shrink ` +
-          'if the catalogue really did get smaller.'
+          'to write the result anyway, when the catalogue really is smaller or ' +
+          'the gaps are expected.'
       );
       process.exit(1);
     }
