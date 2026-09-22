@@ -4,6 +4,9 @@ import { useEditor } from '@/state/store';
 import { kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
 import { planForLayer } from '@/lib/curve';
 import { mmLabel } from '@/lib/plan';
+import { cablingForProject } from '@/lib/cabling';
+import { findProcessor } from '@/lib/processors';
+import { planPower } from '@/lib/power';
 import { SMPTE_MIN_ANGLE_DEG, VIEWING_GRADES, viewingForProject } from '@/lib/viewing';
 import { contrastForProject } from '@/lib/contrast';
 import Dialog from './Dialog';
@@ -16,6 +19,10 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
   const name = useEditor((s) => s.name);
   const canvas = useEditor((s) => s.canvas);
   const layers = useEditor((s) => s.layers);
+  const cabling = useEditor((s) => s.cabling);
+  const power = useEditor((s) => s.power);
+  const processorId = useEditor((s) => s.processorId);
+  const customProcessors = useEditor((s) => s.customProcessors);
   const audience = useEditor((s) => s.audience);
   const totals = projectTotals(layers);
   const viewing = viewingForProject(layers, audience);
@@ -23,6 +30,14 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
   const contrast = contrastForProject(layers, ambient);
   const nearestM = Math.min(audience.nearestM, audience.furthestM);
   const furthestM = Math.max(audience.nearestM, audience.furthestM);
+
+  /*
+   * The distro plan goes on the sheet rather than only in the pick list,
+   * because the service is what a venue has to be asked for weeks ahead — and
+   * the sheet is the thing that leaves with the quote.
+   */
+  const processor = findProcessor(processorId, customProcessors);
+  const supplyPlan = planPower(layers, cabling, cablingForProject(layers, cabling, processor), power);
 
   return (
     <Dialog
@@ -69,6 +84,73 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
                 <dd>{totals.btuPerHour != null ? `${Math.round(totals.btuPerHour).toLocaleString('en-GB')} BTU/h` : '—'}</dd>
               </div>
             </dl>
+          </section>
+
+          <section>
+            <h4>Power distribution</h4>
+            <dl className="stats stats--wide">
+              <div><dt>Supply</dt><dd>{supplyPlan.supply.label}</dd></div>
+              <div>
+                <dt>Circuits</dt>
+                <dd>
+                  {supplyPlan.circuits} at {cabling.maxAmpsPerCircuit} A
+                  <br />
+                  <small>{supplyPlan.distros} distro{supplyPlan.distros === 1 ? '' : 's'}, {supplyPlan.waysPerDistro} ways each</small>
+                </dd>
+              </div>
+              <div>
+                <dt>Worst leg</dt>
+                <dd>
+                  {supplyPlan.worstLegAmps.toFixed(1)} A
+                  {supplyPlan.incomplete && <em> (partial)</em>}
+                </dd>
+              </div>
+              <div>
+                <dt>Feed wanted</dt>
+                <dd>
+                  {supplyPlan.recommendedService != null
+                    ? `${supplyPlan.recommendedService} A a leg`
+                    : 'more than anything stocked'}
+                  {supplyPlan.connector && supplyPlan.recommendedService != null && (
+                    <><br /><small>{supplyPlan.connector}</small></>
+                  )}
+                </dd>
+              </div>
+            </dl>
+            <table className="sheet__table">
+              <thead>
+                <tr>
+                  <th>Leg</th>
+                  <th>Circuits</th>
+                  <th>Max power</th>
+                  <th>Current</th>
+                  <th>Of a {supplyPlan.serviceAmpsPerLeg} A feed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {supplyPlan.legs.map((leg) => (
+                  <tr key={leg.name}>
+                    <td>{leg.name}</td>
+                    <td>{leg.circuits.length}</td>
+                    <td>{(leg.maxW / 1000).toFixed(2)} kW</td>
+                    <td>{leg.amps.toFixed(1)} A</td>
+                    <td>{Math.round(leg.utilisation * 100)}%{leg.overloaded ? ' — over' : ''}</td>
+                  </tr>
+                ))}
+                {supplyPlan.neutralAmps != null && (
+                  <tr>
+                    <td>Neutral</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>{supplyPlan.neutralAmps.toFixed(1)} A</td>
+                    <td>size it for a full leg</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+            {supplyPlan.warnings.map((warning) => (
+              <p key={warning} className="note note--warn">{warning}</p>
+            ))}
           </section>
 
           <section>
