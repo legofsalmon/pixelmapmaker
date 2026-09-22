@@ -27,6 +27,16 @@ these, so this file is the source rather than a copy of them.
   server. No manufacturer in the library publishes a maximum bend per joint, so
   the check says the angle is unchecked rather than claiming a pass; enter one
   on a custom panel to have it tested.
+- **Three-phase power and distro balancing.** The app gave current at 230 V and
+  120 V single-phase, which is the wrong question for a wall of any size: the
+  venue hands over a three-phase service and somebody has to decide which way
+  sits on which leg. Pick a supply — 400/230 V, 208/120 V, 480/277 V, or either
+  single-phase — and the circuits are dealt across L1, L2 and L3 heaviest-first
+  onto the lightest leg, with per-leg load and current, the neutral the
+  imbalance actually returns, how far apart the legs come out, the smallest
+  stocked feed that holds the worst one and the connector it lands on, and a
+  way-by-way patch. It is on the spec sheet as well as the pick list, because
+  the service is the part a venue has to be asked for weeks ahead.
 - **Six outdoor panels were in the library at 5 and 50 nits.** Absen's spec
   PDFs break a number across two runs of glyphs, and the parser joined every
   run with a space, so `num()` read the first piece: 5000 became 5. Runs are

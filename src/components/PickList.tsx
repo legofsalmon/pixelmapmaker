@@ -5,6 +5,7 @@ import { useEditor } from '@/state/store';
 import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib/processors';
 import { buildPickList, pickListCsv } from '@/lib/picklist';
 import { assignPorts } from '@/lib/cabling';
+import { SUPPLIES, getSupply } from '@/lib/power';
 import { RUN_COLOURS } from '@/lib/render';
 import type { LineCategory } from '@/lib/picklist';
 import NumberInput from './NumberInput';
@@ -26,12 +27,14 @@ function downloadCsv(name: string, csv: string) {
 }
 
 export default function PickList({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<'list' | 'cabling'>('list');
+  const [tab, setTab] = useState<'list' | 'cabling' | 'power'>('list');
   const name = useEditor((s) => s.name);
   const layers = useEditor((s) => s.layers);
   const processorId = useEditor((s) => s.processorId);
   const cabling = useEditor((s) => s.cabling);
   const options = useEditor((s) => s.pickList);
+  const power = useEditor((s) => s.power);
+  const setPower = useEditor((s) => s.setPower);
   const setProcessor = useEditor((s) => s.setProcessor);
   const setCabling = useEditor((s) => s.setCabling);
   const setPickList = useEditor((s) => s.setPickList);
@@ -41,9 +44,9 @@ export default function PickList({ onClose }: { onClose: () => void }) {
   const [showProcessorForm, setShowProcessorForm] = useState(false);
 
   const processor = findProcessor(processorId, customProcessors);
-  const { lines, cabling: runs, processors } = useMemo(
-    () => buildPickList(layers, cabling, processor, options),
-    [layers, cabling, processor, options]
+  const { lines, cabling: runs, processors, power: supplyPlan } = useMemo(
+    () => buildPickList(layers, cabling, processor, options, power),
+    [layers, cabling, processor, options, power]
   );
   // Ports belong to the project, not to a screen, so they are dealt out once
   // across every run rather than numbered from 1 inside each screen.
@@ -73,6 +76,9 @@ export default function PickList({ onClose }: { onClose: () => void }) {
           <button type="button" className={tab === 'cabling' ? 'is-active' : ''} aria-current={tab === 'cabling'} onClick={() => setTab('cabling')}>
             Cabling
           </button>
+          <button type="button" className={tab === 'power' ? 'is-active' : ''} aria-current={tab === 'power'} onClick={() => setTab('power')}>
+            Power
+          </button>
         </nav>
 
         <div className="sheet__body">
@@ -82,7 +88,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
             {new Date().toLocaleString('en-GB')}
           </p>
 
-          <section className="no-print">
+          <section className="no-print" hidden={tab === 'power'}>
             <h4>Processing and cabling</h4>
             <div className="opt-grid">
               <label className="field">
@@ -212,7 +218,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
             </p>
           </section>
 
-          <section className="no-print">
+          <section className="no-print" hidden={tab === 'power'}>
             <h4>Quantities</h4>
             <div className="opt-grid">
               <label className="field">
@@ -302,7 +308,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                 Cabling and quantities are a planning aid, not a signed-off design.
               </p>
             </section>
-          ) : (
+          ) : tab === 'cabling' ? (
             <section>
               <h4>Runs per screen</h4>
               <table className="sheet__table">
@@ -368,6 +374,192 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                   rather than a short jumper. A serpentine run pattern removes them.
                 </p>
               )}
+            </section>
+          ) : (
+            <section>
+              <h4 className="no-print">The supply</h4>
+              <div className="opt-grid no-print">
+                <label className="field">
+                  <span>Supply</span>
+                  <select
+                    className="input"
+                    value={power.supplyId}
+                    onChange={(e) => {
+                      const supply = getSupply(e.target.value);
+                      setPower({ supplyId: supply.id });
+                      /*
+                       * Circuits are sized by the cabling rules, and a cabinet
+                       * sits between one line and neutral — so the voltage that
+                       * sizes a circuit is this supply's phase voltage, not the
+                       * name on the service. Setting both from one control is
+                       * what keeps the pick list and this tab agreeing.
+                       */
+                      setCabling({ supplyVoltage: supply.phaseVolts });
+                    }}
+                  >
+                    {SUPPLIES.map((s) => (
+                      <option key={s.id} value={s.id}>{s.label}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="field">
+                  <span>Feed per leg</span>
+                  <NumberInput
+                    min={1}
+                    max={600}
+                    value={power.serviceAmpsPerLeg}
+                    onChange={(serviceAmpsPerLeg) => setPower({ serviceAmpsPerLeg })}
+                  />
+                </label>
+                <label className="field">
+                  <span>Ways per distro</span>
+                  <NumberInput
+                    min={1}
+                    max={48}
+                    value={power.waysPerDistro}
+                    onChange={(waysPerDistro) => setPower({ waysPerDistro })}
+                  />
+                </label>
+                <label className="field">
+                  <span>Power factor</span>
+                  <NumberInput
+                    step="0.01"
+                    min={0.5}
+                    max={1}
+                    value={power.powerFactor}
+                    onChange={(powerFactor) => setPower({ powerFactor })}
+                  />
+                </label>
+              </div>
+
+              <h4>
+                {supplyPlan.supply.label} — {supplyPlan.supply.where}
+              </h4>
+              <dl className="stats stats--wide">
+                <div>
+                  <dt>Load, max</dt>
+                  <dd>{(supplyPlan.totalMaxW / 1000).toFixed(2)} kW</dd>
+                </div>
+                <div>
+                  <dt>Load, average</dt>
+                  <dd>{(supplyPlan.totalAvgW / 1000).toFixed(2)} kW</dd>
+                </div>
+                <div>
+                  <dt>Worst leg</dt>
+                  <dd>{supplyPlan.worstLegAmps.toFixed(1)} A</dd>
+                </div>
+                <div>
+                  <dt>If it split evenly</dt>
+                  <dd>{supplyPlan.balancedAmps.toFixed(1)} A a leg</dd>
+                </div>
+                {supplyPlan.neutralAmps != null && (
+                  <div>
+                    <dt>Neutral</dt>
+                    <dd>{supplyPlan.neutralAmps.toFixed(1)} A</dd>
+                  </div>
+                )}
+                {supplyPlan.supply.legs === 3 && (
+                  <div>
+                    <dt>Legs apart</dt>
+                    <dd>{supplyPlan.imbalancePercent.toFixed(0)}%</dd>
+                  </div>
+                )}
+                <div>
+                  <dt>Feed wanted</dt>
+                  <dd>
+                    {supplyPlan.recommendedService != null
+                      ? `${supplyPlan.recommendedService} A a leg`
+                      : 'more than anything stocked'}
+                    {supplyPlan.connector && supplyPlan.recommendedService != null && (
+                      <><br /><small>{supplyPlan.connector}</small></>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Distros</dt>
+                  <dd>
+                    {supplyPlan.distros}
+                    <br />
+                    <small>{supplyPlan.ways.length} of {supplyPlan.distros * supplyPlan.waysPerDistro} ways used</small>
+                  </dd>
+                </div>
+              </dl>
+
+              {supplyPlan.warnings.map((warning) => (
+                <p key={warning} className="note note--warn">{warning}</p>
+              ))}
+
+              <h4>Across the legs</h4>
+              <table className="sheet__table">
+                <thead>
+                  <tr>
+                    <th>Leg</th>
+                    <th>Circuits</th>
+                    <th>Max</th>
+                    <th>Current</th>
+                    <th>Of the {supplyPlan.serviceAmpsPerLeg} A feed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {supplyPlan.legs.map((leg) => (
+                    <tr key={leg.name}>
+                      <td>{leg.name}</td>
+                      <td>{leg.circuits.length}</td>
+                      <td>{(leg.maxW / 1000).toFixed(2)} kW</td>
+                      <td>{leg.amps.toFixed(1)} A</td>
+                      <td>
+                        {Math.round(leg.utilisation * 100)}%
+                        {leg.overloaded && <> — <strong>over</strong></>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {supplyPlan.ways.length > 0 && (
+                <>
+                  <h4>Way by way</h4>
+                  <table className="sheet__table">
+                    <thead>
+                      <tr>
+                        <th>Distro</th>
+                        <th>Way</th>
+                        <th>Leg</th>
+                        <th>Screen</th>
+                        <th>Panels</th>
+                        <th>Current</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {supplyPlan.ways.map((w) => (
+                        <tr key={`${w.distro}-${w.way}`}>
+                          <td>{w.distro}</td>
+                          <td>{w.way}</td>
+                          <td>{w.leg}</td>
+                          <td>{w.circuit.layerName}</td>
+                          <td>{w.circuit.cabinets}</td>
+                          <td>{w.circuit.amps != null ? `${w.circuit.amps.toFixed(1)} A` : '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
+              )}
+
+              <p className="note">
+                A cabinet&rsquo;s power supply sits between one line and neutral, so it sees{' '}
+                {supplyPlan.supply.phaseVolts} V and its leg carries the watts on it divided by that
+                — the &radic;3 in the three-phase formula is for a load wired across all three lines,
+                and using it per leg reads 42% low.
+                {supplyPlan.supply.legs === 3 && (
+                  <>
+                    {' '}Ways rotate L1, L2, L3 across the distro, and circuits are dealt heaviest
+                    first onto whichever leg is lightest. The neutral figure is the fundamental
+                    only: switch-mode panel supplies add third-harmonic current that does not
+                    cancel, so size the neutral for a full leg rather than for that number.
+                  </>
+                )}
+              </p>
             </section>
           )}
         </div>

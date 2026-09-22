@@ -6,6 +6,7 @@ import type { Layer } from './types';
 import type { Processor } from './processors';
 import type { CablingSettings } from './cabling';
 import { cablingForProject, processorsRequired } from './cabling';
+import { planPower, type PowerPlan, type PowerSettings } from './power';
 
 export type LineCategory = 'Cabinets' | 'Processing' | 'Data' | 'Power' | 'Transport';
 
@@ -68,9 +69,16 @@ export function buildPickList(
   layers: Layer[],
   settings: CablingSettings,
   processor: Processor,
-  options: PickListOptions
-): { lines: PickLine[]; cabling: ReturnType<typeof cablingForProject>; processors: ReturnType<typeof processorsRequired> } {
+  options: PickListOptions,
+  power: PowerSettings
+): {
+  lines: PickLine[];
+  cabling: ReturnType<typeof cablingForProject>;
+  processors: ReturnType<typeof processorsRequired>;
+  power: PowerPlan;
+} {
   const cabling = cablingForProject(layers, settings, processor);
+  const powerPlan = planPower(layers, settings, cabling, power);
   const totalPixels = layers.reduce(
     (sum, l) => sum + l.cols * l.rows * l.spec.resolution.w * l.spec.resolution.h,
     0
@@ -158,6 +166,35 @@ export function buildPickList(
     contingency: false,
   });
 
+  /*
+   * The distro and its feed. Circuits above are the ways; these are the boxes
+   * the ways come out of and the service that feeds them, which is the part
+   * somebody has to ask the venue for weeks ahead.
+   */
+  if (powerPlan.distros > 0) {
+    inputs.push({
+      category: 'Power',
+      item: `Distro, ${powerPlan.supply.label}`,
+      detail: `${powerPlan.waysPerDistro} ways each, ${powerPlan.ways.length} used`,
+      required: powerPlan.distros,
+      unit: 'units',
+      contingency: false,
+    });
+    inputs.push({
+      category: 'Power',
+      item: 'Service feed',
+      detail: [
+        `${powerPlan.worstLegAmps.toFixed(0)} A on the worst leg`,
+        powerPlan.recommendedService != null
+          ? `${powerPlan.recommendedService} A${powerPlan.connector ? ` — ${powerPlan.connector}` : ''}`
+          : 'larger than anything stocked — split the wall',
+      ].join(' · '),
+      required: 1,
+      unit: powerPlan.supply.legs === 3 ? 'three-phase service' : 'single-phase service',
+      contingency: false,
+    });
+  }
+
   if (options.cabinetsPerCase > 1) {
     const totalPanels = [...byModel.values()].reduce((a, e) => a + e.count, 0);
     inputs.push({
@@ -170,7 +207,12 @@ export function buildPickList(
     });
   }
 
-  return { lines: inputs.map((l) => applyRules(l, options)), cabling, processors: procs };
+  return {
+    lines: inputs.map((l) => applyRules(l, options)),
+    cabling,
+    processors: procs,
+    power: powerPlan,
+  };
 }
 
 export function pickListCsv(lines: PickLine[], projectName: string) {

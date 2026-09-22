@@ -9,6 +9,7 @@ import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
 import { FLAT_SHAPE, normaliseShape } from '@/lib/curve';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
+import { DEFAULT_POWER, type PowerSettings } from '@/lib/power';
 import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
 import { DEFAULT_AUDIENCE, type AudienceSettings } from '@/lib/viewing';
 import { DEFAULT_AMBIENT, type AmbientSettings } from '@/lib/contrast';
@@ -82,6 +83,7 @@ interface EditorState extends Project {
   cabling: CablingSettings;
   pickList: PickListOptions;
   support: SupportSettings;
+  power: PowerSettings;
   effect: EffectSettings;
   audience: AudienceSettings;
   ambient: AmbientSettings;
@@ -114,6 +116,7 @@ interface EditorState extends Project {
   setCabling: (patch: Partial<CablingSettings>) => void;
   setPickList: (patch: Partial<PickListOptions>) => void;
   setSupport: (patch: Partial<SupportSettings>) => void;
+  setPower: (patch: Partial<PowerSettings>) => void;
   setEffect: (patch: Partial<EffectSettings>) => void;
   setAudience: (patch: Partial<AudienceSettings>) => void;
   setAmbient: (patch: Partial<AmbientSettings>) => void;
@@ -159,6 +162,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   cabling: DEFAULT_CABLING,
   pickList: DEFAULT_PICKLIST_OPTIONS,
   support: DEFAULT_SUPPORT,
+  power: DEFAULT_POWER,
   effect: DEFAULT_EFFECT,
   audience: DEFAULT_AUDIENCE,
   ambient: DEFAULT_AMBIENT,
@@ -380,6 +384,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   setCabling: (patch) => set((s) => ({ cabling: { ...s.cabling, ...patch } })),
   setPickList: (patch) => set((s) => ({ pickList: { ...s.pickList, ...patch } })),
   setSupport: (patch) => set((s) => ({ support: { ...s.support, ...patch } })),
+  setPower: (patch) => set((s) => ({ power: { ...s.power, ...patch } })),
   setEffect: (patch) => set((s) => ({ effect: { ...s.effect, ...patch } })),
   setAudience: (patch) => set((s) => ({ audience: { ...s.audience, ...patch } })),
   setAmbient: (patch) => set((s) => ({ ambient: { ...s.ambient, ...patch } })),
@@ -453,6 +458,7 @@ export const useEditor = create<EditorState>((set, get) => ({
       cabling: { ...s.cabling, ...(project as { cabling?: Partial<CablingSettings> }).cabling },
       pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
       support: { ...s.support, ...(project as { support?: Partial<SupportSettings> }).support },
+      power: { ...s.power, ...(project as { power?: Partial<PowerSettings> }).power },
       effect: { ...s.effect, ...(project as { effect?: Partial<EffectSettings> }).effect },
       audience: { ...s.audience, ...(project as { audience?: Partial<AudienceSettings> }).audience },
       ambient: { ...s.ambient, ...(project as { ambient?: Partial<AmbientSettings> }).ambient },
@@ -473,7 +479,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList, support, effect, audience, ambient, customProcessors } =
+    const { name, canvas, layers, processorId, cabling, pickList, support, power, effect, audience, ambient, customProcessors } =
       get();
     return JSON.stringify(
       {
@@ -486,6 +492,7 @@ export const useEditor = create<EditorState>((set, get) => ({
         cabling,
         pickList,
         support,
+        power,
         effect,
         audience,
         ambient,
@@ -527,6 +534,7 @@ export function restoreProject() {
       cabling: { ...DEFAULT_CABLING, ...parsed.cabling },
       pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
       support: { ...DEFAULT_SUPPORT, ...parsed.support },
+      power: { ...DEFAULT_POWER, ...parsed.power },
       effect: { ...DEFAULT_EFFECT, ...parsed.effect },
       audience: { ...DEFAULT_AUDIENCE, ...parsed.audience },
       ambient: { ...DEFAULT_AMBIENT, ...parsed.ambient },

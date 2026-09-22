@@ -73,6 +73,18 @@ for the full feature review those two drove.
   as required → with contingency → what to pull
 - Print to PDF or export CSV
 
+**Power and distro**
+- Five supplies: three-phase 400/230 V, 208/120 V and 480/277 V, and single-phase
+  230 V and 120 V — picking one also sets the voltage the circuits are sized at
+- Circuits dealt across L1, L2 and L3 heaviest-first onto whichever leg is
+  lightest, with the load, current and feed utilisation of each leg
+- Neutral current from the actual imbalance, and how far apart the legs come out
+- The smallest stocked feed that holds the worst leg, and the connector it
+  usually lands on
+- A way-by-way patch: which distro, which way, which leg, which screen
+- On the spec sheet as well as the pick list, because the service is what a
+  venue has to be asked for weeks ahead
+
 **Support structure**
 - Three ways of standing it up: truss and baseplates, a ground support system,
   or flown from rigging points
@@ -204,6 +216,31 @@ of them by viewing category and covers direct-view LED rather than only
 projection, but the figures sit behind the standard and the numbers circulating
 for them disagree. So the target is a field you fill in, and the standard is
 named as where a real one comes from.
+### Power distribution
+
+`src/lib/power.ts` is the three-phase side. Two things it is deliberate about:
+
+- **A cabinet is not a three-phase load.** Its power supply is wired between one
+  line and neutral, so it sees the phase voltage — 230 V on a 400 V service,
+  120 V on a 208 V one — and its leg carries the watts on it divided by that.
+  The √3 in `P = √3 · V(L-L) · I` is for a load connected across all three
+  lines; applying it per leg reads 42% low. `threePhaseLineAmps` is there for
+  the balanced whole-service figure and a test holds the two together.
+- **The neutral does not carry nothing.** Three equal line-to-neutral loads at
+  120° cancel; unequal ones return the vector sum,
+  `√(a² + b² + c² − ab − bc − ca)`. That figure is the fundamental only —
+  switch-mode panel supplies add third-harmonic current that does not cancel —
+  so the neutral is sized for a full leg and the number is reported as
+  information rather than as a conductor size.
+
+Circuits are dealt onto legs longest-processing-time first: heaviest circuit to
+whichever leg is lightest, ties to the lower-numbered leg. It is never worse
+than 4/3 of the perfect split and it gives the same answer every time, which
+matters more than the last amp — a patch sheet that reshuffles itself between
+two runs of the same project is worse than a slightly uneven one.
+
+Like the rest of this, it is a planning aid. Distribution is signed off by an
+electrician against the venue's own service, not by a browser tool.
 
 ### Processors
 
@@ -301,6 +338,7 @@ src/lib/calc.ts        size / weight / power / current maths
 src/lib/cabinets.ts    library loading and filtering
 src/lib/picklist.ts    prep-list aggregation, contingency and pack rounding
 src/lib/cabling.ts     data and power runs, auto or manual
+src/lib/power.ts       three-phase supply, leg balancing and distro patch
 src/lib/support.ts     support structure, wrapping the vendored solver
 src/lib/viewing.ts     viewing distance, pitch suitability, field of view
 src/lib/contrast.ts    ambient light, reflected floor, achieved contrast
