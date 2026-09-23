@@ -24,6 +24,38 @@ async function fetchPdf(url) {
   return new Uint8Array(await res.arrayBuffer());
 }
 
+/**
+ * Join one row's text items, putting a space in only where the PDF left a gap.
+ *
+ * These sheets break a number across several text items — 5000 arrives as
+ * "50" then "00", and on one page as "5", "0", "00" — with the runs sitting
+ * flush against each other. Joining every item with a space turned a 5000 nit
+ * outdoor panel into a 50 nit one, because `num()` takes the first number it
+ * finds. The label and its value are already separated by a wide whitespace
+ * item, so the gap between runs is what tells a split number from two numbers.
+ *
+ * The test is whether the runs are flush, not whether the gap looks like a
+ * space: a split number measures 0.000 of the font size, the narrowest real
+ * gap in these sheets measures 0.094 (the one in "SA1.9-C (Brompton/NovaStar)"),
+ * and every actual space between label and value is its own whitespace item
+ * anyway. A twentieth of the font size sits between those two with room either
+ * side. Overlapping runs — a negative gap, which the wide leader items
+ * produce — are flush by the same test.
+ */
+const FLUSH = 0.05;
+
+export function joinRow(items) {
+  const sorted = [...items].sort((a, b) => a.x - b.x);
+  let out = '';
+  let end = null;
+  for (const item of sorted) {
+    if (end != null && item.x - end > item.size * FLUSH) out += ' ';
+    out += item.str;
+    end = item.x + item.width;
+  }
+  return out.replace(/\s+/g, ' ').trim();
+}
+
 /** Text of one PDF page, reassembled into visual lines. */
 async function pageLines(page) {
   const content = await page.getTextContent();
@@ -32,18 +64,16 @@ async function pageLines(page) {
     if (!('str' in item)) continue;
     const y = Math.round(item.transform[5]);
     if (!rows.has(y)) rows.set(y, []);
-    rows.get(y).push([item.transform[4], item.str]);
+    rows.get(y).push({
+      x: item.transform[4],
+      width: item.width ?? 0,
+      size: Math.abs(item.transform[3]) || item.height || 10,
+      str: item.str,
+    });
   }
   return [...rows.entries()]
     .sort((a, b) => b[0] - a[0])
-    .map(([, items]) =>
-      items
-        .sort((a, b) => a[0] - b[0])
-        .map(([, str]) => str)
-        .join(' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-    )
+    .map(([, items]) => joinRow(items))
     .filter(Boolean);
 }
 

@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { useEditor } from '@/state/store';
+import { planForLayer } from '@/lib/curve';
 import { CF_PRESETS, TRUSS_PRESETS, supportForProject, type SupportMode } from '@/lib/support';
 import NumberInput from './NumberInput';
 import Dialog from './Dialog';
@@ -207,6 +208,21 @@ export default function SupportPanel({ onClose }: { onClose: () => void }) {
               )}
             </section>
           ))}
+
+          {/*
+            A curve changes the two numbers the solver cares about most — the
+            wind area is the distance across the ends rather than the width of
+            screen, and the footprint is far deeper — and it is a flat-wall
+            solver. Saying so is the only honest option until the curved case is
+            built; a figure that looks right and is not is worse than no figure.
+          */}
+          {layers.some((l) => !planForLayer(l).flat) && (
+            <p className="note note--warn">
+              One or more of these screens is curved or angled, and these figures treat every
+              screen as flat. A curved wall presents less to the wind and stands on a deeper
+              footprint, so take the numbers below as the flat-wall case, not as this build.
+            </p>
+          )}
 
           <p className="note">
             Ballast and overturning come from the{' '}

@@ -9,6 +9,9 @@ import { exportLayerPng } from '@/lib/export';
 import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
 import Section from './Section';
+import ShapeSection from './ShapeSection';
+import ViewingSection from './ViewingSection';
+import ContrastSection from './ContrastSection';
 import CollapsiblePanel from './CollapsiblePanel';
 import Icon from './Icon';
 
@@ -117,6 +120,19 @@ export default function Inspector() {
             <NumberInput value={layer.y} onChange={(y) => change('y', y)} />
           </label>
         </div>
+
+        {/* How big and what shape are one conversation, so this sits with
+            the size rather than below the questions that depend on it. */}
+        <ShapeSection layer={layer} />
+
+        {/* Straight after the wall itself, because "is that pitch right for
+            this room" is the same conversation as "how big is it" and happens
+            long before anyone thinks about colour or cabling. */}
+        <ViewingSection layer={layer} />
+
+        {/* The other half of "will this read": distance settles the pitch,
+            light settles whether there is a picture left to look at. */}
+        <ContrastSection layer={layer} />
 
         <Section id="appearance" title="Appearance" hint="colour, label, logo">
           <div className="grid2">

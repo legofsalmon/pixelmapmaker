@@ -8,9 +8,13 @@ import { contentBounds, layerRect } from '@/lib/geometry';
 import { loadWorking, migrateFromLocalStorage, saveWorking } from '@/lib/projectStore';
 import { requestPersistence } from '@/lib/idb';
 import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
+import { FLAT_SHAPE, normaliseShape } from '@/lib/curve';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
+import { DEFAULT_POWER, type PowerSettings } from '@/lib/power';
 import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
+import { DEFAULT_AUDIENCE, type AudienceSettings } from '@/lib/viewing';
+import { DEFAULT_AMBIENT, type AmbientSettings } from '@/lib/contrast';
 import type { Processor } from '@/lib/processors';
 
 const CANVAS_PRESETS = [
@@ -46,6 +50,8 @@ export function makeLayer(
     spec,
     cols: 8,
     rows: 4,
+    // Its own copy, since the inspector edits a layer's shape in place.
+    shape: { ...FLAT_SHAPE, folds: [] },
     x: 0,
     y: 0,
     visible: true,
@@ -78,7 +84,10 @@ interface EditorState extends Project {
   cabling: CablingSettings;
   pickList: PickListOptions;
   support: SupportSettings;
+  power: PowerSettings;
   effect: EffectSettings;
+  audience: AudienceSettings;
+  ambient: AmbientSettings;
   customProcessors: Processor[];
   past: Snapshot[];
   future: Snapshot[];
@@ -115,7 +124,10 @@ interface EditorState extends Project {
   setCabling: (patch: Partial<CablingSettings>) => void;
   setPickList: (patch: Partial<PickListOptions>) => void;
   setSupport: (patch: Partial<SupportSettings>) => void;
+  setPower: (patch: Partial<PowerSettings>) => void;
   setEffect: (patch: Partial<EffectSettings>) => void;
+  setAudience: (patch: Partial<AudienceSettings>) => void;
+  setAmbient: (patch: Partial<AmbientSettings>) => void;
   addCustomProcessor: (processor: Processor) => void;
   removeCustomProcessor: (id: string) => void;
 
@@ -158,7 +170,10 @@ export const useEditor = create<EditorState>((set, get) => ({
   cabling: DEFAULT_CABLING,
   pickList: DEFAULT_PICKLIST_OPTIONS,
   support: DEFAULT_SUPPORT,
+  power: DEFAULT_POWER,
   effect: DEFAULT_EFFECT,
+  audience: DEFAULT_AUDIENCE,
+  ambient: DEFAULT_AMBIENT,
   customProcessors: [],
   past: [],
   future: [],
@@ -378,7 +393,10 @@ export const useEditor = create<EditorState>((set, get) => ({
   setCabling: (patch) => set((s) => ({ cabling: { ...s.cabling, ...patch } })),
   setPickList: (patch) => set((s) => ({ pickList: { ...s.pickList, ...patch } })),
   setSupport: (patch) => set((s) => ({ support: { ...s.support, ...patch } })),
+  setPower: (patch) => set((s) => ({ power: { ...s.power, ...patch } })),
   setEffect: (patch) => set((s) => ({ effect: { ...s.effect, ...patch } })),
+  setAudience: (patch) => set((s) => ({ audience: { ...s.audience, ...patch } })),
+  setAmbient: (patch) => set((s) => ({ ambient: { ...s.ambient, ...patch } })),
 
   addCustomProcessor: (processor) =>
     set((s) => ({
@@ -439,13 +457,20 @@ export const useEditor = create<EditorState>((set, get) => ({
     set((s) => ({
       name: project.name ?? s.name,
       canvas: { ...s.canvas, ...project.canvas },
-      layers: (project.layers ?? s.layers).map((l) => ({ ...l, id: l.id || newId() })),
+      layers: (project.layers ?? s.layers).map((l) => ({
+        ...l,
+        id: l.id || newId(),
+        shape: normaliseShape(l.shape),
+      })),
       selectedIds: [],
       processorId: (project as { processorId?: string }).processorId ?? s.processorId,
       cabling: { ...s.cabling, ...(project as { cabling?: Partial<CablingSettings> }).cabling },
       pickList: { ...s.pickList, ...(project as { pickList?: Partial<PickListOptions> }).pickList },
       support: { ...s.support, ...(project as { support?: Partial<SupportSettings> }).support },
+      power: { ...s.power, ...(project as { power?: Partial<PowerSettings> }).power },
       effect: { ...s.effect, ...(project as { effect?: Partial<EffectSettings> }).effect },
+      audience: { ...s.audience, ...(project as { audience?: Partial<AudienceSettings> }).audience },
+      ambient: { ...s.ambient, ...(project as { ambient?: Partial<AmbientSettings> }).ambient },
       customProcessors:
         (project as { customProcessors?: Processor[] }).customProcessors ?? s.customProcessors,
     }));
@@ -463,7 +488,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList, support, effect, customProcessors } =
+    const { name, canvas, layers, processorId, cabling, pickList, support, power, effect, audience, ambient, customProcessors } =
       get();
     return JSON.stringify(
       {
@@ -476,7 +501,10 @@ export const useEditor = create<EditorState>((set, get) => ({
         cabling,
         pickList,
         support,
+        power,
         effect,
+        audience,
+        ambient,
         customProcessors,
       },
       null,
@@ -564,13 +592,18 @@ export async function restoreProject() {
     useEditor.setState({
       name: typeof parsed?.name === 'string' ? parsed.name : 'Untitled map',
       canvas: { ...initialCanvas, ...(parsed?.canvas as object) },
-      layers,
+      // A project saved before shapes existed has no shape on its layers, and
+      // a hand-edited one may have a half-written shape. Both come back flat.
+      layers: layers.map((l) => ({ ...l, shape: normaliseShape(l.shape) })),
       selectedIds: [],
       processorId: typeof parsed?.processorId === 'string' ? parsed.processorId : 'brompton-sx40',
       cabling: { ...DEFAULT_CABLING, ...(parsed?.cabling as object) },
       pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...(parsed?.pickList as object) },
       support: { ...DEFAULT_SUPPORT, ...(parsed?.support as object) },
+      power: { ...DEFAULT_POWER, ...(parsed?.power as object) },
       effect: { ...DEFAULT_EFFECT, ...(parsed?.effect as object) },
+      audience: { ...DEFAULT_AUDIENCE, ...(parsed?.audience as object) },
+      ambient: { ...DEFAULT_AMBIENT, ...(parsed?.ambient as object) },
       customProcessors: Array.isArray(parsed?.customProcessors) ? parsed.customProcessors : [],
       past: [],
       future: [],
