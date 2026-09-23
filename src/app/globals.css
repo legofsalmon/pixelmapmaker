@@ -1057,3 +1057,40 @@ a svg,
   margin-right: var(--s2);
   vertical-align: baseline;
 }
+
+/* ---------- app-level banner ---------- */
+
+/*
+ * For conditions the user has to act on, not notices they can dismiss. Sits
+ * between the toolbar and the workspace so it displaces the UI rather than
+ * floating over it — a message saying work is not being saved should be in
+ * the way.
+ */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: 0;
+  padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.banner svg { flex: none; }
+.banner--danger {
+  background: #2a1416;
+  color: #fecaca;
+  border-bottom-color: var(--danger);
+}
+
+/* ---------- crash page ---------- */
+
+.crash {
+  max-width: 46ch;
+  margin: 0 auto;
+  padding: var(--s6) var(--s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  align-items: flex-start;
+}
+.crash h1 { font-size: 20px; }

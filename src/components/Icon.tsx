@@ -25,6 +25,7 @@ export type IconName =
   | 'plus'
   | 'minus'
   | 'external'
+  | 'warning'
   | 'chevron-down'
   | 'arrow-undo'
   | 'arrow-redo'
@@ -85,6 +86,13 @@ const PATHS: Record<IconName, React.ReactNode> = {
     <>
       <rect x="4.5" y="10.5" width="15" height="9.5" rx="2" />
       <path d="M8 10.5V7.5a4 4 0 0 1 7.5-2" />
+    </>
+  ),
+  warning: (
+    <>
+      <path d="M12 3.6 2.6 19.9h18.8L12 3.6Z" />
+      <path d="M12 9.6v4.6" />
+      <path d="M12 17.1h.01" />
     </>
   ),
   'arrow-up': (

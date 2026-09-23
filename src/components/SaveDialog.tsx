@@ -1,16 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useEditor } from '@/state/store';
 import {
-  StorageFullError,
-  deleteSave,
+  deleteNamed,
   isStorageAvailable,
-  listSaves,
-  loadProject,
-  saveProject,
+  listNamed,
+  loadNamed,
+  saveNamed,
   type SaveSummary,
-} from '@/lib/browserStore';
+} from '@/lib/projectStore';
 import { exportProjectJson } from '@/lib/export';
 import ConfirmDialog from './ConfirmDialog';
 import Dialog from './Dialog';
@@ -25,38 +24,52 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
   const setProjectName = useEditor((s) => s.setProjectName);
 
   const [saveName, setSaveName] = useState(name);
-  // The dialog only ever mounts from a click, so reading storage in the lazy
-  // initialiser is safe and avoids a setState cascade on mount.
-  const [saves, setSaves] = useState<SaveSummary[]>(listSaves);
+  // IndexedDB is asynchronous, so the list arrives after the first paint
+  // rather than during it. Starting empty and filling in is the honest
+  // version of that; the dialog is usable either way.
+  const [saves, setSaves] = useState<SaveSummary[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<SaveSummary | null>(null);
-  const available = isStorageAvailable();
+  const [available, setAvailable] = useState(true);
+
+  const refresh = useCallback(() => {
+    listNamed().then(setSaves).catch(() => setSaves([]));
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    isStorageAvailable().then(setAvailable);
+  }, [refresh]);
 
   const cabinets = layers.reduce((sum, l) => sum + l.cols * l.rows, 0);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setError(null);
+    const label = saveName.trim() || 'Untitled map';
     try {
-      const summary = saveProject(saveName, serialise(), { screens: layers.length, cabinets });
-      setSaves(listSaves());
-      setProjectName(summary.name);
-      setMessage(`Saved “${summary.name}” in this browser.`);
+      await saveNamed(label, JSON.parse(serialise()), { screens: layers.length, cabinets });
+      refresh();
+      setProjectName(label);
+      setMessage(`Saved “${label}” in this browser.`);
     } catch (err) {
+      const quota =
+        err instanceof DOMException &&
+        (err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED');
       setError(
-        err instanceof StorageFullError
-          ? err.message
-          : err instanceof Error
-            ? err.message
-            : 'Could not save.'
+        quota
+          ? 'There is no room left in this browser. Delete a save, or download this project as a file.'
+          : err instanceof Error ? err.message : 'Could not save.'
       );
     }
   };
 
-  const handleLoad = (id: string, label: string) => {
+  const handleLoad = async (id: string, label: string) => {
     setError(null);
     try {
-      loadIntoEditor(loadProject(id));
+      const project = await loadNamed(id);
+      if (!project || typeof project !== 'object') throw new Error('That save could not be found.');
+      loadIntoEditor(project as Parameters<typeof loadIntoEditor>[0]);
       setMessage(`Opened “${label}”.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not open that save.');
@@ -140,8 +153,7 @@ export default function SaveDialog({ onClose }: { onClose: () => void }) {
               body={`“${pendingDelete.name}” will be removed from this browser. This cannot be undone.`}
               confirmLabel="Delete it"
               onConfirm={() => {
-                deleteSave(pendingDelete.id);
-                setSaves(listSaves());
+                void deleteNamed(pendingDelete.id).then(refresh);
                 setMessage(`Deleted “${pendingDelete.name}”.`);
               }}
               onCancel={() => setPendingDelete(null)}

@@ -5,6 +5,8 @@ import type { CabinetSpec, Layer, Project } from '@/lib/types';
 import { CABINETS } from '@/lib/cabinets';
 import { DEFAULT_PALETTE, PALETTES, nextColor } from '@/lib/palettes';
 import { contentBounds, layerRect } from '@/lib/geometry';
+import { loadWorking, migrateFromLocalStorage, saveWorking } from '@/lib/projectStore';
+import { requestPersistence } from '@/lib/idb';
 import { DEFAULT_CABLING, type CablingSettings } from '@/lib/cabling';
 import { DEFAULT_PICKLIST_OPTIONS, type PickListOptions } from '@/lib/picklist';
 import { DEFAULT_SUPPORT, type SupportSettings } from '@/lib/support';
@@ -22,7 +24,6 @@ const CANVAS_PRESETS = [
 
 export { CANVAS_PRESETS };
 
-const STORAGE_KEY = 'pixelmapmaker.project.v1';
 const HISTORY_LIMIT = 60;
 
 let layerCounter = 0;
@@ -81,6 +82,13 @@ interface EditorState extends Project {
   customProcessors: Processor[];
   past: Snapshot[];
   future: Snapshot[];
+  /**
+   * Why the working project could not be saved, or null while it is saving
+   * fine. Swallowing this was the single worst failure in the app: past the
+   * storage ceiling the autosave simply stopped, the user carried on working,
+   * and a reload took them back to the last save that happened to fit.
+   */
+  storageError: string | null;
 
   addLayer: (spec: CabinetSpec) => void;
   duplicateLayer: (id: string) => void;
@@ -154,6 +162,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   customProcessors: [],
   past: [],
   future: [],
+  storageError: null,
 
   commit: () =>
     set((s) => ({
@@ -478,34 +487,91 @@ export const useEditor = create<EditorState>((set, get) => ({
 
 export const selectedLayers = (s: EditorState) => s.layers.filter((l) => s.selectedIds.includes(l.id));
 
-/** Persist the working project so a reload does not lose the layout. */
-export function persistProject() {
+/**
+ * Persist the working project so a reload does not lose the layout.
+ *
+ * A failure here is reported rather than swallowed. It is not fatal — the
+ * project is still in memory and still exportable — but the user has to know,
+ * because the difference between "saved" and "not saved" is invisible until
+ * the reload that loses it.
+ */
+export async function persistProject() {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(STORAGE_KEY, useEditor.getState().serialise());
-  } catch {
-    // Storage can be unavailable (private mode, blocked cookies) — not fatal.
+    await saveWorking(JSON.parse(useEditor.getState().serialise()));
+    if (useEditor.getState().storageError) useEditor.setState({ storageError: null });
+  } catch (err) {
+    const quota =
+      err instanceof DOMException &&
+      (err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED');
+    useEditor.setState({
+      storageError: quota
+        ? 'There is no room left to save this project in the browser. Export it to a file to keep it, and clear some space.'
+        : 'This project cannot be saved in this browser. Export it to a file to keep it.',
+    });
   }
 }
 
-export function restoreProject() {
+/**
+ * Does this layer carry everything the renderer will reach for?
+ *
+ * A saved project used to be handed to the store on the strength of having a
+ * `layers` array at all. A truncated or half-migrated save then threw on the
+ * first paint, and because the bad data was reloaded on every attempt the
+ * crash repeated forever — the error page's own reload button fed it back in.
+ * Refusing the save here turns an unrecoverable loop into an empty canvas.
+ */
+function isUsableLayer(l: unknown): l is Layer {
+  if (!l || typeof l !== 'object') return false;
+  const layer = l as Partial<Layer>;
+  const spec = layer.spec as Layer['spec'] | undefined;
+  return (
+    typeof layer.id === 'string' &&
+    Number.isFinite(layer.cols) &&
+    Number.isFinite(layer.rows) &&
+    !!spec &&
+    Number.isFinite(spec.cabinet?.width) &&
+    Number.isFinite(spec.cabinet?.height) &&
+    Number.isFinite(spec.resolution?.w) &&
+    Number.isFinite(spec.resolution?.h)
+  );
+}
+
+export async function restoreProject() {
   if (typeof window === 'undefined') return false;
   try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (!saved) return false;
-    const parsed = JSON.parse(saved);
-    if (!parsed?.layers?.length) return false;
+    await migrateFromLocalStorage();
+    // Worth asking once the user has something worth keeping. Safari clears
+    // unpersisted origins after about a week idle.
+    void requestPersistence();
+
+    /*
+     * Deliberately loose: this is whatever a previous version of the app, or a
+     * hand-edited file, happened to write. Every field is defaulted below and
+     * the layers are checked properly, so the type here only needs to say
+     * "some object" without pretending it is already a Project.
+     */
+    const parsed = (await loadWorking()) as Record<string, unknown> | null;
+    const layers = parsed?.layers;
+    if (!Array.isArray(layers) || !layers.length) return false;
+    if (!layers.every(isUsableLayer)) {
+      useEditor.setState({
+        storageError:
+          'The project saved in this browser could not be read, so an empty canvas was opened instead. Your file exports are unaffected.',
+      });
+      return false;
+    }
     useEditor.setState({
-      name: parsed.name ?? 'Untitled map',
-      canvas: { ...initialCanvas, ...parsed.canvas },
-      layers: parsed.layers,
+      name: typeof parsed?.name === 'string' ? parsed.name : 'Untitled map',
+      canvas: { ...initialCanvas, ...(parsed?.canvas as object) },
+      layers,
       selectedIds: [],
-      processorId: parsed.processorId ?? 'brompton-sx40',
-      cabling: { ...DEFAULT_CABLING, ...parsed.cabling },
-      pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...parsed.pickList },
-      support: { ...DEFAULT_SUPPORT, ...parsed.support },
-      effect: { ...DEFAULT_EFFECT, ...parsed.effect },
-      customProcessors: parsed.customProcessors ?? [],
+      processorId: typeof parsed?.processorId === 'string' ? parsed.processorId : 'brompton-sx40',
+      cabling: { ...DEFAULT_CABLING, ...(parsed?.cabling as object) },
+      pickList: { ...DEFAULT_PICKLIST_OPTIONS, ...(parsed?.pickList as object) },
+      support: { ...DEFAULT_SUPPORT, ...(parsed?.support as object) },
+      effect: { ...DEFAULT_EFFECT, ...(parsed?.effect as object) },
+      customProcessors: Array.isArray(parsed?.customProcessors) ? parsed.customProcessors : [],
       past: [],
       future: [],
     });

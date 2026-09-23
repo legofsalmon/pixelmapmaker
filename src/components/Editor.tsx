@@ -8,6 +8,7 @@ import LayerPanel from './LayerPanel';
 import EffectsPanel from './EffectsPanel';
 import PickList from './PickList';
 import StatusBar from './StatusBar';
+import Icon from './Icon';
 import MultiSelectPanel from './MultiSelectPanel';
 import SaveDialog from './SaveDialog';
 import SpecSheet from './SpecSheet';
@@ -29,9 +30,10 @@ export default function Editor() {
   const selectAll = useEditor((s) => s.selectAll);
   const duplicateSelection = useEditor((s) => s.duplicateSelection);
   const removeSelection = useEditor((s) => s.removeSelection);
+  const storageError = useEditor((s) => s.storageError);
 
   useEffect(() => {
-    restoreProject();
+    void restoreProject();
   }, []);
 
   // Save on every change, coalesced so typing does not thrash localStorage.
@@ -39,7 +41,7 @@ export default function Editor() {
     let timer: ReturnType<typeof setTimeout>;
     const unsubscribe = useEditor.subscribe(() => {
       clearTimeout(timer);
-      timer = setTimeout(persistProject, 400);
+      timer = setTimeout(() => void persistProject(), 400);
     });
     return () => {
       clearTimeout(timer);
@@ -108,6 +110,18 @@ export default function Editor() {
           </button>
         ))}
       </nav>
+
+      {storageError && (
+        /*
+          App level, above everything, and not dismissible. A panel could be
+          closed and a toast would time out; this says the work is not being
+          kept, which stays true until it is fixed.
+        */
+        <p className="banner banner--danger" role="alert">
+          <Icon name="warning" size={16} />
+          <span>{storageError}</span>
+        </p>
+      )}
 
       <main className="app__body" data-mobile-panel={mobilePanel}>
         <aside className="app__rail app__rail--left" aria-label="Cabinet library">

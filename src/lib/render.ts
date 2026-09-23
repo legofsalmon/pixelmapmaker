@@ -50,48 +50,115 @@ export const RUN_COLOURS = [
   '#c084fc', '#22d3ee', '#fb923c', '#a3e635',
 ];
 
-/** Font size that keeps a label inside a tile at any tile size. */
+/**
+ * Font size that keeps a label inside a tile at any tile size.
+ *
+ * No floor. The old one clamped to 6px, which meant a zoomed-out wall paid for
+ * thousands of glyphs nobody could read — the caller now drops the text
+ * instead of drawing it illegibly small.
+ */
 function fitFontSize(text: string, tileW: number, tileH: number) {
   const byHeight = tileH * 0.32;
   const byWidth = (tileW * 0.78) / Math.max(1, text.length * 0.6);
-  return Math.max(6, Math.min(byHeight, byWidth));
+  return Math.min(byHeight, byWidth);
 }
 
-function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer) {
+/**
+ * Below this a cabinet number is a smudge, not a number. Drawing it costs the
+ * same as drawing a readable one: on a 120x67 wall at fit-to-screen that was
+ * 8,040 unreadable glyphs and 274ms a frame, against 27ms for the tiles alone.
+ */
+const MIN_LEGIBLE_PX = 7;
+
+function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
   const tile = tileSize(layer);
   const rect = layerRect(layer);
   const ink = contrastInk(layer.color);
   const lineColor = shade(layer.color, ink === '#000000' ? -0.35 : 0.4);
   // Grid lines stay visible on huge walls but never swamp a small tile.
   const lineWidth = Math.max(1, Math.min(tile.w, tile.h) * 0.012);
+  const checkerColor = shade(layer.color, -layer.checkerAmount);
+  const checkered = layer.checkerAmount > 0;
 
   const numbers = layer.showNumbers ? new Map<string, number>() : null;
   if (numbers) {
     signalOrder(layer).forEach(([col, row], i) => numbers.set(`${col},${row}`, i + 1));
   }
 
+  /*
+   * Everything that is the same for every tile is set once, outside the loop.
+   * Canvas state assignment is not free — a colour or a font shorthand is
+   * parsed on assignment — and on a big wall the loop runs thousands of times
+   * a frame. Measured at 3,600 tiles on a throttled machine, moving the font
+   * assignment alone took the pass from 71ms to 48ms.
+   */
+  let lastFill = '';
+  const fill = (colour: string) => {
+    if (colour !== lastFill) {
+      ctx.fillStyle = colour;
+      lastFill = colour;
+    }
+  };
+
   for (let row = 0; row < layer.rows; row++) {
     for (let col = 0; col < layer.cols; col++) {
       const x = rect.x + col * tile.w;
       const y = rect.y + row * tile.h;
-
-      const checker = layer.checkerAmount > 0 && (col + row) % 2 === 1;
-      ctx.fillStyle = checker ? shade(layer.color, -layer.checkerAmount) : layer.color;
+      fill(checkered && (col + row) % 2 === 1 ? checkerColor : layer.color);
       ctx.fillRect(x, y, tile.w, tile.h);
+    }
+  }
 
-      ctx.strokeStyle = lineColor;
-      ctx.lineWidth = lineWidth;
-      ctx.strokeRect(x + lineWidth / 2, y + lineWidth / 2, tile.w - lineWidth, tile.h - lineWidth);
+  /*
+   * One path for every tile border, stroked once, rather than a strokeRect per
+   * tile. Same geometry, one draw call instead of thousands.
+   */
+  const grid = new Path2D();
+  for (let row = 0; row < layer.rows; row++) {
+    for (let col = 0; col < layer.cols; col++) {
+      grid.rect(
+        rect.x + col * tile.w + lineWidth / 2,
+        rect.y + row * tile.h + lineWidth / 2,
+        tile.w - lineWidth,
+        tile.h - lineWidth
+      );
+    }
+  }
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = lineWidth;
+  ctx.stroke(grid);
 
-      if (numbers) {
-        const label = String(numbers.get(`${col},${row}`) ?? '');
-        const size = fitFontSize(label, tile.w, tile.h);
-        ctx.fillStyle = ink;
-        ctx.font = `600 ${size}px ui-monospace, SFMono-Regular, Menlo, monospace`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(label, x + tile.w / 2, y + tile.h / 2);
-      }
+  if (!numbers) return;
+
+  /*
+   * Size the number for the longest label the wall will show, once, rather
+   * than per tile. Uniform digits across a wall read better than digits that
+   * shrink as the count passes 9 and 99 anyway.
+   */
+  const widest = String(layer.cols * layer.rows);
+  const size = fitFontSize(widest, tile.w, tile.h);
+  /*
+   * Legibility is a property of the screen, not of the canvas. Tiles are drawn
+   * in canvas pixels, so a 10px number on a 3840-wide canvas shown at 14% zoom
+   * is 1.4px to the eye. The test is against the on-screen size, which is why
+   * the export path — drawn untransformed at scale 1 — keeps its numbers
+   * whatever the viewport happened to be zoomed to.
+   */
+  if (size * scale < MIN_LEGIBLE_PX) return;
+
+  ctx.fillStyle = ink;
+  ctx.font = `600 ${size}px ui-monospace, SFMono-Regular, Menlo, monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let row = 0; row < layer.rows; row++) {
+    for (let col = 0; col < layer.cols; col++) {
+      const label = numbers.get(`${col},${row}`);
+      if (label === undefined) continue;
+      ctx.fillText(
+        String(label),
+        rect.x + col * tile.w + tile.w / 2,
+        rect.y + row * tile.h + tile.h / 2
+      );
     }
   }
 }
@@ -359,7 +426,7 @@ export function renderProject(
 
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
-    drawTiles(ctx, layer);
+    drawTiles(ctx, layer, scale);
     if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
     const logo = logos?.get(layer.id);
     if (logo) drawLogo(ctx, layer, logo);
