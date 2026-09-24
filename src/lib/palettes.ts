@@ -3,6 +3,13 @@ export interface Palette {
   id: string;
   name: string;
   colors: string[];
+  /**
+   * A palette that paints the wall as one picture rather than tinting each
+   * cabinet. The colours are still used, so screens added while it is on get
+   * a sensible tile colour underneath and anything downstream that expects a
+   * colour still gets one.
+   */
+  pattern?: 'union-jack';
 }
 
 export const PALETTES: Palette[] = [
@@ -12,6 +19,17 @@ export const PALETTES: Palette[] = [
   { id: 'broadcast', name: 'Broadcast', colors: ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000'] },
   { id: 'pastel', name: 'Pastel', colors: ['#8ab6f9', '#f9a8a8', '#9be0b3', '#f7d488', '#c9b0f5', '#8fd8e0'] },
   { id: 'grayscale', name: 'Grayscale', colors: ['#111111', '#333333', '#555555', '#777777', '#999999', '#bbbbbb'] },
+  /*
+   * Not a serious palette. It is genuinely useful for one thing though: a flag
+   * stretched over the whole wall makes a mis-patched cabinet obvious at a
+   * glance, because the diagonals stop lining up.
+   */
+  {
+    id: 'union-jack',
+    name: 'Union Jack',
+    colors: ['#012169', '#ffffff', '#c8102e', '#012169', '#ffffff', '#c8102e'],
+    pattern: 'union-jack',
+  },
 ];
 
 export const DEFAULT_PALETTE = PALETTES[0];

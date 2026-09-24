@@ -1,5 +1,5 @@
 import type { CanvasSettings, Layer } from './types';
-import { contentBounds, layerRect, signalOrder, tileSize } from './geometry';
+import { contentBounds, layerRect, signalOrder, tileSize, type Rect } from './geometry';
 import { contrastInk, shade } from './palettes';
 import { drawEffect, type EffectSettings } from './effects';
 
@@ -70,6 +70,72 @@ function fitFontSize(text: string, tileW: number, tileH: number) {
  */
 const MIN_LEGIBLE_PX = 7;
 
+/**
+ * A Union Flag stretched across a whole screen.
+ *
+ * Drawn on the heraldic 60 x 30 grid and then scaled to the wall per axis, so
+ * a square screen gets a squashed flag rather than a correct flag in a letter
+ * box. Stretching is the point: the diagonals only meet the corners when every
+ * cabinet is where the map says it is, which makes a mis-patch obvious across
+ * a room in a way a colour swatch never is.
+ */
+function drawUnionJack(ctx: CanvasRenderingContext2D, rect: Rect) {
+  const BLUE = '#012169';
+  const RED = '#C8102E';
+  const WHITE = '#FFFFFF';
+
+  ctx.save();
+  ctx.translate(rect.x, rect.y);
+  ctx.scale(rect.width / 60, rect.height / 30);
+  ctx.beginPath();
+  ctx.rect(0, 0, 60, 30);
+  ctx.clip();
+
+  ctx.fillStyle = BLUE;
+  ctx.fillRect(0, 0, 60, 30);
+
+  // St Andrew: white saltire, corner to corner.
+  ctx.strokeStyle = WHITE;
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(60, 30);
+  ctx.moveTo(60, 0); ctx.lineTo(0, 30);
+  ctx.stroke();
+
+  /*
+   * St Patrick: the red saltire is counterchanged, not centred — it hugs one
+   * side of the white in each quarter, which is why the flag has an upside
+   * down. Each half is clipped and the diagonal shifted to the correct side.
+   */
+  ctx.strokeStyle = RED;
+  ctx.lineWidth = 2;
+  const halfDiagonal = (clipX: number, from: [number, number], to: [number, number], dy: number) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(clipX, 0, 30, 30);
+    ctx.clip();
+    ctx.beginPath();
+    ctx.moveTo(from[0], from[1] + dy);
+    ctx.lineTo(to[0], to[1] + dy);
+    ctx.stroke();
+    ctx.restore();
+  };
+  halfDiagonal(0, [0, 0], [60, 30], 2);    // hoist top: red below the white
+  halfDiagonal(30, [0, 0], [60, 30], -2);  // fly bottom: red above
+  halfDiagonal(30, [60, 0], [0, 30], 2);   // fly top: red below
+  halfDiagonal(0, [60, 0], [0, 30], -2);   // hoist bottom: red above
+
+  // St George, fimbriated: the white band first, the red cross on top of it.
+  ctx.fillStyle = WHITE;
+  ctx.fillRect(25, 0, 10, 30);
+  ctx.fillRect(0, 10, 60, 10);
+  ctx.fillStyle = RED;
+  ctx.fillRect(27, 0, 6, 30);
+  ctx.fillRect(0, 12, 60, 6);
+
+  ctx.restore();
+}
+
 function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
   const tile = tileSize(layer);
   const rect = layerRect(layer);
@@ -92,20 +158,25 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
    * a frame. Measured at 3,600 tiles on a throttled machine, moving the font
    * assignment alone took the pass from 71ms to 48ms.
    */
-  let lastFill = '';
-  const fill = (colour: string) => {
-    if (colour !== lastFill) {
-      ctx.fillStyle = colour;
-      lastFill = colour;
-    }
-  };
+  if (layer.pattern === 'union-jack') {
+    // One picture across the wall, so there are no per-tile fills to make.
+    drawUnionJack(ctx, rect);
+  } else {
+    let lastFill = '';
+    const fill = (colour: string) => {
+      if (colour !== lastFill) {
+        ctx.fillStyle = colour;
+        lastFill = colour;
+      }
+    };
 
-  for (let row = 0; row < layer.rows; row++) {
-    for (let col = 0; col < layer.cols; col++) {
-      const x = rect.x + col * tile.w;
-      const y = rect.y + row * tile.h;
-      fill(checkered && (col + row) % 2 === 1 ? checkerColor : layer.color);
-      ctx.fillRect(x, y, tile.w, tile.h);
+    for (let row = 0; row < layer.rows; row++) {
+      for (let col = 0; col < layer.cols; col++) {
+        const x = rect.x + col * tile.w;
+        const y = rect.y + row * tile.h;
+        fill(checkered && (col + row) % 2 === 1 ? checkerColor : layer.color);
+        ctx.fillRect(x, y, tile.w, tile.h);
+      }
     }
   }
 
@@ -150,15 +221,25 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
   ctx.font = `600 ${size}px ui-monospace, SFMono-Regular, Menlo, monospace`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
+  /*
+   * A patterned wall has no single background colour, so one ink cannot be
+   * legible everywhere — white numbers disappear into the white of a flag.
+   * Only then is a halo worth the second pass over every tile.
+   */
+  const halo = layer.pattern ? (ink === '#000000' ? '#ffffff' : '#000000') : null;
+  if (halo) {
+    ctx.strokeStyle = halo;
+    ctx.lineWidth = Math.max(1, size * 0.18);
+    ctx.lineJoin = 'round';
+  }
   for (let row = 0; row < layer.rows; row++) {
     for (let col = 0; col < layer.cols; col++) {
       const label = numbers.get(`${col},${row}`);
       if (label === undefined) continue;
-      ctx.fillText(
-        String(label),
-        rect.x + col * tile.w + tile.w / 2,
-        rect.y + row * tile.h + tile.h / 2
-      );
+      const x = rect.x + col * tile.w + tile.w / 2;
+      const y = rect.y + row * tile.h + tile.h / 2;
+      if (halo) ctx.strokeText(String(label), x, y);
+      ctx.fillText(String(label), x, y);
     }
   }
 }
@@ -304,7 +385,15 @@ function drawRunLabel(
 }
 
 /** Logo centred on the screen, sized against its shorter side. */
-function drawLogo(ctx: CanvasRenderingContext2D, layer: Layer, image: CanvasImageSource) {
+/** One turn every this many seconds when spin is on — a drift, not a spin. */
+const LOGO_SECONDS_PER_TURN = 12;
+
+function drawLogo(
+  ctx: CanvasRenderingContext2D,
+  layer: Layer,
+  image: CanvasImageSource,
+  timeMs = 0
+) {
   const rect = layerRect(layer);
   const source = image as { width?: number; height?: number };
   const naturalW = source.width ?? 1;
@@ -313,15 +402,20 @@ function drawLogo(ctx: CanvasRenderingContext2D, layer: Layer, image: CanvasImag
 
   const width = Math.min(rect.width, rect.height) * layer.logoScale;
   const height = width * (naturalH / naturalW);
+  const cx = rect.x + rect.width / 2;
+  const cy = rect.y + rect.height / 2;
+
   ctx.save();
   ctx.globalAlpha = layer.logoOpacity;
-  ctx.drawImage(
-    image,
-    rect.x + (rect.width - width) / 2,
-    rect.y + (rect.height - height) / 2,
-    width,
-    height
-  );
+  if (layer.logoSpin) {
+    // Rotate about the centre of the screen, so the image stays put and only
+    // turns. Driven by the frame's timestamp rather than a counter, so an
+    // exported frame at time t is the same picture as the viewport at time t.
+    ctx.translate(cx, cy);
+    ctx.rotate(((timeMs / 1000) / LOGO_SECONDS_PER_TURN) * Math.PI * 2);
+    ctx.translate(-cx, -cy);
+  }
+  ctx.drawImage(image, cx - width / 2, cy - height / 2, width, height);
   ctx.restore();
 }
 
@@ -429,7 +523,7 @@ export function renderProject(
     drawTiles(ctx, layer, scale);
     if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
     const logo = logos?.get(layer.id);
-    if (logo) drawLogo(ctx, layer, logo);
+    if (logo) drawLogo(ctx, layer, logo, timeMs);
     drawLayerLabel(ctx, layer);
     if (effect && canvas.effectScope === 'per-screen') {
       drawEffect(ctx, layerRect(layer), effect, timeMs);
@@ -485,7 +579,8 @@ export function renderLayerAlone(
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
   if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLength, runLabels);
-  if (logo) drawLogo(ctx, layer, logo);
+  // A still of one screen has no clock, so a spinning logo exports upright.
+  if (logo) drawLogo(ctx, layer, logo, 0);
   drawLayerLabel(ctx, layer);
   ctx.restore();
 }

@@ -92,8 +92,15 @@ export interface Layer {
   /** Alternate tile shading, 0 = off. */
   checkerAmount: number;
   label: string;
+  /**
+   * A palette that paints the wall as one picture instead of tinting tiles.
+   * Optional: projects saved before it existed simply have none.
+   */
+  pattern?: 'union-jack';
   /** Data URL of a logo drawn centred on the screen; null for none. */
   logo: string | null;
+  /** Turn the centre image slowly, for the same reason the flag exists. */
+  logoSpin?: boolean;
   /** Logo width as a fraction of the screen's shorter side. */
   logoScale: number;
   logoOpacity: number;

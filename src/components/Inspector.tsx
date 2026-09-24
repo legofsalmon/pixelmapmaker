@@ -229,6 +229,17 @@ export default function Inspector() {
               </label>
             </div>
           )}
+
+          {layer.logo && (
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={!!layer.logoSpin}
+                onChange={(e) => updateLayer(layer.id, { logoSpin: e.target.checked })}
+              />
+              <span>Turn it slowly (one revolution every 12 seconds)</span>
+            </label>
+          )}
         </Section>
 
         <Section id="signal" title="Numbering and signal" hint="feed corner, run pattern">

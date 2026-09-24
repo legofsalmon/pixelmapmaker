@@ -148,11 +148,14 @@ export default function CanvasStage() {
     };
   }, [layers]);
 
-  // Run the clock only while an effect is actually animating — and not at all
+  // A spinning centre image needs the clock too, not just a test pattern.
+  const spinning = layers.some((l) => l.logoSpin && l.logo && l.visible);
+
+  // Run the clock only while something is actually animating — and not at all
   // when the viewer has asked for reduced motion. The pattern still draws, it
   // just holds on its first frame rather than moving.
   useEffect(() => {
-    if (!isAnimated(effect)) return;
+    if (!isAnimated(effect) && !spinning) return;
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     let raf = 0;
     startedAt.current = performance.now();
@@ -162,7 +165,7 @@ export default function CanvasStage() {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [effect]);
+  }, [effect, spinning]);
 
   // Paint.
   useEffect(() => {
@@ -198,7 +201,7 @@ export default function CanvasStage() {
       scale: view.scale,
       snapGuides,
       effect: isAnimated(effect) ? effect : undefined,
-      timeMs: isAnimated(effect) ? performance.now() - startedAt.current : 0,
+      timeMs: isAnimated(effect) || spinning ? performance.now() - startedAt.current : 0,
       logos: cachedLogos(layers),
       runLengths,
       runLabels,
@@ -221,7 +224,7 @@ export default function CanvasStage() {
       ctx.strokeRect(x, y, marquee.w * view.scale, marquee.h * view.scale);
       ctx.restore();
     }
-  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels]);
+  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels, spinning]);
 
   const hitTest = useCallback(
     (point: { x: number; y: number }): Layer | null => {

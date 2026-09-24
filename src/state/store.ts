@@ -220,6 +220,7 @@ export const useEditor = create<EditorState>((set, get) => ({
         x: bounds ? Math.round(bounds.x + bounds.width + spec.resolution.w / 2) : 0,
         y: bounds ? bounds.y : 0,
         color: nextColor(PALETTES.find((p) => p.id === s.paletteId) ?? DEFAULT_PALETTE, s.layers.length),
+        pattern: (PALETTES.find((p) => p.id === s.paletteId) ?? DEFAULT_PALETTE).pattern,
       });
       return { layers: [...s.layers, layer], selectedIds: [layer.id] };
     });
@@ -382,7 +383,14 @@ export const useEditor = create<EditorState>((set, get) => ({
       const palette = PALETTES.find((p) => p.id === id) ?? DEFAULT_PALETTE;
       return {
         paletteId: id,
-        layers: s.layers.map((l, i) => ({ ...l, color: nextColor(palette, i) })),
+        // The pattern rides on the layer rather than being looked up from the
+        // project at paint time, so the renderer stays layer-local and a saved
+        // project keeps the look it was saved with.
+        layers: s.layers.map((l, i) => ({
+          ...l,
+          color: nextColor(palette, i),
+          pattern: palette.pattern,
+        })),
       };
     });
   },
