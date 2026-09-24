@@ -1,6 +1,7 @@
 import type { CanvasSettings, Layer } from './types';
 import { layerRect } from './geometry';
 import { renderLayerAlone, renderProject } from './render';
+import type { RunOverlays } from './cabling';
 import { loadLayerLogos } from './logos';
 import { isAnimated, type EffectSettings } from './effects';
 
@@ -37,24 +38,44 @@ export async function exportCanvasPng(
   projectName: string,
   canvasSettings: CanvasSettings,
   layers: Layer[],
-  transparentBackground: boolean
+  transparentBackground: boolean,
+  /*
+   * The run plan. Optional only so a caller that draws no runs need not build
+   * one — but every caller that can show them must pass it, or the export
+   * quietly disagrees with the screen it was taken from.
+   */
+  overlays?: RunOverlays
 ) {
   const { canvas, ctx } = makeCanvas(canvasSettings.width, canvasSettings.height);
   renderProject(
     ctx,
     transparentBackground ? { ...canvasSettings, background: 'rgba(0,0,0,0)' } : canvasSettings,
     layers,
-    { chrome: false, logos: await loadLayerLogos(layers) }
+    { chrome: false, logos: await loadLayerLogos(layers), ...overlays }
   );
   download(await toBlob(canvas), `${safe(projectName)}_${canvasSettings.width}x${canvasSettings.height}.png`);
 }
 
 /** Export one screen cropped to its own bounds — the native grid for that wall. */
-export async function exportLayerPng(layer: Layer, background: string, transparent: boolean) {
+export async function exportLayerPng(
+  layer: Layer,
+  background: string,
+  transparent: boolean,
+  overlays?: RunOverlays
+) {
   const rect = layerRect(layer);
   const { canvas, ctx } = makeCanvas(rect.width, rect.height);
   const logos = await loadLayerLogos([layer]);
-  renderLayerAlone(ctx, layer, transparent ? 'transparent' : background, logos.get(layer.id));
+  renderLayerAlone(
+    ctx,
+    layer,
+    transparent ? 'transparent' : background,
+    logos.get(layer.id),
+    overlays?.runLengths.get(layer.id),
+    overlays?.runLabels.get(layer.id),
+    overlays?.powerLengths.get(layer.id),
+    overlays?.powerLabels.get(layer.id)
+  );
   download(await toBlob(canvas), `${safe(layer.name)}_${rect.width}x${rect.height}.png`);
 }
 
@@ -133,7 +154,8 @@ export async function exportVideo(
   canvasSettings: CanvasSettings,
   layers: Layer[],
   effect: EffectSettings,
-  { seconds, fps, onProgress }: VideoExportOptions
+  { seconds, fps, onProgress }: VideoExportOptions,
+  overlays?: RunOverlays
 ) {
   if (!isAnimated(effect)) throw new Error('Choose a test pattern before recording');
   const mimeType = pickVideoType();
@@ -159,6 +181,7 @@ export async function exportVideo(
       effect,
       timeMs: (i / fps) * 1000,
       logos,
+      ...overlays,
     });
     track?.requestFrame?.();
     onProgress?.((i + 1) / total);

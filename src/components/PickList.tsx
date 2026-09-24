@@ -51,8 +51,8 @@ export default function PickList({ onClose }: { onClose: () => void }) {
   // Ports belong to the project, not to a screen, so they are dealt out once
   // across every run rather than numbered from 1 inside each screen.
   const portMap = useMemo(
-    () => assignPorts(runs.screens, processor, processors.count),
-    [runs.screens, processor, processors.count]
+    () => assignPorts(runs.screens, processor, processors.count, cabling.backupPorts),
+    [runs.screens, processor, processors.count, cabling.backupPorts]
   );
 
   return (
@@ -385,7 +385,24 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                   />
                   <span>End power runs at the screen edge</span>
                 </label>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={cabling.backupPorts}
+                    onChange={(e) => setCabling({ backupPorts: e.target.checked })}
+                  />
+                  <span>Close each data run to a backup port</span>
+                </label>
               </div>
+              {cabling.backupPorts && (
+                <p className="note">
+                  Each chain is fed at the head and picked up at the tail by a second port, so a
+                  break anywhere in it is covered from the other side and the processor swaps over
+                  within a frame. It costs a port and a long cable per run:{' '}
+                  {runs.portsNeeded} ports for {runs.dataRuns} runs, and {runs.backupFeeds} return
+                  cables from the far end of each chain back to the rack.
+                </p>
+              )}
               <p className="note">
                 A run that stops mid-wall leaves its tail cable hanging on the face of the
                 screen. Ending on an edge puts every termination where the racks are, at the
@@ -420,7 +437,13 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                             style={{ background: RUN_COLOURS[i % RUN_COLOURS.length] }}
                             aria-hidden="true"
                           />
-                          {ports[i]?.label ?? `Port ${i + 1}`}: {run.length} panel
+                          {/* A loop is patched at both ends, so both are named. */}
+                          {ports[i]
+                            ? ports[i].backup
+                              ? `${ports[i].label} → ${ports[i].backup.label} (backup)`
+                              : ports[i].label
+                            : `Port ${i + 1}`}
+                          : {run.length} panel
                           {run.length === 1 ? '' : 's'} — from col {run[0][0] + 1}, row {run[0][1] + 1}
                           {' '}to col {run[run.length - 1][0] + 1}, row {run[run.length - 1][1] + 1}
                         </li>

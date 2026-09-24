@@ -608,7 +608,9 @@ export function renderLayerAlone(
   background: string,
   logo?: CanvasImageSource,
   runLength?: number,
-  runLabels?: string[]
+  runLabels?: string[],
+  powerLength?: number,
+  powerLabels?: string[]
 ) {
   const rect = layerRect(layer);
   ctx.save();
@@ -619,6 +621,14 @@ export function renderLayerAlone(
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
   if (layer.showSignalFlow) drawRuns(ctx, layer, runLength, runLabels);
+  if (layer.showPowerRuns) {
+    drawRuns(ctx, layer, powerLength, powerLabels, {
+      colours: POWER_COLOURS,
+      dashed: true,
+      widthMul: 1.4,
+      nudge: 0.14,
+    });
+  }
   // A still of one screen has no clock, so a spinning logo exports upright.
   if (logo) drawLogo(ctx, layer, logo, 0);
   drawLayerLabel(ctx, layer);

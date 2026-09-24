@@ -83,7 +83,8 @@ export function buildPickList(
     (sum, l) => sum + l.cols * l.rows * l.spec.resolution.w * l.spec.resolution.h,
     0
   );
-  const procs = processorsRequired(totalPixels, cabling.dataRuns, processor);
+  // Ports occupied, not runs: a closed loop holds two of them.
+  const procs = processorsRequired(totalPixels, cabling.portsNeeded, processor);
 
   const inputs: PickLineInput[] = [];
 

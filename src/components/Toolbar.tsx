@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { CANVAS_PRESETS, useEditor } from '@/state/store';
 import { PALETTES } from '@/lib/palettes';
 import { exportCanvasPng, exportCompositionJson, readProjectFile } from '@/lib/export';
+import { useRunOverlays } from '@/state/useRunOverlays';
 import Icon from './Icon';
 import Menu from './Menu';
 import NumberInput from './NumberInput';
@@ -41,6 +42,7 @@ export default function Toolbar({
   const canvas = useEditor((s) => s.canvas);
   const layers = useEditor((s) => s.layers);
   const paletteId = useEditor((s) => s.paletteId);
+  const overlays = useRunOverlays();
   const snapEnabled = useEditor((s) => s.snapEnabled);
   const past = useEditor((s) => s.past);
   const future = useEditor((s) => s.future);
@@ -251,7 +253,7 @@ export default function Toolbar({
             className="btn"
             type="button"
             disabled={busy || !hasScreens}
-            onClick={() => withBusy(() => exportCanvasPng(name, canvas, layers, false))}
+            onClick={() => withBusy(() => exportCanvasPng(name, canvas, layers, false, overlays))}
           >
             Export PNG
           </button>
@@ -260,8 +262,8 @@ export default function Toolbar({
             ariaLabel="More export options"
             align="end"
             items={[
-              { label: 'Export PNG', hint: 'opaque background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, false)) },
-              { label: 'Export PNG with alpha', hint: 'transparent background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, true)) },
+              { label: 'Export PNG', hint: 'opaque background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, false, overlays)) },
+              { label: 'Export PNG with alpha', hint: 'transparent background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, true, overlays)) },
             ]}
           />
         </div>

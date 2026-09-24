@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useEditor } from '@/state/store';
 import { DIRECTION_LABELS, isAnimated, type EffectDirection } from '@/lib/effects';
 import { canRecordVideo, exportVideo } from '@/lib/export';
+import { useRunOverlays } from '@/state/useRunOverlays';
 import NumberInput from './NumberInput';
 import Dialog from './Dialog';
 import EffectPicker from './EffectPicker';
@@ -19,6 +20,7 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
   const effect = useEditor((s) => s.effect);
   const setEffect = useEditor((s) => s.setEffect);
   const setCanvas = useEditor((s) => s.setCanvas);
+  const overlays = useRunOverlays();
 
   const [seconds, setSeconds] = useState(10);
   const [fps, setFps] = useState(30);
@@ -36,7 +38,7 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
         seconds,
         fps,
         onProgress: setProgress,
-      });
+      }, overlays);
       setDone(`Recorded ${seconds}s at ${canvas.width} × ${canvas.height} as .${extension}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Recording failed');

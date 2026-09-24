@@ -6,6 +6,7 @@ import { readLogoFile } from '@/lib/logos';
 import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
 import { cabinetsForMetres, metresForCabinets } from '@/lib/geometry';
 import { exportLayerPng } from '@/lib/export';
+import { useRunOverlays } from '@/state/useRunOverlays';
 import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
 import Section from './Section';
@@ -40,6 +41,7 @@ export default function Inspector() {
   const updateLayer = useEditor((s) => s.updateLayer);
   const commit = useEditor((s) => s.commit);
   const canvasBackground = useEditor((s) => s.canvas.background);
+  const overlays = useRunOverlays();
 
   const layer = layers.find((l) => l.id === selectedIds[0]);
 
@@ -331,10 +333,10 @@ export default function Inspector() {
         </details>
 
         <div className="btn-row">
-          <button className="btn" type="button" onClick={() => exportLayerPng(layer, canvasBackground, false)}>
+          <button className="btn" type="button" onClick={() => exportLayerPng(layer, canvasBackground, false, overlays)}>
             Export this screen
           </button>
-          <button className="btn btn--secondary" type="button" onClick={() => exportLayerPng(layer, canvasBackground, true)}>
+          <button className="btn btn--secondary" type="button" onClick={() => exportLayerPng(layer, canvasBackground, true, overlays)}>
             Transparent
           </button>
         </div>

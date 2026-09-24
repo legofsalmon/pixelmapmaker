@@ -1,11 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
 import { layerRect, rectContains, snapPosition, type SnapResult } from '@/lib/geometry';
 import { renderProject } from '@/lib/render';
-import { assignPorts, cablingForLayer, cablingForProject, processorsRequired } from '@/lib/cabling';
-import { findProcessor } from '@/lib/processors';
+import { useRunOverlays } from '@/state/useRunOverlays';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 import { isAnimated } from '@/lib/effects';
 import { cachedLogos, loadLayerLogos } from '@/lib/logos';
@@ -53,9 +52,6 @@ export default function CanvasStage() {
   const selectedIds = useEditor((s) => s.selectedIds);
   const snapEnabled = useEditor((s) => s.snapEnabled);
   const effect = useEditor((s) => s.effect);
-  const cabling = useEditor((s) => s.cabling);
-  const processorId = useEditor((s) => s.processorId);
-  const customProcessors = useEditor((s) => s.customProcessors);
 
   /*
    * The signal overlay breaks into one chain per port, so it needs the same
@@ -63,35 +59,7 @@ export default function CanvasStage() {
    * change — this sits inside the render loop, which runs every frame while a
    * test pattern is playing.
    */
-  const { runLengths, runLabels, powerLengths, powerLabels } = useMemo(() => {
-    const processor = findProcessor(processorId, customProcessors);
-    const lengths = new Map<string, number>();
-    const powerLen = new Map<string, number>();
-    const powerLab = new Map<string, string[]>();
-    for (const layer of layers) {
-      if (!layer.showSignalFlow && !layer.showPowerRuns) continue;
-      const plan = cablingForLayer(layer, cabling, processor);
-      if (layer.showSignalFlow) lengths.set(layer.id, plan.data.cabinetsPerRun);
-      if (layer.showPowerRuns) {
-        powerLen.set(layer.id, plan.power.cabinetsPerRun);
-        // Circuits are numbered per screen: a distro feeds a wall, where a
-        // processor's ports are shared across the whole project.
-        powerLab.set(layer.id, plan.powerOrder.map((_, i) => `Circuit ${i + 1}`));
-      }
-    }
-    // Ports are dealt out over every screen, not just the ones drawing their
-    // run, or the labels on screen would disagree with the pick list.
-    const plan = cablingForProject(layers, cabling, processor);
-    const totalPixels = layers.reduce(
-      (sum, l) => sum + l.cols * l.rows * l.spec.resolution.w * l.spec.resolution.h,
-      0
-    );
-    const boxes = processorsRequired(totalPixels, plan.dataRuns, processor).count;
-    const ports = assignPorts(plan.screens, processor, boxes);
-    const labels = new Map<string, string[]>();
-    for (const [id, list] of ports) labels.set(id, list.map((p) => p.label));
-    return { runLengths: lengths, runLabels: labels, powerLengths: powerLen, powerLabels: powerLab };
-  }, [layers, cabling, processorId, customProcessors]);
+  const { runLengths, runLabels, powerLengths, powerLabels } = useRunOverlays();
   const setSelection = useEditor((s) => s.setSelection);
   const toggleSelection = useEditor((s) => s.toggleSelection);
   const updateLayer = useEditor((s) => s.updateLayer);

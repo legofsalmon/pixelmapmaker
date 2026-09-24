@@ -47,6 +47,19 @@ export interface CablingSettings {
    */
   dataRunsEndAtEdge: boolean;
   powerRunsEndAtEdge: boolean;
+  /**
+   * Close every data run back to a second port.
+   *
+   * A chain fed from one end fails entirely at the first dead panel or pulled
+   * cable. In a closed loop the primary feeds the head and a backup port picks
+   * up the tail, so a break anywhere is covered from the other side and the
+   * processor swaps over within a frame. Brompton pair two outputs for it and
+   * NovaStar call it hot backup; both work the same way on the wall.
+   *
+   * The cost is exact and worth stating: two ports per run instead of one, and
+   * a second feed cable from the far end of every chain back to the rack.
+   */
+  backupPorts: boolean;
 }
 
 export const DEFAULT_CABLING: CablingSettings = {
@@ -61,12 +74,15 @@ export const DEFAULT_CABLING: CablingSettings = {
   refreshHz: 60,
   dataRunsEndAtEdge: false,
   powerRunsEndAtEdge: false,
+  backupPorts: false,
 };
 
 export interface RunPlan {
   cabinetsPerRun: number;
   runs: number;
   feedCables: number;
+  /** Return cables from the tail of each chain to its backup port. */
+  backupFeeds: number;
   jumperCables: number;
   /** Why the chain length came out as it did — shown in the UI. */
   limitedBy: string;
@@ -127,7 +143,13 @@ export interface ScreenCabling {
  * `longHops` are subtracted from the jumper count because they are the same
  * hops, priced differently — counting both would double the cable.
  */
-function plan(cabinets: number, perRun: number, limitedBy: string, longHops = 0): RunPlan {
+function plan(
+  cabinets: number,
+  perRun: number,
+  limitedBy: string,
+  longHops = 0,
+  backup = false
+): RunPlan {
   const size = Math.max(1, Math.floor(perRun));
   const runs = Math.max(1, Math.ceil(cabinets / size));
   return {
@@ -135,6 +157,9 @@ function plan(cabinets: number, perRun: number, limitedBy: string, longHops = 0)
     runs,
     // One feed per run; every other cabinet in a run is reached by a jumper.
     feedCables: runs,
+    // A loop is closed at the far end, so a backup costs a second long cable
+    // per run — from the tail of the chain back to the rack, not a jumper.
+    backupFeeds: backup ? runs : 0,
     jumperCables: Math.max(0, cabinets - runs - longHops),
     limitedBy,
   };
@@ -243,7 +268,7 @@ export function cablingForLayer(
     layerId: layer.id,
     layerName: layer.name,
     cabinets,
-    data: plan(cabinets, perRun, dataLimit, longHops),
+    data: plan(cabinets, perRun, dataLimit, longHops, settings.backupPorts),
     power: plan(cabinets, perPowerRun, powerLimit),
     runOrder,
     powerOrder,
@@ -266,6 +291,13 @@ export function cablingForProject(
     dataJumpers: screens.reduce((a, s) => a + s.data.jumperCables, 0),
     powerFeeds: screens.reduce((a, s) => a + s.power.feedCables, 0),
     powerJumpers: screens.reduce((a, s) => a + s.power.jumperCables, 0),
+    backupFeeds: screens.reduce((a, s) => a + s.data.backupFeeds, 0),
+    /**
+     * Ports the project actually occupies. A closed loop holds two — the
+     * processor count has to be worked out from this and not from the run
+     * count, or a redundant system is specified with half the kit it needs.
+     */
+    portsNeeded: screens.reduce((a, s) => a + s.data.runs * (settings.backupPorts ? 2 : 1), 0),
     longHops: screens.reduce((a, s) => a + s.longHops, 0),
   };
 }
@@ -284,28 +316,33 @@ export interface PortAssignment {
   processor: number;
   port: number;
   label: string;
+  /** The port closing the loop at the far end, when backup is on. */
+  backup?: { processor: number; port: number; label: string };
 }
 
 export function assignPorts(
   screens: ScreenCabling[],
   processor: Processor,
-  processorCount: number
+  processorCount: number,
+  backup = false
 ): Map<string, PortAssignment[]> {
   const perBox = Math.max(1, processor.ports);
   const byLayer = new Map<string, PortAssignment[]>();
   let next = 0;
+  const take = () => {
+    const box = Math.floor(next / perBox) + 1;
+    const port = (next % perBox) + 1;
+    next++;
+    // With one box in the project its name is noise on every line.
+    return { processor: box, port, label: processorCount > 1 ? `Processor ${box}, port ${port}` : `Port ${port}` };
+  };
   for (const screen of screens) {
     const list: PortAssignment[] = [];
     for (let i = 0; i < screen.data.runs; i++) {
-      const box = Math.floor(next / perBox) + 1;
-      const port = (next % perBox) + 1;
-      list.push({
-        processor: box,
-        port,
-        // With one box in the project its name is noise on every line.
-        label: processorCount > 1 ? `Processor ${box}, port ${port}` : `Port ${port}`,
-      });
-      next++;
+      // Primary and backup are taken together so a loop's two ends are
+      // adjacent on the rack, which is how it gets patched.
+      const primary = take();
+      list.push(backup ? { ...primary, backup: take() } : primary);
     }
     byLayer.set(screen.layerId, list);
   }
@@ -315,15 +352,71 @@ export function assignPorts(
 /** Processors needed to cover both the pixel count and the port count. */
 export function processorsRequired(
   totalPixels: number,
-  totalDataRuns: number,
+  /** Ports the project occupies — two per run when loops are closed. */
+  totalPorts: number,
   processor: Processor
 ) {
   const byPixels = Math.ceil(totalPixels / Math.max(1, processor.totalPixels));
-  const byPorts = Math.ceil(totalDataRuns / Math.max(1, processor.ports));
+  const byPorts = Math.ceil(totalPorts / Math.max(1, processor.ports));
   return {
     count: Math.max(1, byPixels, byPorts),
     byPixels,
     byPorts,
     limitedBy: byPorts > byPixels ? 'port count' : 'pixel capacity',
   };
+}
+
+
+/**
+ * The per-layer run data every drawing of a wall needs: how long a chain is,
+ * and what each one is called.
+ *
+ * This used to be computed inside the canvas component, which meant the live
+ * view knew about the plan and the exports did not — an exported PNG drew one
+ * unbroken chain through the whole screen with no labels and no power at all,
+ * whatever the settings said. The export is the drawing that goes to site, so
+ * it was the worse half to have wrong. Both call this now.
+ */
+export interface RunOverlays {
+  runLengths: Map<string, number>;
+  runLabels: Map<string, string[]>;
+  powerLengths: Map<string, number>;
+  powerLabels: Map<string, string[]>;
+}
+
+export function runOverlays(
+  layers: Layer[],
+  settings: CablingSettings,
+  processor: Processor,
+  processorCount?: number
+): RunOverlays {
+  const runLengths = new Map<string, number>();
+  const powerLengths = new Map<string, number>();
+  const powerLabels = new Map<string, string[]>();
+
+  for (const layer of layers) {
+    // Only what is actually being drawn: a wall with both overlays off costs
+    // nothing, and on a big project that matters on every frame.
+    if (!layer.showSignalFlow && !layer.showPowerRuns) continue;
+    const plan = cablingForLayer(layer, settings, processor);
+    if (layer.showSignalFlow) runLengths.set(layer.id, plan.data.cabinetsPerRun);
+    if (layer.showPowerRuns) {
+      powerLengths.set(layer.id, plan.power.cabinetsPerRun);
+      // Circuits are numbered per screen: a distro feeds a wall, where a
+      // processor's ports are shared across the whole project.
+      powerLabels.set(layer.id, plan.powerOrder.map((_, i) => `Circuit ${i + 1}`));
+    }
+  }
+
+  // Ports are dealt out over every screen, not just the ones being drawn, or
+  // the labels on the canvas would disagree with the pick list.
+  const plan = cablingForProject(layers, settings, processor);
+  const boxes = processorCount ?? 1;
+  const runLabels = new Map<string, string[]>();
+  for (const [id, list] of assignPorts(plan.screens, processor, boxes, settings.backupPorts)) {
+    // The tail label names the port that closes the loop, so a run reads
+    // "in from 1, out to 2" on the drawing the way it is patched.
+    runLabels.set(id, list.map((x) => (x.backup ? `${x.label} \u2192 ${x.backup.label}` : x.label)));
+  }
+  return { runLengths, runLabels, powerLengths, powerLabels };
 }
