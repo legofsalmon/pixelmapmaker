@@ -87,6 +87,8 @@ export interface Layer {
   color: string;
   showNumbers: boolean;
   showSignalFlow: boolean;
+  /** Draw the power circuits too. Absent on projects saved before it existed. */
+  showPowerRuns?: boolean;
   signalStart: SignalStart;
   signalPath: SignalPath;
   /** Alternate tile shading, 0 = off. */

@@ -23,6 +23,17 @@ export interface Processor {
    * CablingSettings then applies on its own.
    */
   maxCabinetsPerPort: number | null;
+  /**
+   * The colour depth and refresh the quoted capacity assumes.
+   *
+   * Capacity figures are meaningless without them and manufacturers do not
+   * share a baseline: Brompton quote the SX40 at 36 bits per pixel, which is
+   * 12 bits a channel, while NovaStar's familiar 650,000 pixels a Gigabit port
+   * is 24 bits per pixel at 60 Hz. Comparing the two as printed compares
+   * different things.
+   */
+  baselineBitDepth: number;
+  baselineHz: number;
   /** Null for generic entries and user-defined kit, which are not specs. */
   sourceUrl: string | null;
   note?: string;
@@ -38,6 +49,8 @@ export const PROCESSORS: Processor[] = [
     portType: '10G',
     totalPixels: 9_000_000,
     maxCabinetsPerPort: 50,
+    baselineBitDepth: 12,
+    baselineHz: 60,
     sourceUrl: 'https://www.bromptontech.com/product/sx40/',
     note:
       'Four 10GBASE-T outputs, nominally 9 million pixels at 36 bits per pixel, 60 Hz. '+
@@ -51,6 +64,8 @@ export const PROCESSORS: Processor[] = [
     portType: '10G',
     totalPixels: 35_000_000,
     maxCabinetsPerPort: null,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl:
       'https://support.megapixelvr.com/support/solutions/articles/103000262246-helios-system-capacity-basics',
     note:
@@ -64,6 +79,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 13_000_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note:
       'Twenty Gigabit Ethernet ports, up to 13 million pixels. Halved in top-and-bottom 3D. '+
@@ -77,6 +94,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 9_000_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Twenty Gigabit Ethernet ports, load capacity up to 9 million pixels.',
   },
@@ -89,6 +108,8 @@ export const PROCESSORS: Processor[] = [
     // 4096 x 2160 at 60 Hz, the loading capacity NovaStar quotes for one unit.
     totalPixels: 4096 * 2160,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Sixteen Gigabit Ethernet ports, loading capacity 4096 × 2160 at 60 Hz.',
   },
@@ -100,6 +121,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 10_400_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Sixteen Gigabit Ethernet ports, loading up to 10.4 million pixels.',
   },
@@ -111,6 +134,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 3_900_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Six Gigabit Ethernet ports, driving up to 3.9 million pixels.',
   },
@@ -122,6 +147,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 2_600_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Four Gigabit Ethernet ports, driving up to 2.6 million pixels.',
   },
@@ -133,6 +160,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 35_380_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note:
       'COEX controller quoted at 35.38 million pixels. Output is by fitted card, so the twenty '
@@ -146,6 +175,8 @@ export const PROCESSORS: Processor[] = [
     portType: '10G',
     totalPixels: 141_000_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note:
       'Flagship COEX controller quoted at 141 million pixels. Output is by fitted card — 4 x 10G '
@@ -159,6 +190,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 6_500_000,
     maxCabinetsPerPort: 512,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: 'https://www.novastar.tech/',
     note: 'Ten Gigabit Ethernet ports, driving up to 6.5 million pixels.',
   },
@@ -170,6 +203,8 @@ export const PROCESSORS: Processor[] = [
     portType: '1G',
     totalPixels: 8 * 650_000,
     maxCabinetsPerPort: null,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: null,
     note: 'Planning assumption only: 650,000 pixels per Gigabit port at 8-bit. Adjust to your kit.',
   },
@@ -181,12 +216,36 @@ export const PROCESSORS: Processor[] = [
     portType: '10G',
     totalPixels: 4 * 2_250_000,
     maxCabinetsPerPort: null,
+    baselineBitDepth: 8,
+    baselineHz: 60,
     sourceUrl: null,
     note: 'Planning assumption only: 2.25 million pixels per 10G port. Adjust to your kit.',
   },
 ];
 
 export const pixelsPerPort = (p: Processor) => Math.floor(p.totalPixels / Math.max(1, p.ports));
+
+/**
+ * How a port's capacity moves with colour depth and refresh rate.
+ *
+ * A pixel costs three channels of colour, every refresh: 24 bits at 60 Hz is
+ * 1,440 bits a second, which is why a Gigabit port carries about 650,000 of
+ * them and no more. Both terms are linear and both divide, so asking for more
+ * bits or more hertz buys fewer pixels in exact proportion — 8-bit 60 Hz
+ * halves going to 8-bit 120 Hz, and loses a fifth going to 10-bit.
+ *
+ * Returned as a multiplier against whatever the manufacturer quoted, rather
+ * than as an absolute, so each processor is scaled from its own baseline.
+ */
+export function signalScale(p: Processor, bitDepth: number, refreshHz: number) {
+  const bits = Math.max(1, bitDepth);
+  const hz = Math.max(1, refreshHz);
+  return (p.baselineBitDepth / bits) * (p.baselineHz / hz);
+}
+
+/** Pixels one port will carry at the chosen colour depth and refresh. */
+export const pixelsPerPortAt = (p: Processor, bitDepth: number, refreshHz: number) =>
+  Math.floor(pixelsPerPort(p) * signalScale(p, bitDepth, refreshHz));
 
 /** Look a processor up across the built-in list and the user's own. */
 export function findProcessor(id: string, custom: Processor[] = []) {
@@ -201,6 +260,8 @@ export function customProcessor(input: {
   portType: '1G' | '10G';
   totalPixels: number;
   maxCabinetsPerPort?: number | null;
+  baselineBitDepth?: number;
+  baselineHz?: number;
 }): Processor {
   return {
     id: `proc-${Date.now().toString(36)}`,
@@ -213,6 +274,10 @@ export function customProcessor(input: {
       input.maxCabinetsPerPort && input.maxCabinetsPerPort > 0
         ? Math.round(input.maxCabinetsPerPort)
         : null,
+    // Your own figure is whatever you measured it at; 8-bit 60Hz is the
+    // assumption if you did not say.
+    baselineBitDepth: input.baselineBitDepth ?? 8,
+    baselineHz: input.baselineHz ?? 60,
     sourceUrl: null,
     note: 'Your own figures.',
     custom: true,

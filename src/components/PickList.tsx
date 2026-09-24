@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useEditor } from '@/state/store';
-import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort } from '@/lib/processors';
+import { PROCESSORS, customProcessor, findProcessor, pixelsPerPort, pixelsPerPortAt, signalScale } from '@/lib/processors';
 import { buildPickList, pickListCsv } from '@/lib/picklist';
 import { assignPorts } from '@/lib/cabling';
 import { SUPPLIES, getSupply } from '@/lib/power';
@@ -158,6 +158,31 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                       value={cabling.maxAmpsPerCircuit}
                       onChange={(maxAmpsPerCircuit) => setCabling({ maxAmpsPerCircuit })}
                     />
+                  </label>
+                  <label className="field">
+                    <span>Colour depth</span>
+                    <select
+                      className="input"
+                      value={cabling.bitDepth}
+                      onChange={(e) => setCabling({ bitDepth: Number(e.target.value) })}
+                    >
+                      <option value={8}>8-bit</option>
+                      <option value={10}>10-bit</option>
+                      <option value={12}>12-bit</option>
+                    </select>
+                  </label>
+                  <label className="field">
+                    <span>Refresh</span>
+                    <select
+                      className="input"
+                      value={cabling.refreshHz}
+                      onChange={(e) => setCabling({ refreshHz: Number(e.target.value) })}
+                    >
+                      <option value={50}>50 Hz</option>
+                      <option value={60}>60 Hz</option>
+                      <option value={100}>100 Hz</option>
+                      <option value={120}>120 Hz</option>
+                    </select>
                   </label>
                   <label className="field">
                     <span>Longest chain</span>
@@ -337,6 +362,47 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                   ))}
                 </tbody>
               </table>
+
+              {/*
+                Stated rather than left to be inferred: both of these cost
+                ports, and the number they cost depends on the wall, so the
+                reader needs the rule and the table together.
+              */}
+              <div className="btn-row">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={cabling.dataRunsEndAtEdge}
+                    onChange={(e) => setCabling({ dataRunsEndAtEdge: e.target.checked })}
+                  />
+                  <span>End data runs at the screen edge</span>
+                </label>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={cabling.powerRunsEndAtEdge}
+                    onChange={(e) => setCabling({ powerRunsEndAtEdge: e.target.checked })}
+                  />
+                  <span>End power runs at the screen edge</span>
+                </label>
+              </div>
+              <p className="note">
+                A run that stops mid-wall leaves its tail cable hanging on the face of the
+                screen. Ending on an edge puts every termination where the racks are, at the
+                cost of shortening each run to a whole number of rows — the capacity that
+                leaves unused comes back as extra ports and circuits, which the table above
+                already counts.
+              </p>
+              <p className="note">
+                Capacity moves with the signal, not just the panel. A pixel costs three
+                channels of colour on every refresh, so {cabling.bitDepth}-bit at{' '}
+                {cabling.refreshHz} Hz carries{' '}
+                {Math.round(signalScale(processor, cabling.bitDepth, cabling.refreshHz) * 100)}% of
+                what {processor.model} is quoted at ({processor.baselineBitDepth}-bit,{' '}
+                {processor.baselineHz} Hz) — {pixelsPerPortAt(processor, cabling.bitDepth, cabling.refreshHz).toLocaleString('en-GB')}{' '}
+                pixels a port against {pixelsPerPort(processor).toLocaleString('en-GB')}. Doubling
+                the refresh halves it; going 8-bit to 10-bit costs a fifth.
+              </p>
 
               <h4>Patch</h4>
               {runs.screens.map((s) => {

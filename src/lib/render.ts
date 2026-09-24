@@ -32,6 +32,9 @@ export interface RenderOptions {
    * overlay says which output it belongs to.
    */
   runLabels?: Map<string, string[]>;
+  /** Cabinets on one power circuit, by layer id, and the circuit labels. */
+  powerLengths?: Map<string, number>;
+  powerLabels?: Map<string, string[]>;
 }
 
 /**
@@ -48,6 +51,16 @@ export interface RenderOptions {
 export const RUN_COLOURS = [
   '#38bdf8', '#fbbf24', '#4ade80', '#f87171',
   '#c084fc', '#22d3ee', '#fb923c', '#a3e635',
+];
+
+/**
+ * Power circuits, drawn in a separate range so the two overlays can be on at
+ * once and still be told apart: data reads cool and thin, power warm and
+ * thick, the way they are drawn on a rigging plot.
+ */
+export const POWER_COLOURS = [
+  '#f97316', '#facc15', '#ef4444', '#f472b6',
+  '#fb923c', '#eab308', '#dc2626', '#e879f9',
 ];
 
 /**
@@ -244,11 +257,22 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
   }
 }
 
-function drawSignalFlow(
+/**
+ * Draw a wall's runs as chains, one per port or circuit.
+ *
+ * Data and power differ only in palette and line style, so they share this
+ * rather than existing twice. Power is drawn dashed, thicker and nudged off
+ * the centre line, so both overlays can be on at once and still be read —
+ * which is the whole point of looking at them together.
+ */
+function drawRuns(
   ctx: CanvasRenderingContext2D,
   layer: Layer,
   runLength?: number,
-  runLabels?: string[]
+  runLabels?: string[],
+  style: { colours: string[]; dashed?: boolean; widthMul?: number; nudge?: number } = {
+    colours: RUN_COLOURS,
+  }
 ) {
   const tile = tileSize(layer);
   const rect = layerRect(layer);
@@ -263,20 +287,26 @@ function drawSignalFlow(
 
   const centre = ([col, row]: [number, number]) => ({
     x: rect.x + col * tile.w + tile.w / 2,
-    y: rect.y + row * tile.h + tile.h / 2,
+    y: rect.y + row * tile.h + tile.h / 2 + nudge,
   });
 
   ctx.save();
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
 
-  const width = Math.max(1, Math.min(tile.w, tile.h) * 0.035);
+  const width = Math.max(1, Math.min(tile.w, tile.h) * 0.035 * (style.widthMul ?? 1));
   const dot = Math.min(tile.w, tile.h) * 0.15;
   const head = Math.min(tile.w, tile.h) * 0.22;
+  // Power sits off the centre line so a cabinet carrying both shows both.
+  const nudge = Math.min(tile.w, tile.h) * (style.nudge ?? 0);
+  if (style.dashed) ctx.setLineDash([width * 3, width * 2.2]);
   // A single run keeps the old ink, which reads as part of the screen rather
   // than as one arbitrary colour out of eight.
   const single = runs.length < 2;
-  const inkFor = (i: number) => (single ? contrastInk(layer.color) : RUN_COLOURS[i % RUN_COLOURS.length]);
+  const inkFor = (i: number) =>
+    single && style.colours === RUN_COLOURS
+      ? contrastInk(layer.color)
+      : style.colours[i % style.colours.length];
 
   runs.forEach((run, runIndex) => {
     const colour = inkFor(runIndex);
@@ -512,6 +542,8 @@ export function renderProject(
     logos,
     runLengths,
     runLabels,
+    powerLengths,
+    powerLabels,
   } = options;
   const hairline = 1 / scale;
 
@@ -521,7 +553,15 @@ export function renderProject(
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
     drawTiles(ctx, layer, scale);
-    if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
+    if (layer.showSignalFlow) drawRuns(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
+    if (layer.showPowerRuns) {
+      drawRuns(ctx, layer, powerLengths?.get(layer.id), powerLabels?.get(layer.id), {
+        colours: POWER_COLOURS,
+        dashed: true,
+        widthMul: 1.4,
+        nudge: 0.14,
+      });
+    }
     const logo = logos?.get(layer.id);
     if (logo) drawLogo(ctx, layer, logo, timeMs);
     drawLayerLabel(ctx, layer);
@@ -578,7 +618,7 @@ export function renderLayerAlone(
   }
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
-  if (layer.showSignalFlow) drawSignalFlow(ctx, layer, runLength, runLabels);
+  if (layer.showSignalFlow) drawRuns(ctx, layer, runLength, runLabels);
   // A still of one screen has no clock, so a spinning logo exports upright.
   if (logo) drawLogo(ctx, layer, logo, 0);
   drawLayerLabel(ctx, layer);

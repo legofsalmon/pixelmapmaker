@@ -63,12 +63,21 @@ export default function CanvasStage() {
    * change — this sits inside the render loop, which runs every frame while a
    * test pattern is playing.
    */
-  const { runLengths, runLabels } = useMemo(() => {
+  const { runLengths, runLabels, powerLengths, powerLabels } = useMemo(() => {
     const processor = findProcessor(processorId, customProcessors);
     const lengths = new Map<string, number>();
+    const powerLen = new Map<string, number>();
+    const powerLab = new Map<string, string[]>();
     for (const layer of layers) {
-      if (!layer.showSignalFlow) continue;
-      lengths.set(layer.id, cablingForLayer(layer, cabling, processor).data.cabinetsPerRun);
+      if (!layer.showSignalFlow && !layer.showPowerRuns) continue;
+      const plan = cablingForLayer(layer, cabling, processor);
+      if (layer.showSignalFlow) lengths.set(layer.id, plan.data.cabinetsPerRun);
+      if (layer.showPowerRuns) {
+        powerLen.set(layer.id, plan.power.cabinetsPerRun);
+        // Circuits are numbered per screen: a distro feeds a wall, where a
+        // processor's ports are shared across the whole project.
+        powerLab.set(layer.id, plan.powerOrder.map((_, i) => `Circuit ${i + 1}`));
+      }
     }
     // Ports are dealt out over every screen, not just the ones drawing their
     // run, or the labels on screen would disagree with the pick list.
@@ -81,7 +90,7 @@ export default function CanvasStage() {
     const ports = assignPorts(plan.screens, processor, boxes);
     const labels = new Map<string, string[]>();
     for (const [id, list] of ports) labels.set(id, list.map((p) => p.label));
-    return { runLengths: lengths, runLabels: labels };
+    return { runLengths: lengths, runLabels: labels, powerLengths: powerLen, powerLabels: powerLab };
   }, [layers, cabling, processorId, customProcessors]);
   const setSelection = useEditor((s) => s.setSelection);
   const toggleSelection = useEditor((s) => s.toggleSelection);
@@ -205,6 +214,8 @@ export default function CanvasStage() {
       logos: cachedLogos(layers),
       runLengths,
       runLabels,
+      powerLengths,
+      powerLabels,
     });
 
     // Canvas outline sits above everything so the frame is always readable.
@@ -224,7 +235,7 @@ export default function CanvasStage() {
       ctx.strokeRect(x, y, marquee.w * view.scale, marquee.h * view.scale);
       ctx.restore();
     }
-  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels, spinning]);
+  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels, powerLengths, powerLabels, spinning]);
 
   const hitTest = useCallback(
     (point: { x: number; y: number }): Layer | null => {

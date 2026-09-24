@@ -251,6 +251,10 @@ export default function Inspector() {
             <input type="checkbox" checked={layer.showSignalFlow} onChange={(e) => updateLayer(layer.id, { showSignalFlow: e.target.checked })} />
             <span>Draw the signal run</span>
           </label>
+          <label className="checkbox">
+            <input type="checkbox" checked={!!layer.showPowerRuns} onChange={(e) => updateLayer(layer.id, { showPowerRuns: e.target.checked })} />
+            <span>Draw the power circuits</span>
+          </label>
 
           <div className="grid2">
             <label className="field">

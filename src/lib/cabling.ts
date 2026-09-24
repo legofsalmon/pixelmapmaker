@@ -7,7 +7,7 @@
  */
 import type { Layer } from './types';
 import { signalOrder } from './geometry';
-import { pixelsPerPort, type Processor } from './processors';
+import { pixelsPerPortAt, type Processor } from './processors';
 
 export interface CablingSettings {
   mode: 'auto' | 'manual';
@@ -27,6 +27,26 @@ export interface CablingSettings {
    * panel taking out the rest of the chain all cap it well below the spec.
    */
   maxCabinetsPerChain: number;
+  /**
+   * Colour depth in bits per channel, and refresh rate. Both divide a port's
+   * pixel capacity: 10-bit costs a fifth of it against 8-bit, and 120 Hz costs
+   * half against 60 Hz. Quoted capacities assume a baseline that differs by
+   * manufacturer, so each processor is scaled from its own.
+   */
+  bitDepth: number;
+  refreshHz: number;
+  /**
+   * Finish every run at an edge of the screen rather than wherever the
+   * cabinet count runs out.
+   *
+   * A run that stops in the middle of the wall leaves its tail cable hanging
+   * there, to be dressed back across the face or round the frame. Ending on an
+   * edge puts every termination where the racks and the distro already are.
+   * It is not free: the run has to shorten to a whole number of rows, so the
+   * unused capacity turns into extra ports.
+   */
+  dataRunsEndAtEdge: boolean;
+  powerRunsEndAtEdge: boolean;
 }
 
 export const DEFAULT_CABLING: CablingSettings = {
@@ -37,6 +57,10 @@ export const DEFAULT_CABLING: CablingSettings = {
   maxAmpsPerCircuit: 16,
   circuitUtilisation: 0.8,
   maxCabinetsPerChain: 16,
+  bitDepth: 8,
+  refreshHz: 60,
+  dataRunsEndAtEdge: false,
+  powerRunsEndAtEdge: false,
 };
 
 export interface RunPlan {
@@ -53,6 +77,22 @@ export interface DataLimits {
   byPixels: number | null;
   byPort: number | null;
   byChain: number | null;
+  /** What the chain would have been before edge alignment shortened it. */
+  beforeEdgeAlign: number | null;
+}
+
+/**
+ * Shorten a run to a whole number of rows (or columns, on a vertical path) so
+ * it finishes at the edge of the wall.
+ *
+ * Returns the original length when a single row already exceeds it: there is
+ * no way to end on an edge if one row will not fit down a port, and silently
+ * halving the run to one cabinet would be worse than leaving it mid-wall.
+ */
+export function alignToEdge(perRun: number, layer: Layer) {
+  const line = layer.signalPath.startsWith('vertical') ? layer.rows : layer.cols;
+  if (line <= 0 || perRun < line) return perRun;
+  return Math.floor(perRun / line) * line;
 }
 
 export interface ScreenCabling {
@@ -63,6 +103,13 @@ export interface ScreenCabling {
   power: RunPlan;
   /** Cabinet order along each data run, for the manual patch view. */
   runOrder: Array<Array<[number, number]>>;
+  /**
+   * The same for power circuits. Power follows the wall in the same order as
+   * data here — distros are rigged to the same structure and the same corner —
+   * but it is chunked separately, because a circuit holds a different number
+   * of cabinets from a port.
+   */
+  powerOrder: Array<Array<[number, number]>>;
   /** What each ceiling would have allowed, so the UI can show its working. */
   dataLimits: DataLimits;
   /**
@@ -113,16 +160,18 @@ export function cablingForLayer(
    * "port capacity" on a chain the port capacity did not limit is a lie the
    * user would carry to site.
    */
-  const limits: DataLimits = { byPixels: null, byPort: null, byChain: null };
+  const limits: DataLimits = { byPixels: null, byPort: null, byChain: null, beforeEdgeAlign: null };
   let dataPerRun = settings.cabinetsPerDataRun;
   let dataLimit = 'set by hand';
   if (settings.mode === 'auto') {
-    limits.byPixels = Math.max(1, Math.floor(pixelsPerPort(processor) / Math.max(1, pixelsEach)));
+    const perPort = pixelsPerPortAt(processor, settings.bitDepth, settings.refreshHz);
+    limits.byPixels = Math.max(1, Math.floor(perPort / Math.max(1, pixelsEach)));
     limits.byPort = processor.maxCabinetsPerPort;
     limits.byChain = Math.max(1, Math.floor(settings.maxCabinetsPerChain));
 
+    const depth = `${settings.bitDepth}-bit ${settings.refreshHz} Hz`;
     const named: Array<[number, string]> = [
-      [limits.byPixels, `${processor.model} port capacity`],
+      [limits.byPixels, `${processor.model} port capacity at ${depth}`],
       ...(limits.byPort === null
         ? []
         : ([[limits.byPort, `${processor.model} addresses ${limits.byPort} per port`]] as Array<[number, string]>)),
@@ -133,6 +182,15 @@ export function cablingForLayer(
     const [best, why] = named.reduce((a, b) => (b[0] < a[0] ? b : a));
     dataPerRun = Math.max(1, best);
     dataLimit = why;
+  }
+
+  if (settings.dataRunsEndAtEdge) {
+    const aligned = alignToEdge(dataPerRun, layer);
+    if (aligned < dataPerRun) {
+      limits.beforeEdgeAlign = dataPerRun;
+      dataPerRun = aligned;
+      dataLimit = `${dataLimit}, shortened to end at the edge`;
+    }
   }
 
   let powerPerRun = settings.cabinetsPerPowerRun;
@@ -152,6 +210,14 @@ export function cablingForLayer(
     }
   }
 
+  if (settings.powerRunsEndAtEdge) {
+    const aligned = alignToEdge(powerPerRun, layer);
+    if (aligned < powerPerRun) {
+      powerPerRun = aligned;
+      powerLimit = `${powerLimit}, shortened to end at the edge`;
+    }
+  }
+
   const order = signalOrder(layer);
   const perRun = Math.max(1, Math.floor(dataPerRun));
   const runOrder: Array<Array<[number, number]>> = [];
@@ -167,13 +233,20 @@ export function cablingForLayer(
     for (let i = 1; i < run.length; i++) if (!adjacent(run[i - 1], run[i])) longHops++;
   }
 
+  const perPowerRun = Math.max(1, Math.floor(powerPerRun));
+  const powerOrder: Array<Array<[number, number]>> = [];
+  for (let i = 0; i < order.length; i += perPowerRun) {
+    powerOrder.push(order.slice(i, i + perPowerRun));
+  }
+
   return {
     layerId: layer.id,
     layerName: layer.name,
     cabinets,
     data: plan(cabinets, perRun, dataLimit, longHops),
-    power: plan(cabinets, powerPerRun, powerLimit),
+    power: plan(cabinets, perPowerRun, powerLimit),
     runOrder,
+    powerOrder,
     dataLimits: limits,
     longHops,
   };
