@@ -22,7 +22,7 @@ the vendors' own product pages and store listings, linked at the bottom.
 | **Drag screens directly on the canvas** | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Marquee / multi-select, nudge, undo | ❌ | ❌ | ❌ | partial | ✅ |
 | Snapping to edges, centres and tile grid | ❌ | ❌ | ❌ | ✅ | ✅ |
-| Library of real manufacturer cabinets | partial¹ | ✅ | ❌ | ❌ | ✅ (246) |
+| Library of real manufacturer cabinets | partial¹ | ✅ | ❌ | ❌ | ✅ (541) |
 | Filter library by brand / pitch / indoor–outdoor | ❌ | ✅ | ❌ | ❌ | ✅ |
 | User-defined custom panels | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Size, weight, power, current, heat calculations | ❌ | ✅ | ❌ | ❌ | ✅ |

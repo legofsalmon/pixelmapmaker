@@ -5,6 +5,63 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.3.0
+
+Two strands of work landed together: the wall described in more of the ways a
+job actually asks about it — where the audience stands, the light in the room,
+a curve in plan, the three-phase service — and the app made to hold up under
+the size of project that comes with them.
+
+
+- **Big walls stay usable on an ordinary laptop.** Drawing was fine on a fast
+  machine and fell apart on anything slower: a 3,600-cabinet wall with a test
+  pattern running held 19.6fps while blocking the main thread for 869ms in
+  every 2,000. Almost all of it was text — the font was being re-parsed for
+  every tile, and cabinet numbers were drawn at a 6px floor even when zoomed
+  out far enough that nobody could read them. Numbers now disappear when they
+  would be illegible on screen, and everything constant is set once. The same
+  wall now blocks for 91ms. Exports are drawn untransformed, so they keep their
+  numbers whatever the viewport was zoomed to.
+- **Work is no longer lost at the storage ceiling.** A single logo took a saved
+  project to 2.31MB against the browser's ~5MB limit for the kind of storage
+  the app was using, so three screens with a logo each — ordinary for a
+  multi-screen show — quietly stopped saving while you carried on working.
+  Projects and named saves now live in IndexedDB, which has room for hundreds
+  of times that, and logos are stored as images rather than as text, which is a
+  third smaller again. Anything already saved moves across on first load. If a
+  save does fail, it now says so instead of failing silently.
+- **A project that cannot be read no longer takes the app down with it.** A
+  half-written save used to crash on load, and because every way back in
+  reloaded the same data the crash repeated forever. A save that does not make
+  sense is now refused, with an empty canvas and an explanation; the crash page
+  behind that has a way out of its own.
+- **Runs can be made to finish at the edge of the screen.** A run that stops
+  mid-wall leaves its tail cable hanging on the face of it. Ending on an edge
+  puts every termination where the racks and the distro already are. Separate
+  toggles for data and for power. It costs ports — a run has to shorten to a
+  whole number of rows, and on a 10-wide wall a 16-cabinet chain becomes ten
+  and four ports become six — and the table says so rather than leaving it to
+  be noticed.
+- **Port capacity moves with colour depth and refresh rate.** A pixel costs
+  three channels of colour on every refresh, so 120Hz halves what a port
+  carries and 10-bit costs a fifth of it. Quoted capacities assume a baseline
+  and manufacturers do not share one — Brompton quote the SX40 at 12 bits a
+  channel where NovaStar's familiar 650,000 a port is 8-bit — so each processor
+  is now scaled from its own. Which makes a real planning point visible:
+  running an SX40 at 8-bit rather than its quoted 12-bit buys half as much
+  capacity again.
+- **Power circuits can be drawn on the canvas.** They were numbers in a table
+  while data runs had an overlay, so there was no way to see a circuit cross a
+  screen the way you can see a port. Power draws warm, thicker and dashed,
+  nudged off the centre line, so both can be on at once and still be read.
+- **A Union Jack palette**, which is a joke and also genuinely useful: a flag
+  stretched over a whole wall only meets its corners when every cabinet is
+  where the map says, so a mis-patch shows up across a room in a way a colour
+  swatch never does. The centre image can be set to turn slowly, for no
+  defensible reason at all.
+
 - **Viewing distance.** Set where the nearest and furthest of the audience
   stand, and every screen says how it reads from both: arcminutes per pixel,
   the distance at which pixels stop being separable, how much of the field of
@@ -79,7 +136,7 @@ Live at **https://pixelmap.letissier.ie**
 
 This is the first tagged release. The app has been in production throughout, so the tag marks a point in the history rather than the first time anything shipped.
 
-## What it does
+### What it does
 
 - **Drag screens on the canvas** — multi-select, marquee, nudge, align and distribute, snapping to edges, centres and the tile grid
 - **246 real cabinets** scraped from ROE Visual, GLOSHINE and Absen spec pages and datasheets, filterable by brand, pitch and indoor/outdoor
@@ -89,14 +146,14 @@ This is the first tagged release. The app has been in production throughout, so 
 - **Test patterns** — sonar, line, pulse, scan, ripple, waves and screen lines, playing live on the canvas and recordable to video
 - **Exports** — PNG (whole canvas or per screen, transparent optional), project JSON, and a printable spec sheet
 
-## Recent work
+### Recent work
 
 - **Data runs respect what can actually be cabled.** Runs were sized on pixel capacity alone, which put 200 cabinets on one port. A run is now the smallest of pixel capacity, the maker's per-port limit and the longest chain you will rig — and the report names whichever one bound.
 - **The signal overlay is a patch diagram.** One colour per run, labelled with its port, with the patch list carrying matching swatches. Ports are dealt out across the whole project rather than numbered from 1 inside each screen.
 - **Test patterns are picked from thumbnails** rendered by the effect functions themselves, because "Sonar" and "Ripple" are names for things nobody can picture.
 - **Interface rebuilt around a three-tier hierarchy**, documented in `UX.md`, with WCAG 2.2 AA fixes and a 4pt spacing scale that is actually obeyed.
 
-## Known limits
+### Known limits
 
 - Cabinet specs are scraped; confirm against the current datasheet before ordering.
 - Unilumin, INFiLED and Desay cabinets are not included — their specs are JS-rendered with no reachable PDFs.
