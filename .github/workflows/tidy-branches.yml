@@ -1,0 +1,87 @@
+# Delete branches whose work is already on the default branch.
+#
+# Sessions working on this repo each push their own branch, and they pile up:
+# by the first run there were four, all of them landed under different SHAs by
+# a merge, so none looked merged by ancestry and all of them looked unmerged in
+# the branch list. Nobody can tell those apart from real work by looking.
+#
+# `git cherry` can: it marks a commit "-" when an equivalent patch is already
+# on the default branch and "+" when it is not. A branch is deleted only if
+# every commit on it is a "-", so a branch carrying anything of its own is
+# always kept, however far behind it has fallen.
+#
+# Run it from the Actions tab. It lists what it would delete and deletes
+# nothing until you clear the dry-run box.
+
+name: Tidy branches
+
+on:
+  workflow_dispatch:
+    inputs:
+      pattern:
+        description: 'Branch glob to consider'
+        type: string
+        default: 'claude/project-thread-*'
+      dry_run:
+        description: 'List what would go, without deleting it'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  tidy:
+    name: Tidy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # `git cherry` compares patches, so it needs the real history.
+          fetch-depth: 0
+
+      - name: Delete what is already upstream
+        env:
+          PATTERN: ${{ inputs.pattern }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+
+          git fetch --quiet --prune origin '+refs/heads/*:refs/remotes/origin/*'
+
+          deleted=0
+          kept=0
+
+          for ref in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v '^origin/HEAD$'); do
+            branch="${ref#origin/}"
+
+            if [ "$branch" = "$DEFAULT_BRANCH" ]; then
+              continue
+            fi
+
+            case "$branch" in
+              $PATTERN) ;;
+              *) continue ;;
+            esac
+
+            if git cherry "origin/$DEFAULT_BRANCH" "$ref" | grep -q '^+'; then
+              echo "keep    $branch — has commits that are not on $DEFAULT_BRANCH"
+              kept=$((kept + 1))
+              continue
+            fi
+
+            ahead=$(git rev-list --count "origin/$DEFAULT_BRANCH..$ref")
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "would delete  $branch — $ahead commit(s), every one already upstream"
+            else
+              git push --quiet origin --delete "$branch"
+              echo "deleted $branch — $ahead commit(s), every one already upstream"
+            fi
+            deleted=$((deleted + 1))
+          done
+
+          verb=$([ "$DRY_RUN" = "true" ] && echo "would be deleted" || echo "deleted")
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$PATTERN\`: **$deleted** $verb, **$kept** kept for having their own work." >> "$GITHUB_STEP_SUMMARY"
+          echo "$deleted $verb, $kept kept."
