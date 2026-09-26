@@ -122,6 +122,15 @@ the size of project that comes with them.
   a digit off three cabinet depths and two weights, and had been dropping ten
   cabinets whose dimensions it mangled past the validator. The library is
   rebuilt: 246 cabinets to 256, with 13 corrected figures.
+- **Checks run on every push, and releases cut themselves.** There was no CI
+  at all: `npm test`, the linter and the typechecker existed and ran when
+  somebody remembered. They now run on GitHub for every push and pull request,
+  and on main a passing run publishes a release for whatever version
+  `package.json` names, with the body read out of this file. Cutting a release
+  by hand was a tag, a title and a paste into a browser form, which only the
+  repository's owner could do; it is now a version bump and a push. The notes
+  cannot drift from the changelog because there is only the one copy of them,
+  and `npm test` fails if a version is bumped without any written.
 - **The first tests in the repo.** `npm test` finds and runs every
   `scripts/test-*.mjs`, checking each piece of maths against the published
   figures it claims to reproduce. No framework: Node strips the types and a

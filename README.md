@@ -383,8 +383,30 @@ environment variables, no database and no server-side state. Import the repo at
 npx vercel --prod
 ```
 
-Projects are held in `localStorage` — the working project autosaves, and named
-saves sit alongside it — so nothing leaves the browser.
+Projects are held in IndexedDB — the working project autosaves, named saves
+sit alongside it, and logos are kept as images rather than as text — so
+nothing leaves the browser.
+
+## Releasing
+
+Releases are cut by CI, from the changelog.
+
+```bash
+npm run release -- 0.4.0            # Unreleased becomes 0.4.0, and the version is bumped
+git commit -am "Release 0.4.0"
+git push
+```
+
+A push to `main` runs the lint, the types, the tests and a build. If they pass
+and `package.json` names a version that has no release yet, the workflow tags
+it and publishes a GitHub release whose body is that version's section of
+`CHANGELOG.md`. A push that does not change the version releases nothing, so
+ordinary work is unaffected and re-running is harmless.
+
+Writing the notes is the only part left to a person, which is the part worth
+one. Everything downstream of them is read rather than retyped, and `npm test`
+fails if `package.json` names a version the changelog says nothing about — so
+a release cannot go out describing the one before it.
 
 ## Layout of the code
 
@@ -406,6 +428,7 @@ src/state/store.ts     editor state, history, persistence
 src/components/        canvas stage, library, inspector, layers, toolbar, spec sheet
 scripts/scraper/       cabinet library scraper
 scripts/test-*.mjs     tests, run with npm test
+scripts/release*.mjs   the version bump, and the notes CI releases from
 data/cabinets.json     generated library
 ```
 

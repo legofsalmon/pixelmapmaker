@@ -1,0 +1,94 @@
+# Checks on every push and pull request, and — on main — a GitHub release
+# whenever package.json names a version that has not been released yet.
+#
+# This exists because the release was being cut by hand in a browser: create
+# the tag, type the title, paste the notes out of CHANGELOG.md. Three chances
+# to get it wrong, and nothing checking that what shipped was what passed.
+#
+# To release: write the notes under a `## x.y.z` heading in CHANGELOG.md, put
+# the same version in package.json, push to main. That is the whole of it.
+# `npm run release -- x.y.z` does both edits. A push that does not change the
+# version releases nothing, so ordinary work is unaffected.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Read-only for everything; the release job asks for more, and only it gets it.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Superseded pull request runs are worth nothing, but a run on main may be
+  # part-way through cutting a release and must be left alone.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: Lint, types, tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          # The tests run TypeScript through `--experimental-strip-types`,
+          # which needs 22 or newer.
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  release:
+    name: Release
+    needs: check
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      # Creates the tag and the release. Nothing else needs writing.
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # No `npm ci` here: reading the changelog needs the standard library
+      # and nothing else, and the checks above already installed and built.
+
+      - name: Read the version
+        id: v
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Release v${{ steps.v.outputs.version }} if it is new
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "v$VERSION is already released — nothing to do."
+            echo "v$VERSION was already released; no new release." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          # Exits non-zero if the changelog has nothing for this version,
+          # which fails the job rather than publishing an empty release.
+          node scripts/release-notes.mjs "$VERSION" > "$RUNNER_TEMP/notes.md"
+
+          gh release create "v$VERSION" \
+            --title "Pixel Map Maker $VERSION" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            --target "$GITHUB_SHA"
+
+          echo "Released [v$VERSION]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/v$VERSION)." \
+            >> "$GITHUB_STEP_SUMMARY"
