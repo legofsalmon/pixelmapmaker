@@ -56,6 +56,27 @@ the size of project that comes with them.
   while data runs had an overlay, so there was no way to see a circuit cross a
   screen the way you can see a port. Power draws warm, thicker and dashed,
   nudged off the centre line, so both can be on at once and still be read.
+- **Data runs can be closed to a backup port.** A chain fed from one end dies
+  entirely at the first dead panel or pulled cable. Close the loop and a second
+  port picks up the tail, so a break anywhere is covered from the other side
+  and the processor swaps over within a frame — Brompton pair two outputs for
+  it, NovaStar call it hot backup, and it is the same cabling either way. The
+  cost is stated rather than buried, because it is the whole decision: two
+  ports per run, and a long cable from the far end of each chain back to the
+  rack. Four runs become eight ports and four returns, the patch names both
+  ends of each loop, and the processor count is worked out from ports occupied
+  rather than runs — sizing a redundant system off the run count would specify
+  half the kit it needs.
+- **The exported diagrams carry the cabling plan.** They never had. An exported
+  PNG drew one unbroken chain through the whole screen, with no port labels and
+  no power circuits, whatever the settings said — reported as the edge toggles
+  not reaching the diagrams, which was right about the symptom and too kind
+  about the cause. Turning a project into run overlays was written inside the
+  canvas component, so the live view had it and the three export paths did not;
+  it now sits in one place that the viewport, both PNG exports and the video
+  all read. The per-screen export draws power too, which it never could. This
+  was the worse half to have wrong: the screen is checked by the person who set
+  it, and the export is what goes to site.
 - **A Union Jack palette**, which is a joke and also genuinely useful: a flag
   stretched over a whole wall only meets its corners when every cabinet is
   where the map says, so a mis-patch shows up across a room in a way a colour
