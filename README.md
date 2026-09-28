@@ -377,7 +377,7 @@ with the project.
 | [Absen](https://www.usabsen.com/) | 89 | Parsed from the specification PDFs linked on each product page; power is quoted per m² and converted per panel |
 | [INFiLED](https://www.infiled.com/) | 285 | Spec panel rendered client-side, read with a headless browser; numbers arrive in both decimal conventions on one page |
 | [REDOT](https://www.redotled.com/products) | 9 | Carbon-fibre panels; the only brand here that publishes a maximum bend per joint, so its curve check is a real one |
-| [Unilumin](https://unilumin.com/products/professional/) | 0 so far | Source written and tested, but see the note below — the product pages have not been reachable long enough to complete a crawl |
+| [Unilumin](https://unilumin.com/products/professional/) | 0 so far | Source written and tested, but see the note below — the product pages no longer carry a specification table |
 
 ### Data quality
 
@@ -447,14 +447,18 @@ which is what both of them needed. What is left:
 Two notes on the two that are now in, because both will bite whoever runs the
 scraper next:
 
-- **Unilumin** answers 502 to a crawl that does not pause, and goes on
-  refusing an address long afterwards. The source waits between pages, but no
-  Unilumin records have shipped yet: its product pages have been reachable in
-  windows too short to finish 39 of them, while `unilumin.com/` itself keeps
-  answering. The parser is written against a table captured while they were
-  up and is covered by `scripts/test-browser-sources.mjs`; what it needs is a
-  run from an address the site has not tired of. Until then the run audit
-  refuses the empty result rather than shipping it.
+- **Unilumin** is reachable now, and it no longer publishes what the source
+  was written to read. The pages used to carry a transposed specification
+  table written by the theme's JavaScript. On 28/09/2026 a full crawl loaded
+  41 of them and 38 came back with no table at all: the product pages have
+  been redesigned into marketing copy, with pitches mentioned in prose
+  ("P0.9, P1.2, P1.5") and no cabinet size, resolution or weight anywhere, and
+  no datasheet or download link to follow. So the parser is not broken in a
+  way a selector fixes — the figures are not on the site. Its tests in
+  `scripts/test-browser-sources.mjs` still pass against the markup they were
+  captured from, which is worth keeping for whenever the specs reappear; until
+  they do the run audit refuses the near-empty result rather than shipping it,
+  and Unilumin stays at zero records.
 - **INFiLED** puts a SiteGround interstitial in front of a first visit. An
   ordinary browser sits through it for a few seconds and is let past, which is
   all the source does — it waits, sometimes across two or three loads. Its

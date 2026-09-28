@@ -34,6 +34,23 @@ these, so this file is the source rather than a copy of them.
   1000x500; the source cross-checks those three against each other now, so a
   digit typed twice is caught where it is published rather than by the
   validator at the end.
+- **The scraper's browser can borrow Node's TLS trust.** Chromium carries its
+  own root store, so behind a proxy that re-signs TLS it has no idea who
+  signed anything and every page dies before it parses — which looks exactly
+  like the site being down. `SCRAPE_FETCH_VIA_NODE=1` has Node make the
+  requests and hands the browser the replies, so the certificate is still
+  checked, against whatever Node trusts. It moves where the check happens; it
+  does not remove it, and there is deliberately no flag here for ignoring
+  certificate errors.
+- **Unilumin is still out, for a new reason.** It used to be unreachable. It
+  is reachable now, and a full crawl found that 38 of 41 product pages no
+  longer carry a specification table: they have been redesigned into marketing
+  copy, with pitches in prose and no cabinet size, resolution or weight
+  anywhere, and no datasheet to follow. The parser is not broken in a way a
+  selector fixes — the figures are not published. The run audit refused the
+  near-empty result and left the library alone, which is the behaviour that
+  matters. Desay remains unreachable, and Brompton's site still answers a
+  crawl with a challenge page.
 - **A file that is not a project says so.** Opening one that would not parse
   handed the JSON parser's own words to the user — `Unexpected token '', "PNG"`
   — which names the byte it choked on and not the mistake, which is almost
