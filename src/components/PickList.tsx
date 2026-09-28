@@ -11,6 +11,7 @@ import type { LineCategory } from '@/lib/picklist';
 import NumberInput from './NumberInput';
 import Icon from './Icon';
 import Dialog from './Dialog';
+import St2110Section from './St2110Section';
 
 const CATEGORY_ORDER: LineCategory[] = ['Cabinets', 'Processing', 'Data', 'Power', 'Transport'];
 
@@ -27,7 +28,7 @@ function downloadCsv(name: string, csv: string) {
 }
 
 export default function PickList({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<'list' | 'cabling' | 'power'>('list');
+  const [tab, setTab] = useState<'list' | 'cabling' | 'power' | 'st2110'>('list');
   const name = useEditor((s) => s.name);
   const layers = useEditor((s) => s.layers);
   const processorId = useEditor((s) => s.processorId);
@@ -79,6 +80,9 @@ export default function PickList({ onClose }: { onClose: () => void }) {
           <button type="button" className={tab === 'power' ? 'is-active' : ''} aria-current={tab === 'power'} onClick={() => setTab('power')}>
             Power
           </button>
+          <button type="button" className={tab === 'st2110' ? 'is-active' : ''} aria-current={tab === 'st2110'} onClick={() => setTab('st2110')}>
+            ST 2110
+          </button>
         </nav>
 
         <div className="sheet__body">
@@ -88,7 +92,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
             {new Date().toLocaleString('en-GB')}
           </p>
 
-          <section className="no-print" hidden={tab === 'power'}>
+          <section className="no-print" hidden={tab === 'power' || tab === 'st2110'}>
             <h4>Processing and cabling</h4>
             <div className="opt-grid">
               <label className="field">
@@ -243,7 +247,7 @@ export default function PickList({ onClose }: { onClose: () => void }) {
             </p>
           </section>
 
-          <section className="no-print" hidden={tab === 'power'}>
+          <section className="no-print" hidden={tab === 'power' || tab === 'st2110'}>
             <h4>Quantities</h4>
             <div className="opt-grid">
               <label className="field">
@@ -464,6 +468,8 @@ export default function PickList({ onClose }: { onClose: () => void }) {
                 </p>
               )}
             </section>
+          ) : tab === 'st2110' ? (
+            <St2110Section />
           ) : (
             <section>
               <h4 className="no-print">The supply</h4>

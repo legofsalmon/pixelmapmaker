@@ -9,6 +9,7 @@ import { findProcessor } from '@/lib/processors';
 import { planPower } from '@/lib/power';
 import { SMPTE_MIN_ANGLE_DEG, VIEWING_GRADES, viewingForProject } from '@/lib/viewing';
 import { contrastForProject } from '@/lib/contrast';
+import { describeFeed, formatRate, planSt2110 } from '@/lib/st2110';
 import Dialog from './Dialog';
 
 /**
@@ -27,6 +28,7 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
   const totals = projectTotals(layers);
   const viewing = viewingForProject(layers, audience);
   const ambient = useEditor((s) => s.ambient);
+  const st2110 = useEditor((s) => s.st2110);
   const contrast = contrastForProject(layers, ambient);
   const nearestM = Math.min(audience.nearestM, audience.furthestM);
   const furthestM = Math.max(audience.nearestM, audience.furthestM);
@@ -38,6 +40,10 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
    */
   const processor = findProcessor(processorId, customProcessors);
   const supplyPlan = planPower(layers, cabling, cablingForProject(layers, cabling, processor), power);
+
+  // Only when the feed is planned as ST 2110: most walls are fed some other
+  // way, and a section of network figures on their sheet would be noise.
+  const ipPlan = st2110.transport === 'none' ? null : planSt2110(layers, canvas, st2110);
 
   return (
     <Dialog
@@ -152,6 +158,49 @@ export default function SpecSheet({ onClose }: { onClose: () => void }) {
               <p key={warning} className="note note--warn">{warning}</p>
             ))}
           </section>
+
+          {ipPlan && (
+            <section>
+              <h4>Video over IP</h4>
+              <dl className="stats stats--wide">
+                <div>
+                  <dt>Feed</dt>
+                  <dd>
+                    {st2110.transport === 'jpeg-xs' ? 'ST 2110-22' : 'ST 2110-20'}
+                    <br />
+                    <small>{describeFeed(st2110)}</small>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Flows</dt>
+                  <dd>
+                    {ipPlan.flows.length}
+                    <br />
+                    <small>{ipPlan.networks === 2 ? 'each sent twice, ST 2022-7' : 'on one network'}</small>
+                  </dd>
+                </div>
+                <div>
+                  <dt>On the wire</dt>
+                  <dd>
+                    {formatRate(ipPlan.wireBps)}
+                    <br />
+                    <small>{ipPlan.networks === 2 ? 'on each of two networks' : 'framing included'}</small>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Links</dt>
+                  <dd>
+                    {ipPlan.links} × {st2110.linkGbps} GbE
+                    <br />
+                    <small>sending side, at {Math.round(st2110.linkLoad * 100)}%</small>
+                  </dd>
+                </div>
+              </dl>
+              {ipPlan.warnings.map((warning) => (
+                <p key={warning} className="note note--warn">{warning}</p>
+              ))}
+            </section>
+          )}
 
           <section>
             <h4>Screens</h4>

@@ -568,6 +568,8 @@ a { color: var(--accent); }
 .sheet__table th, .sheet__table td { text-align: left; padding: var(--s2); border-bottom: 1px solid var(--line); vertical-align: top; }
 .sheet__table th { color: var(--ink-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
 .sheet__table small { color: var(--ink-2); }
+/* A table with more columns than a phone has room for scrolls on its own. */
+.sheet__scroll { overflow-x: auto; }
 
 /* ---------- responsive ---------- */
 
