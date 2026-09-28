@@ -5,6 +5,10 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.5.0
+
 - **The corner handles resize the screen.** They were always drawn and never
   did anything: four grab targets on a selected screen whose whole message was
   "this is selected". Dragging one now adds and removes cabinets with the
