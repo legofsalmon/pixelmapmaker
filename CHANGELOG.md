@@ -5,6 +5,10 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.4.0
+
 - **Screens fed over ST 2110 can be planned.** A new ST 2110 tab in the pick
   list works out what each screen's feed costs on the network, uncompressed
   under ST 2110-20 or as JPEG XS under ST 2110-22. Packets are cut exactly as
