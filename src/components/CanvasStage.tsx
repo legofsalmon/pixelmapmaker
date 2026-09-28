@@ -2,7 +2,18 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
-import { layerRect, rectContains, snapPosition, type SnapResult } from '@/lib/geometry';
+import {
+  HANDLE_GRAB_PX,
+  anchorFor,
+  canResize,
+  handleAtPoint,
+  layerRect,
+  rectContains,
+  resizeFromAnchor,
+  snapPosition,
+  type Handle,
+  type SnapResult,
+} from '@/lib/geometry';
 import { renderProject } from '@/lib/render';
 import { useRunOverlays } from '@/state/useRunOverlays';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
@@ -27,7 +38,22 @@ type Drag =
       pointerStart: { x: number; y: number };
       origins: Map<string, { x: number; y: number }>;
     }
-  | { kind: 'marquee'; start: { x: number; y: number }; current: { x: number; y: number } };
+  | { kind: 'marquee'; start: { x: number; y: number }; current: { x: number; y: number } }
+  | {
+      kind: 'resize';
+      id: string;
+      handle: Handle;
+      /** The opposite corner, fixed when the drag began so it cannot drift. */
+      anchor: { x: number; y: number };
+    };
+
+/** Two diagonals, so the cursor points along the one being dragged. */
+const CURSORS: Record<Handle, string> = {
+  nw: 'nwse-resize',
+  se: 'nwse-resize',
+  ne: 'nesw-resize',
+  sw: 'nesw-resize',
+};
 
 const MIN_SCALE = 0.005;
 const MAX_SCALE = 8;
@@ -42,6 +68,7 @@ export default function CanvasStage() {
   const [snapGuides, setSnapGuides] = useState<SnapResult['guides'] | null>(null);
   const [marquee, setMarquee] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+  const [activeHandle, setActiveHandle] = useState<Handle | null>(null);
   // Bumped each animation frame to re-run the paint effect.
   const [frame, setFrame] = useState(0);
   const startedAt = useRef<number>(0);
@@ -218,6 +245,28 @@ export default function CanvasStage() {
     [layers]
   );
 
+  /**
+   * The corner handle under the pointer, if any.
+   *
+   * Only a selected screen offers one: an unselected screen under the pointer
+   * should be picked up, not resized, and the handles are not drawn for it
+   * either. Topmost first, to agree with the layer panel and with `hitTest`.
+   */
+  const resizeTargetAt = useCallback(
+    (point: { x: number; y: number }) => {
+      const tolerance = HANDLE_GRAB_PX / view.scale;
+      for (let i = layers.length - 1; i >= 0; i--) {
+        const layer = layers[i];
+        if (!layer.visible || !selectedIds.includes(layer.id)) continue;
+        if (!canResize(layer, view.scale)) continue;
+        const handle = handleAtPoint(layerRect(layer), point, tolerance);
+        if (handle) return { layer, handle };
+      }
+      return null;
+    },
+    [layers, selectedIds, view.scale]
+  );
+
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     const point = toCanvas(e.clientX, e.clientY);
@@ -225,6 +274,21 @@ export default function CanvasStage() {
     const wantsPan = e.button === 1 || e.button === 2 || e.altKey || spaceRef.current;
     if (wantsPan) {
       dragRef.current = { kind: 'pan', startX: e.clientX, startY: e.clientY, originX: view.x, originY: view.y };
+      return;
+    }
+
+    // Before the hit test: the handles sit on the outline, so a corner grab
+    // would otherwise read as a grab of the screen underneath it.
+    const grab = resizeTargetAt(point);
+    if (grab) {
+      commit();
+      setActiveHandle(grab.handle);
+      dragRef.current = {
+        kind: 'resize',
+        id: grab.layer.id,
+        handle: grab.handle,
+        anchor: anchorFor(layerRect(grab.layer), grab.handle),
+      };
       return;
     }
 
@@ -263,6 +327,15 @@ export default function CanvasStage() {
     const point = toCanvas(e.clientX, e.clientY);
     setCursor(point);
     const drag = dragRef.current;
+
+    if (drag.kind === 'none') setActiveHandle(resizeTargetAt(point)?.handle ?? null);
+
+    if (drag.kind === 'resize') {
+      const layer = layers.find((l) => l.id === drag.id);
+      if (!layer) return;
+      updateLayer(drag.id, resizeFromAnchor(layer, drag.handle, drag.anchor, point));
+      return;
+    }
 
     if (drag.kind === 'pan') {
       setView((v) => ({
@@ -341,6 +414,9 @@ export default function CanvasStage() {
     dragRef.current = { kind: 'none' };
     setSnapGuides(null);
     setMarquee(null);
+    // The screen has just changed shape under the pointer, so ask again
+    // rather than leaving a resize cursor over open canvas.
+    setActiveHandle(resizeTargetAt(toCanvas(e.clientX, e.clientY))?.handle ?? null);
   };
 
   const onWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
@@ -431,11 +507,14 @@ export default function CanvasStage() {
               `${selectedIds.length} selected. Arrow keys move the selection, shift for ten pixels.`
             : `Empty canvas, ${canvas.width} by ${canvas.height} pixels. Add a cabinet from the library to place a screen.`
         }
-        style={{ width: size.width, height: size.height }}
+        style={{ width: size.width, height: size.height, cursor: activeHandle ? CURSORS[activeHandle] : undefined }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
-        onPointerLeave={() => setCursor(null)}
+        onPointerLeave={() => {
+          setCursor(null);
+          setActiveHandle(null);
+        }}
         onWheel={onWheel}
         onContextMenu={(e) => e.preventDefault()}
       />
@@ -459,7 +538,8 @@ export default function CanvasStage() {
           <p className="stage__empty-title">Nothing placed yet</p>
           <p>Pick a cabinet from the library on the left to drop your first screen.</p>
           <p className="stage__empty-hint">
-            Then: drag to move · alt-drag to pan · scroll to zoom · hold Ctrl to ignore snapping
+            Then: drag to move · drag a corner to add cabinets · alt-drag to pan · scroll to zoom ·
+            hold Ctrl to ignore snapping
           </p>
         </div>
       )}

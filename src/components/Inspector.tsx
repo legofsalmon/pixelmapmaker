@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
 import { readLogoFile } from '@/lib/logos';
 import { layerTotals, kgToLbs, mmToFeetInches } from '@/lib/calc';
-import { cabinetsForMetres, metresForCabinets } from '@/lib/geometry';
+import { MAX_CABINETS, cabinetsForMetres, metresForCabinets } from '@/lib/geometry';
 import { exportLayerPng } from '@/lib/export';
 import { useRunOverlays } from '@/state/useRunOverlays';
 import type { SignalPath, SignalStart } from '@/lib/types';
@@ -15,9 +15,6 @@ import ViewingSection from './ViewingSection';
 import ContrastSection from './ContrastSection';
 import CollapsiblePanel from './CollapsiblePanel';
 import Icon from './Icon';
-
-/** Cap on cabinets per side, shared by both ways of sizing a screen. */
-const MAX_CABINETS = 200;
 
 const SIGNAL_STARTS: Array<{ value: SignalStart; label: string }> = [
   { value: 'tl', label: 'Top left' },

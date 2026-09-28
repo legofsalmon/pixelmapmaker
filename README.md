@@ -13,6 +13,8 @@ for the full feature review those two drove.
 
 **Layout**
 - Drag screens directly on the canvas; nothing needs typing to move a wall
+- Drag a corner handle to add or remove cabinets, in whole cabinets, with the
+  opposite corner held still
 - Snapping to canvas edges and centre, to other screens' edges and centres, and
   to the cabinet grid — hold <kbd>Ctrl</kbd> to override
 - Marquee multi-select, arrow-key nudge (<kbd>Shift</kbd> for 10 px), undo/redo

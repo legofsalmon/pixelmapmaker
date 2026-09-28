@@ -1,5 +1,14 @@
 import type { CanvasSettings, Layer } from './types';
-import { contentBounds, layerRect, signalOrder, tileSize, type Rect } from './geometry';
+import {
+  HANDLES,
+  canResize,
+  contentBounds,
+  handlePoint,
+  layerRect,
+  signalOrder,
+  tileSize,
+  type Rect,
+} from './geometry';
 import { contrastInk, shade } from './palettes';
 import { drawEffect, type EffectSettings } from './effects';
 
@@ -498,7 +507,8 @@ function drawCanvasGuides(ctx: CanvasRenderingContext2D, canvas: CanvasSettings,
   ctx.restore();
 }
 
-function drawSelection(ctx: CanvasRenderingContext2D, layer: Layer, hairline: number) {
+function drawSelection(ctx: CanvasRenderingContext2D, layer: Layer, scale: number) {
+  const hairline = 1 / scale;
   const rect = layerRect(layer);
   ctx.save();
   ctx.strokeStyle = '#38bdf8';
@@ -506,16 +516,25 @@ function drawSelection(ctx: CanvasRenderingContext2D, layer: Layer, hairline: nu
   ctx.setLineDash([]);
   ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
 
-  // Corner handles, sized in screen pixels so they stay grabbable at any zoom.
-  const handle = hairline * 7;
-  ctx.fillStyle = '#38bdf8';
-  for (const [hx, hy] of [
-    [rect.x, rect.y],
-    [rect.x + rect.width, rect.y],
-    [rect.x, rect.y + rect.height],
-    [rect.x + rect.width, rect.y + rect.height],
-  ]) {
-    ctx.fillRect(hx - handle / 2, hy - handle / 2, handle, handle);
+  /*
+   * Handles only where they do something. They read as "drag me to resize" —
+   * which is what they now do — so a locked screen, or one too small on screen
+   * to spare the room, shows the outline and no corners rather than four
+   * targets that ignore the pointer.
+   *
+   * Positions come from the same helper the hit test uses, so what is painted
+   * and what is grabbable cannot drift apart.
+   */
+  if (canResize(layer, scale)) {
+    const size = hairline * 8;
+    ctx.fillStyle = '#38bdf8';
+    ctx.strokeStyle = '#0b1220';
+    ctx.lineWidth = hairline;
+    for (const handle of HANDLES) {
+      const at = handlePoint(rect, handle);
+      ctx.fillRect(at.x - size / 2, at.y - size / 2, size, size);
+      ctx.strokeRect(at.x - size / 2, at.y - size / 2, size, size);
+    }
   }
   ctx.restore();
 }
@@ -597,7 +616,7 @@ export function renderProject(
   }
 
   for (const layer of layers) {
-    if (selectedIds.includes(layer.id)) drawSelection(ctx, layer, hairline);
+    if (selectedIds.includes(layer.id)) drawSelection(ctx, layer, scale);
   }
 }
 

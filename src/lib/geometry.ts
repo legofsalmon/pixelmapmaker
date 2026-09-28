@@ -24,6 +24,117 @@ export function layerRect(layer: Layer): Rect {
   };
 }
 
+/**
+ * Most cabinets a screen may be across or high.
+ *
+ * Not a hardware limit. It is a guard against one stray drag turning a screen
+ * into tens of thousands of cabinets and taking the renderer down with it;
+ * 200 each way is already far past any wall anyone will build.
+ */
+export const MAX_CABINETS = 200;
+
+/** A whole number of cabinets, never none and never more than the ceiling. */
+export const clampCabinets = (count: number) =>
+  Math.max(1, Math.min(MAX_CABINETS, Math.round(count)));
+
+/** The corner being dragged. The anchor is always the one opposite. */
+export type Handle = 'nw' | 'ne' | 'sw' | 'se';
+
+export const HANDLES: Handle[] = ['nw', 'ne', 'sw', 'se'];
+
+const isWest = (handle: Handle) => handle.endsWith('w');
+const isNorth = (handle: Handle) => handle.startsWith('n');
+
+/** How near a corner the pointer must come, in screen pixels. */
+export const HANDLE_GRAB_PX = 11;
+
+/**
+ * How big a screen must be on screen before its corners become resize
+ * handles, in screen pixels.
+ *
+ * Below this the four targets cover the whole shape and there is nowhere left
+ * to grab to move it, so a screen zoomed out to a speck stays a move target
+ * and nothing else.
+ */
+export const MIN_RESIZABLE_PX = 48;
+
+/**
+ * Whether this screen offers resize handles right now.
+ *
+ * Drawing and hit-testing both ask this, which is the point: a handle that is
+ * painted but dead is the same lie as no handle at all, only more annoying.
+ */
+export function canResize(layer: Layer, scale: number) {
+  if (layer.locked) return false;
+  const rect = layerRect(layer);
+  return rect.width * scale >= MIN_RESIZABLE_PX && rect.height * scale >= MIN_RESIZABLE_PX;
+}
+
+/** Where a handle sits, in canvas pixels. */
+export function handlePoint(rect: Rect, handle: Handle) {
+  return {
+    x: isWest(handle) ? rect.x : rect.x + rect.width,
+    y: isNorth(handle) ? rect.y : rect.y + rect.height,
+  };
+}
+
+/** The corner that stays put while `handle` is dragged. */
+export const anchorFor = (rect: Rect, handle: Handle) =>
+  handlePoint(rect, `${isNorth(handle) ? 's' : 'n'}${isWest(handle) ? 'e' : 'w'}` as Handle);
+
+/**
+ * The handle nearest `point`, or null if none is within `tolerance`.
+ *
+ * Nearest rather than first, because on a screen only a few cabinets wide the
+ * targets overlap, and the one whose centre you are closest to is the one you
+ * meant.
+ */
+export function handleAtPoint(rect: Rect, point: { x: number; y: number }, tolerance: number): Handle | null {
+  let best: Handle | null = null;
+  let bestDistance = tolerance;
+  for (const handle of HANDLES) {
+    const at = handlePoint(rect, handle);
+    const distance = Math.hypot(point.x - at.x, point.y - at.y);
+    if (distance <= bestDistance) {
+      best = handle;
+      bestDistance = distance;
+    }
+  }
+  return best;
+}
+
+/**
+ * The size and position a screen takes when `handle` is dragged to `point`,
+ * with `anchor` — the opposite corner, fixed at the start of the drag — held
+ * still.
+ *
+ * A wall is built from whole cabinets, so this rounds to the nearest one
+ * rather than reporting a fraction: the drag adds and removes cabinets, it
+ * does not stretch them. Dragging past the anchor stops at a single cabinet
+ * instead of turning the screen inside out, which is the only reading of a
+ * negative width that means anything here.
+ */
+export function resizeFromAnchor(
+  layer: Layer,
+  handle: Handle,
+  anchor: { x: number; y: number },
+  point: { x: number; y: number }
+) {
+  const tile = tileSize(layer);
+  const across = isWest(handle) ? anchor.x - point.x : point.x - anchor.x;
+  const down = isNorth(handle) ? anchor.y - point.y : point.y - anchor.y;
+
+  const cols = clampCabinets(Math.max(0, across) / tile.w);
+  const rows = clampCabinets(Math.max(0, down) / tile.h);
+
+  return {
+    cols,
+    rows,
+    x: Math.round(isWest(handle) ? anchor.x - cols * tile.w : anchor.x),
+    y: Math.round(isNorth(handle) ? anchor.y - rows * tile.h : anchor.y),
+  };
+}
+
 /** Physical size of a layer in millimetres. */
 export function layerSizeMm(layer: Layer) {
   return {

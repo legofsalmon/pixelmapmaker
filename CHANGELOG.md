@@ -5,7 +5,17 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
-_Nothing yet._
+- **The corner handles resize the screen.** They were always drawn and never
+  did anything: four grab targets on a selected screen whose whole message was
+  "this is selected". Dragging one now adds and removes cabinets with the
+  opposite corner held still, so a wall can be sized on the canvas and not
+  only in the fields. It counts in whole cabinets because a wall is built from
+  whole cabinets — the drag takes the nearest, never fewer than one, and going
+  past the far corner stops there rather than turning the screen inside out.
+  Handles are now drawn only where they work: a locked screen, or one too
+  small on screen to leave anywhere to grab it by, shows the outline and no
+  corners. A painted handle that ignores the pointer is the same lie the other
+  way round.
 
 ## 0.4.0
 
