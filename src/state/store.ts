@@ -15,6 +15,7 @@ import { DEFAULT_POWER, type PowerSettings } from '@/lib/power';
 import { DEFAULT_EFFECT, type EffectSettings } from '@/lib/effects';
 import { DEFAULT_AUDIENCE, type AudienceSettings } from '@/lib/viewing';
 import { DEFAULT_AMBIENT, type AmbientSettings } from '@/lib/contrast';
+import { DEFAULT_ST2110, normaliseSt2110, type St2110Settings } from '@/lib/st2110';
 import type { Processor } from '@/lib/processors';
 
 const CANVAS_PRESETS = [
@@ -88,6 +89,7 @@ interface EditorState extends Project {
   effect: EffectSettings;
   audience: AudienceSettings;
   ambient: AmbientSettings;
+  st2110: St2110Settings;
   customProcessors: Processor[];
   past: Snapshot[];
   future: Snapshot[];
@@ -128,6 +130,7 @@ interface EditorState extends Project {
   setEffect: (patch: Partial<EffectSettings>) => void;
   setAudience: (patch: Partial<AudienceSettings>) => void;
   setAmbient: (patch: Partial<AmbientSettings>) => void;
+  setSt2110: (patch: Partial<St2110Settings>) => void;
   addCustomProcessor: (processor: Processor) => void;
   removeCustomProcessor: (id: string) => void;
 
@@ -174,6 +177,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   effect: DEFAULT_EFFECT,
   audience: DEFAULT_AUDIENCE,
   ambient: DEFAULT_AMBIENT,
+  st2110: DEFAULT_ST2110,
   customProcessors: [],
   past: [],
   future: [],
@@ -405,6 +409,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   setEffect: (patch) => set((s) => ({ effect: { ...s.effect, ...patch } })),
   setAudience: (patch) => set((s) => ({ audience: { ...s.audience, ...patch } })),
   setAmbient: (patch) => set((s) => ({ ambient: { ...s.ambient, ...patch } })),
+  setSt2110: (patch) => set((s) => ({ st2110: { ...s.st2110, ...patch } })),
 
   addCustomProcessor: (processor) =>
     set((s) => ({
@@ -479,6 +484,7 @@ export const useEditor = create<EditorState>((set, get) => ({
       effect: { ...s.effect, ...(project as { effect?: Partial<EffectSettings> }).effect },
       audience: { ...s.audience, ...(project as { audience?: Partial<AudienceSettings> }).audience },
       ambient: { ...s.ambient, ...(project as { ambient?: Partial<AmbientSettings> }).ambient },
+      st2110: normaliseSt2110({ ...s.st2110, ...(project as { st2110?: Partial<St2110Settings> }).st2110 }),
       customProcessors:
         (project as { customProcessors?: Processor[] }).customProcessors ?? s.customProcessors,
     }));
@@ -496,7 +502,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   serialise: () => {
-    const { name, canvas, layers, processorId, cabling, pickList, support, power, effect, audience, ambient, customProcessors } =
+    const { name, canvas, layers, processorId, cabling, pickList, support, power, effect, audience, ambient, st2110, customProcessors } =
       get();
     return JSON.stringify(
       {
@@ -513,6 +519,7 @@ export const useEditor = create<EditorState>((set, get) => ({
         effect,
         audience,
         ambient,
+        st2110,
         customProcessors,
       },
       null,
@@ -612,6 +619,7 @@ export async function restoreProject() {
       effect: { ...DEFAULT_EFFECT, ...(parsed?.effect as object) },
       audience: { ...DEFAULT_AUDIENCE, ...(parsed?.audience as object) },
       ambient: { ...DEFAULT_AMBIENT, ...(parsed?.ambient as object) },
+      st2110: normaliseSt2110(parsed?.st2110),
       customProcessors: Array.isArray(parsed?.customProcessors) ? parsed.customProcessors : [],
       past: [],
       future: [],

@@ -5,7 +5,18 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
-_Nothing yet._
+- **Screens fed over ST 2110 can be planned.** A new ST 2110 tab in the pick
+  list works out what each screen's feed costs on the network, uncompressed
+  under ST 2110-20 or as JPEG XS under ST 2110-22. Packets are cut exactly as
+  the st2110 project's sender cuts them, and the tests hold the counts to that
+  sender's for ten formats; a 2304 × 1152 wall in 10-bit RGB at 60 fps comes
+  to 8,064 packets a frame and 5.11 Gb/s on the wire. It counts the ports the
+  sending side needs with Ethernet's framing included, cuts a screen that
+  outgrows one link between cabinets, gives every flow a multicast group (and a
+  second for ST 2022-7), warns about groups a switch may send to every port,
+  and downloads an SDP file for each receiver as one zip. st2110's linter finds
+  no errors in those files, and a capture of its sender's stream arrives whole
+  against them. Once the feed is planned, the spec sheet carries it too.
 
 ## 0.3.0
 

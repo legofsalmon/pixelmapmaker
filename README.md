@@ -85,6 +85,19 @@ for the full feature review those two drove.
 - On the spec sheet as well as the pick list, because the service is what a
   venue has to be asked for weeks ahead
 
+**Video over IP**
+- Say the screens are fed over ST 2110 and it works out each one's flow:
+  uncompressed ST 2110-20 at any sampling, bit depth and frame rate, or JPEG XS
+  under ST 2110-22 at a chosen ratio
+- Packets counted as a real sender cuts them, and sized with Ethernet's framing,
+  because that is what fills a link
+- How many 10–400 GbE ports the sending side needs, with a screen too big for
+  one link cut between cabinets into flows that fit
+- A multicast group for every flow, a second network for ST 2022-7, and a
+  warning for any group a switch may send to every port
+- The SDP file each receiver loads, all of them in one zip
+- On the spec sheet as well, once it is planned
+
 **Support structure**
 - Three ways of standing it up: truss and baseplates, a ground support system,
   or flown from rigging points
@@ -255,6 +268,71 @@ two runs of the same project is worse than a slightly uneven one.
 
 Like the rest of this, it is a planning aid. Distribution is signed off by an
 electrician against the venue's own service, not by a browser tool.
+
+### Video over IP
+
+`src/lib/st2110.ts` works out what each screen costs on an ST 2110 network.
+Most of it is counting, and the counting is held against a real sender rather
+than a formula:
+
+- **Packets are cut the way a sender cuts them.** ST 2110-20 leaves the packet
+  size to the sender. The app cuts rows as the
+  [st2110](https://github.com/legofsalmon/st2110) project's sender does:
+  general packing, every row split evenly into as few packets as fit under
+  ST 2110-10's 1460-octet UDP limit, and narrow rows two or three to a packet.
+  The tests pin the packet counts that sender produces for ten formats, and the
+  rate its capture analyser measures for one.
+- **Links are sized on the wire, not on the pixels.** Every packet carries
+  40 octets of RTP, UDP and IP header, and Ethernet adds 38 more on the wire:
+  its header and checksum, the preamble, and the gap before the next frame. A
+  25 GbE link carries 25 Gb/s of all of it, so that is the figure flows are
+  packed against, at a load you choose, 90% by default, since flows that meet on
+  a switch port queue behind each other.
+- **A flow stays on one link.** Counting the links is bin packing. First fit
+  with the largest flow first answers at once and usually gets the fewest; where
+  it might not, a search tries each smaller count. The search stops after a
+  fixed amount of work. It settled every plan of up to sixteen flows in testing,
+  and past that it sometimes stops first, which leaves first fit's count.
+- **A screen too big for a link is cut between cabinets**, along its longer
+  side, into the fewest even parts that fit. A receiver takes a rectangle of the
+  wall, and a cut inside a cabinet would split that cabinet between two inputs.
+  A screen whose single line of cabinets is still too big stays whole, and says
+  so.
+- **Groups count up from a base**, skipping addresses ending .0 and .255, which
+  plenty of equipment refuses. Only a group's low 23 bits reach its Ethernet
+  address, so 32 groups share each one. Groups counted from one base never share
+  with each other, which leaves the control blocks as the clash worth warning
+  about: 224.0.0.x, which switches send to every port, and 224.0.1.x, where
+  PTP's 224.0.1.129 sits.
+- **SDP files are written as the st2110 sender writes its own**, and its linter
+  finds no errors in them. Two lines are the plan's assumptions rather than a
+  sender's facts: `TP=2110TPN`, the narrow timing that hardware senders keep,
+  and the PTP clock. Once the sender exists, its own SDP file is the one to
+  load. JPEG XS flows get none, since the profile and level are the encoder's
+  to choose.
+
+No network is needed to try a plan out. With st2110 built from a clone
+(`cargo install --path crates/cli`), this lints a planned SDP file, makes the
+stream it describes into a capture rather than onto a network, measures the
+capture against the file, and receives it as a receiver loaded with that file
+would. It runs as well on a Mac with nothing plugged in:
+
+```sh
+st2110 lint 01-main-wall.sdp
+st2110 send video 2304x1152p60 --sampling RGB --depth 10 --to 239.20.1.1:5004 \
+  --sender-type narrow --clock traceable --duration 0.2 --pcap rehearse.pcap
+st2110 pcap rehearse.pcap --sdp 01-main-wall.sdp
+st2110 receive 01-main-wall.sdp --pcap rehearse.pcap
+```
+
+For a 12 × 6 wall of 192 px cabinets, the plan's 8,064 packets a frame are the
+sender's, the capture fits `2110TPN`, and all 12 frames arrive whole. The lint
+warns that the file has no source filter, which it gets once the sender's
+address is filled in.
+
+The bandwidth is the plan's to get right. Whether a switch forwards it
+cleanly, and whether a processor accepts the SDP file, is for the network's own
+design and a bench test on the real equipment.
 
 ### Processors
 
