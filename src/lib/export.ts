@@ -1,4 +1,4 @@
-import type { CanvasSettings, Layer } from './types';
+import type { CanvasSettings, Layer, Project } from './types';
 import { layerRect } from './geometry';
 import { renderLayerAlone, renderProject } from './render';
 import type { RunOverlays } from './cabling';
@@ -114,11 +114,37 @@ export function exportCompositionJson(
   );
 }
 
+/**
+ * Read a project back off disk.
+ *
+ * The parser's own message reaches the user otherwise, and it describes the
+ * byte it choked on rather than the mistake that was made: drop a PNG on the
+ * open dialog and the app says `Unexpected token '\u0000', "\u0089PNG..."`, which
+ * names nothing anyone can act on. What went wrong is almost always that this
+ * is not a project file, so that is what it says.
+ */
 export async function readProjectFile(file: File) {
   const text = await file.text();
-  const parsed = JSON.parse(text);
-  if (!parsed?.layers?.length) throw new Error('That file has no screens in it');
-  return parsed;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error(
+      `${file.name || 'That file'} is not a Pixel Map Maker project. ` +
+        'Open the .json written by File \u2192 Export project.'
+    );
+  }
+
+  const layers = (parsed as { layers?: unknown[] } | null)?.layers;
+  if (!Array.isArray(layers) || !layers.length) {
+    throw new Error(`${file.name || 'That file'} is valid JSON, but there are no screens in it`);
+  }
+
+  // Shaped like a project, which is as much as parsing can tell. Whether each
+  // screen in it makes sense is `loadProject`'s to decide, and it does —
+  // every field lands on top of a default and every layer is normalised.
+  return parsed as Partial<Project>;
 }
 
 /** Container and codec the browser will actually record, best first. */

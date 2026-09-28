@@ -23,8 +23,9 @@ import * as gloshine from './sources/gloshine.mjs';
 import * as absen from './sources/absen.mjs';
 import * as unilumin from './sources/unilumin.mjs';
 import * as infiled from './sources/infiled.mjs';
+import * as redot from './sources/redot.mjs';
 
-const SOURCES = { roevisual, gloshine, absen, unilumin, infiled };
+const SOURCES = { roevisual, gloshine, absen, unilumin, infiled, redot };
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), '../../data/cabinets.json');
 
 /** Classify a cabinet so the library can be filtered by use case. */

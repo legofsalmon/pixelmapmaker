@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-22T11:34:22.836Z",
-  "count": 541,
+  "generatedAt": "2026-09-28T16:53:02.638Z",
+  "count": 550,
   "cabinets": [
     {
       "id": "absen-a1021d-1280x960",
@@ -15573,6 +15573,321 @@
       "pixelsPerCabinet": 16384,
       "weightPerM2": 32.4,
       "powerPerM2": 720,
+      "category": "outdoor"
+    },
+    {
+      "id": "redot-rc-ilholo3-9",
+      "brand": "REDOT",
+      "series": "Holo",
+      "model": "RC-iLHolo3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 1000,
+        "height": 500,
+        "depth": 63.6
+      },
+      "resolution": {
+        "w": 256,
+        "h": 128
+      },
+      "weightKg": 3.7,
+      "power": {
+        "max": 380,
+        "avg": 200
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "scanRate": null,
+      "ledConfig": "SMD 1515 Black",
+      "maxCurveAngle": 10,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Holo-series/220.html",
+      "aspect": 2,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 7.4,
+      "powerPerM2": 760,
+      "category": "rental"
+    },
+    {
+      "id": "redot-rc-iholo3-9xl",
+      "brand": "REDOT",
+      "series": "Holo",
+      "model": "RC-iHolo3.9XL",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 1000,
+        "height": 1000,
+        "depth": 68
+      },
+      "resolution": {
+        "w": 256,
+        "h": 256
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 560,
+        "avg": 280
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 7680,
+      "ipRating": "IP40",
+      "scanRate": null,
+      "ledConfig": "SMD 1515 Black",
+      "maxCurveAngle": 5,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Holo-series/143.html",
+      "aspect": 1,
+      "areaM2": 1,
+      "pixelsPerCabinet": 65536,
+      "weightPerM2": 7,
+      "powerPerM2": 560,
+      "category": "rental"
+    },
+    {
+      "id": "redot-rc-i2-6",
+      "brand": "REDOT",
+      "series": "Indoor",
+      "model": "RC-i2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 66
+      },
+      "resolution": {
+        "w": 192,
+        "h": 192
+      },
+      "weightKg": 3.9,
+      "power": {
+        "max": 135,
+        "avg": 67.5
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "scanRate": null,
+      "ledConfig": "3in1 SMD RGB",
+      "maxCurveAngle": 10,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Indoor-series/207.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 36864,
+      "weightPerM2": 15.6,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "redot-rc-il2-6",
+      "brand": "REDOT",
+      "series": "Indoor",
+      "model": "RC-iL2.6",
+      "pixelPitch": 2.6,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 66
+      },
+      "resolution": {
+        "w": 192,
+        "h": 384
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 270,
+        "avg": 135
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "scanRate": null,
+      "ledConfig": "3in1 SMD RGB",
+      "maxCurveAngle": 10,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Indoor-series/203.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 73728,
+      "weightPerM2": 14,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "redot-rc-i3-9",
+      "brand": "REDOT",
+      "series": "Indoor",
+      "model": "RC-i3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 66
+      },
+      "resolution": {
+        "w": 128,
+        "h": 128
+      },
+      "weightKg": 3.9,
+      "power": {
+        "max": 135,
+        "avg": 67.5
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "scanRate": null,
+      "ledConfig": "3in1 SMD RGB",
+      "maxCurveAngle": 10,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Indoor-series/206.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 16384,
+      "weightPerM2": 15.6,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "redot-rc-il3-9",
+      "brand": "REDOT",
+      "series": "Indoor",
+      "model": "RC-iL3.9",
+      "pixelPitch": 3.9,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 66
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 7,
+      "power": {
+        "max": 270,
+        "avg": 135
+      },
+      "brightnessNits": 1000,
+      "refreshHz": 3840,
+      "ipRating": "IP40",
+      "scanRate": null,
+      "ledConfig": "3in1 SMD RGB",
+      "maxCurveAngle": 10,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Indoor-series/202.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 14,
+      "powerPerM2": 540,
+      "category": "rental"
+    },
+    {
+      "id": "redot-rc-i1-5",
+      "brand": "REDOT",
+      "series": "Indoor fine pitch",
+      "model": "RC-i1.5",
+      "pixelPitch": 1.56,
+      "cabinet": {
+        "width": 500,
+        "height": 500,
+        "depth": 73
+      },
+      "resolution": {
+        "w": 320,
+        "h": 320
+      },
+      "weightKg": 4.95,
+      "power": {
+        "max": 126,
+        "avg": 63
+      },
+      "brightnessNits": 1200,
+      "refreshHz": 7680,
+      "ipRating": "indoor",
+      "scanRate": null,
+      "ledConfig": "4in1 common cathode",
+      "maxCurveAngle": 5,
+      "environment": "indoor",
+      "sourceUrl": "https://www.redotled.com/Indoor-fine-pitch/142.html",
+      "aspect": 1,
+      "areaM2": 0.25,
+      "pixelsPerCabinet": 102400,
+      "weightPerM2": 19.8,
+      "powerPerM2": 504,
+      "category": "fine-pitch"
+    },
+    {
+      "id": "redot-rc-ol3-9",
+      "brand": "REDOT",
+      "series": "Outdoor",
+      "model": "RC-oL3.9",
+      "pixelPitch": 3.91,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 66.3
+      },
+      "resolution": {
+        "w": 128,
+        "h": 256
+      },
+      "weightKg": 9,
+      "power": {
+        "max": 283,
+        "avg": 141.5
+      },
+      "brightnessNits": 5500,
+      "refreshHz": 7680,
+      "ipRating": "IP65",
+      "scanRate": null,
+      "ledConfig": "3in1 SMD RGB Common Cathode",
+      "maxCurveAngle": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.redotled.com/Outdoor-series/187.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 32768,
+      "weightPerM2": 18,
+      "powerPerM2": 566,
+      "category": "outdoor"
+    },
+    {
+      "id": "redot-rc-m6-9",
+      "brand": "REDOT",
+      "series": "Outdoor",
+      "model": "RC-M6.9",
+      "pixelPitch": 6.94,
+      "cabinet": {
+        "width": 500,
+        "height": 1000,
+        "depth": 63
+      },
+      "resolution": {
+        "w": 72,
+        "h": 144
+      },
+      "weightKg": 6.92,
+      "power": {
+        "max": 301,
+        "avg": 150.5
+      },
+      "brightnessNits": 5000,
+      "refreshHz": 3840,
+      "ipRating": "IP65",
+      "scanRate": null,
+      "ledConfig": "3in1 SMD RGB",
+      "maxCurveAngle": 10,
+      "environment": "outdoor",
+      "sourceUrl": "https://www.redotled.com/Outdoor-series/137.html",
+      "aspect": 0.5,
+      "areaM2": 0.5,
+      "pixelsPerCabinet": 10368,
+      "weightPerM2": 13.8,
+      "powerPerM2": 602,
       "category": "outdoor"
     },
     {

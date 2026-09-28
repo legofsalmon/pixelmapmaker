@@ -35,7 +35,7 @@ for the full feature review those two drove.
   rectangle of pixels, so the canvas, the export and the signal order stay put
 
 **Cabinet library**
-- 541 real cabinets scraped from manufacturer spec pages and datasheets
+- 550 real cabinets scraped from manufacturer spec pages and datasheets
 - Filter by brand, type, indoor/outdoor and pitch range; search; favourites
 - Add your own panels when a model is not in the list
 - Every entry links back to the manufacturer page it came from
@@ -364,6 +364,7 @@ with the project.
 | [GLOSHINE](https://gloshine.com/products) | 91 | Publishes size, pitch and weight; panel resolution is derived from size ÷ pitch |
 | [Absen](https://www.usabsen.com/) | 89 | Parsed from the specification PDFs linked on each product page; power is quoted per m² and converted per panel |
 | [INFiLED](https://www.infiled.com/) | 285 | Spec panel rendered client-side, read with a headless browser; numbers arrive in both decimal conventions on one page |
+| [REDOT](https://www.redotled.com/products) | 9 | Carbon-fibre panels; the only brand here that publishes a maximum bend per joint, so its curve check is a real one |
 | [Unilumin](https://unilumin.com/products/professional/) | 0 so far | Source written and tested, but see the note below — the product pages have not been reachable long enough to complete a crawl |
 
 ### Data quality

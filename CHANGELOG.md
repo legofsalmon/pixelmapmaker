@@ -16,6 +16,31 @@ these, so this file is the source rather than a copy of them.
   small on screen to leave anywhere to grab it by, shows the outline and no
   corners. A painted handle that ignores the pointer is the same lie the other
   way round.
+- **REDOT is in the library, and brings the first bend rating in it.** Nine
+  carbon-fibre panels from redotled.com, 541 cabinets to 550. The interesting
+  part is one field: REDOT publishes a maximum bend per joint, and no other
+  brand here does, so the curve check has only ever been able to say the angle
+  was unchecked. Put a REDOT panel on a curve too tight for it now and the app
+  says "the wall bends 9.0° at a joint but the panel is rated to 5°". Where
+  two ratings are quoted the tighter one is kept, because this check exists to
+  fail a curve the panel cannot make.
+- **Two REDOT panels were left out, on purpose.** The transparent pair are
+  quoted "3.9mm(H) 7.8mm(V)" — the pixels really are twice as far apart
+  vertically — and a cabinet here carries one pitch, which the app spends on
+  working out how close an audience can stand before the pixels separate.
+  Either figure would make that confidently wrong in one axis, so they are
+  refused and the run says why rather than flattening them. One of the two
+  also lists a 1000x5000mm cabinet, which its own resolution and pitch put at
+  1000x500; the source cross-checks those three against each other now, so a
+  digit typed twice is caught where it is published rather than by the
+  validator at the end.
+- **A file that is not a project says so.** Opening one that would not parse
+  handed the JSON parser's own words to the user — `Unexpected token '', "PNG"`
+  — which names the byte it choked on and not the mistake, which is almost
+  always that this is not a project file. It now says which file, that it is
+  not one, and what to open instead. A file that parses but holds no screens
+  is told apart from one that does not parse at all, because those are two
+  different mistakes.
 
 ## 0.4.0
 
