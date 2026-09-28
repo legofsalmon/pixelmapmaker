@@ -163,6 +163,18 @@ node scripts/scraper/index.mjs --source roevisual
 One source at a time tops that brand up and leaves the rest of the library
 alone, so a vendor can be re-read without re-reading all of them.
 
+Two sources read their specs with a headless browser, because the pages write
+them with JavaScript. Those need `npx playwright install chromium` once. Behind
+a proxy that re-signs TLS, Chromium will not trust it — it carries its own root
+store — and every page fails before it parses; setting
+`SCRAPE_FETCH_VIA_NODE=1` has Node make the requests instead and hand the
+browser the replies, so the certificate is checked against whatever Node is
+configured to trust:
+
+```bash
+SCRAPE_FETCH_VIA_NODE=1 node scripts/scraper/index.mjs --source unilumin
+```
+
 Each source in `scripts/scraper/sources/` exports `brand` and `scrape()`, and
 returns records that `scripts/scraper/index.mjs` normalises, validates and
 de-duplicates. To add a manufacturer, drop in another module and register it in

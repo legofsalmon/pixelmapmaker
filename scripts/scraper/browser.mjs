@@ -51,7 +51,11 @@ async function loadPlaywright() {
  * whatever cookies a site hands out, which is what gets past the interstitial
  * some of these sites put in front of a first visit.
  */
-export async function openBrowser({ log = console.log, userAgent = DEFAULT_UA } = {}) {
+export async function openBrowser({
+  log = console.log,
+  userAgent = DEFAULT_UA,
+  viaNodeFetch = process.env.SCRAPE_FETCH_VIA_NODE === '1',
+} = {}) {
   const chromium = await loadPlaywright();
   const browser = await chromium.launch({
     // Containers and CI images rarely have user namespaces enabled; this is a
@@ -59,12 +63,58 @@ export async function openBrowser({ log = console.log, userAgent = DEFAULT_UA } 
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
   });
   const context = await browser.newContext({ userAgent, viewport: { width: 1440, height: 2400 } });
-  // Images and fonts are most of the bytes on these pages and none of the specs.
-  await context.route('**/*', (route) =>
-    ['image', 'media', 'font'].includes(route.request().resourceType())
-      ? route.abort()
-      : route.continue()
-  );
+  /*
+   * One router, because Playwright runs handlers last-registered-first and
+   * two of them would have the heavier one winning.
+   *
+   * Images and fonts are most of the bytes on these pages and none of the
+   * specs, so they never leave the machine.
+   *
+   * Everything else is optionally fetched by Node rather than by Chromium.
+   * Chromium ships its own root store, and behind an inspecting proxy — a
+   * corporate egress gateway, or the one this repo's agent sessions run
+   * through — it does not hold the CA that proxy presents: every navigation
+   * fails ERR_CERT_AUTHORITY_INVALID before a byte is parsed. Node, configured
+   * for that environment, does hold it. So Node makes the request and the
+   * browser is handed the reply. The certificate is still checked, by Node,
+   * against the real bundle — this moves where the check happens, it does not
+   * remove it. Off unless asked for, because a browser that can reach the
+   * internet by itself should.
+   *
+   * `content-encoding` and `content-length` are dropped on the way back:
+   * fetch has already decoded the body, and leaving them makes Chromium try to
+   * gunzip plain bytes and give up on the page.
+   */
+  await context.route('**/*', async (route) => {
+    const request = route.request();
+    if (['image', 'media', 'font'].includes(request.resourceType())) return route.abort();
+    if (!viaNodeFetch) return route.continue();
+
+    try {
+      const response = await fetch(request.url(), {
+        method: request.method(),
+        headers: request.headers(),
+        body: ['GET', 'HEAD'].includes(request.method()) ? undefined : request.postDataBuffer(),
+        redirect: 'follow',
+        signal: AbortSignal.timeout(30_000),
+      });
+      const headers = Object.fromEntries(
+        [...response.headers].filter(
+          ([k]) => !['content-encoding', 'content-length', 'transfer-encoding'].includes(k.toLowerCase())
+        )
+      );
+      await route.fulfill({
+        status: response.status,
+        headers,
+        body: Buffer.from(await response.arrayBuffer()),
+      });
+    } catch {
+      // A sub-resource that will not load is not worth failing the page for;
+      // `visit` decides whether what arrived was enough.
+      await route.abort();
+    }
+  });
+
   const page = await context.newPage();
 
   return {
