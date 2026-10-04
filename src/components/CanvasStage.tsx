@@ -211,6 +211,13 @@ export default function CanvasStage() {
       runLabels,
       powerLengths,
       powerLabels,
+      // What the viewport is actually showing, in canvas pixels.
+      viewport: {
+        x: -view.x / view.scale,
+        y: -view.y / view.scale,
+        width: size.width / view.scale,
+        height: size.height / view.scale,
+      },
     });
 
     // Canvas outline sits above everything so the frame is always readable.

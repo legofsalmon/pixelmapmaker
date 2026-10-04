@@ -5,7 +5,20 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
-_Nothing yet._
+- **A wall of any size now costs the same to draw.** The canvas drew every
+  cabinet on every frame, whether or not it was on screen — and a big wall is
+  mostly off screen, because 200 cabinets across is 38,400 pixels against a 4K
+  canvas. Drawing is now limited to the cabinets the viewport actually covers.
+  The second half was the numbering: working out which cabinet is which built
+  the whole signal run and a lookup of it, forty thousand entries, every
+  frame, to label the few hundred on screen. A cabinet's place in the run is
+  arithmetic, so it is worked out per cabinet instead. Measured on a
+  six-times-throttled machine with a test pattern playing: a 40,000-cabinet
+  wall went from 4.8 to 29.4 frames a second, and from blocking the main
+  thread 63% of the time to 5%. 8,040 cabinets went 18.4 to 28.7. Frame cost
+  no longer grows with the wall — every size now sits at the same ceiling.
+  Exports are untouched: they draw the whole wall, as they must, and are
+  checked to still do it while the viewport is zoomed into a corner.
 
 ## 0.5.0
 

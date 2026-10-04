@@ -252,6 +252,39 @@ export function snapPosition(
  * Cabinet order for a signal run, returned as [col, row] pairs in feed order.
  * Mirrors how a processor is normally patched across a wall.
  */
+/**
+ * Where one cabinet falls in the signal run, counting from zero.
+ *
+ * The same ordering as `signalOrder`, read the other way round. That function
+ * builds the whole sequence, which is what the cabling needs; drawing a
+ * number on one cabinet needs only that cabinet's place in it, and building
+ * forty thousand of them to look up a few hundred is most of a frame on a
+ * large wall.
+ *
+ * Kept honest by `scripts/test-geometry-index.mjs`, which walks the sequence
+ * `signalOrder` produces and checks this agrees at every position, for every
+ * combination of start corner and path.
+ */
+export function signalIndex(layer: Layer, col: number, row: number) {
+  const { cols, rows, signalStart, signalPath } = layer;
+  const vertical = signalPath.startsWith('vertical');
+  const serpentine = signalPath.endsWith('serpentine');
+  const fromRight = signalStart === 'tr' || signalStart === 'br';
+  const fromBottom = signalStart === 'bl' || signalStart === 'br';
+
+  // Undo the mirroring the start corner applies.
+  const c = fromRight ? cols - 1 - col : col;
+  const r = fromBottom ? rows - 1 - row : row;
+
+  const minor = vertical ? rows : cols;
+  const major = vertical ? c : r;
+  const along = vertical ? r : c;
+
+  // Every other line runs backwards on a serpentine path.
+  const n = serpentine && major % 2 === 1 ? minor - 1 - along : along;
+  return major * minor + n;
+}
+
 export function signalOrder(layer: Layer): Array<[number, number]> {
   const { cols, rows, signalStart, signalPath } = layer;
   const vertical = signalPath.startsWith('vertical');

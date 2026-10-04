@@ -5,6 +5,7 @@ import {
   contentBounds,
   handlePoint,
   layerRect,
+  signalIndex,
   signalOrder,
   tileSize,
   type Rect,
@@ -18,6 +19,12 @@ export interface RenderOptions {
   selectedIds?: string[];
   /** Canvas pixels per screen pixel — used to keep chrome hairline-thin. */
   scale?: number;
+  /**
+   * The part of the canvas on screen, in canvas pixels. Cabinets outside it
+   * are skipped. Omit it to draw the whole wall, which is what the exporters
+   * need.
+   */
+  viewport?: Rect | null;
   snapGuides?: { vertical: number[]; horizontal: number[] } | null;
   /** Animated overlay; omit for a still frame. */
   effect?: EffectSettings;
@@ -158,9 +165,41 @@ function drawUnionJack(ctx: CanvasRenderingContext2D, rect: Rect) {
   ctx.restore();
 }
 
-function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
+/**
+ * The band of cabinets that `visible` covers, as half-open ranges.
+ *
+ * A wall can be far larger than the canvas it sits on — 200 cabinets across
+ * is 38,400 pixels, ten times a 4K canvas — and the viewport shows a window
+ * onto it. Drawing the cabinets outside that window costs exactly as much as
+ * drawing the ones inside it and produces nothing, so the loops below run
+ * over this instead of over the whole grid.
+ *
+ * Without a window, every cabinet is in range: that is what the exporters
+ * want, since they draw the whole wall at once.
+ */
+export function visibleTiles(layer: Layer, visible?: Rect | null) {
+  if (!visible) return { colFrom: 0, colTo: layer.cols, rowFrom: 0, rowTo: layer.rows };
   const tile = tileSize(layer);
   const rect = layerRect(layer);
+  const span = (start: number, end: number, origin: number, size: number, count: number) => ({
+    from: Math.max(0, Math.min(count, Math.floor((start - origin) / size))),
+    to: Math.max(0, Math.min(count, Math.ceil((end - origin) / size))),
+  });
+  const across = span(visible.x, visible.x + visible.width, rect.x, tile.w, layer.cols);
+  const down = span(visible.y, visible.y + visible.height, rect.y, tile.h, layer.rows);
+  return { colFrom: across.from, colTo: across.to, rowFrom: down.from, rowTo: down.to };
+}
+
+function drawTiles(
+  ctx: CanvasRenderingContext2D,
+  layer: Layer,
+  scale = 1,
+  visible?: Rect | null
+) {
+  const tile = tileSize(layer);
+  const rect = layerRect(layer);
+  const { colFrom, colTo, rowFrom, rowTo } = visibleTiles(layer, visible);
+  if (colFrom >= colTo || rowFrom >= rowTo) return;
   const ink = contrastInk(layer.color);
   const lineColor = shade(layer.color, ink === '#000000' ? -0.35 : 0.4);
   // Grid lines stay visible on huge walls but never swamp a small tile.
@@ -168,10 +207,7 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
   const checkerColor = shade(layer.color, -layer.checkerAmount);
   const checkered = layer.checkerAmount > 0;
 
-  const numbers = layer.showNumbers ? new Map<string, number>() : null;
-  if (numbers) {
-    signalOrder(layer).forEach(([col, row], i) => numbers.set(`${col},${row}`, i + 1));
-  }
+  const numbered = layer.showNumbers;
 
   /*
    * Everything that is the same for every tile is set once, outside the loop.
@@ -192,8 +228,8 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
       }
     };
 
-    for (let row = 0; row < layer.rows; row++) {
-      for (let col = 0; col < layer.cols; col++) {
+    for (let row = rowFrom; row < rowTo; row++) {
+      for (let col = colFrom; col < colTo; col++) {
         const x = rect.x + col * tile.w;
         const y = rect.y + row * tile.h;
         fill(checkered && (col + row) % 2 === 1 ? checkerColor : layer.color);
@@ -207,8 +243,8 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
    * tile. Same geometry, one draw call instead of thousands.
    */
   const grid = new Path2D();
-  for (let row = 0; row < layer.rows; row++) {
-    for (let col = 0; col < layer.cols; col++) {
+  for (let row = rowFrom; row < rowTo; row++) {
+    for (let col = colFrom; col < colTo; col++) {
       grid.rect(
         rect.x + col * tile.w + lineWidth / 2,
         rect.y + row * tile.h + lineWidth / 2,
@@ -221,7 +257,7 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
   ctx.lineWidth = lineWidth;
   ctx.stroke(grid);
 
-  if (!numbers) return;
+  if (!numbered) return;
 
   /*
    * Size the number for the longest label the wall will show, once, rather
@@ -254,10 +290,9 @@ function drawTiles(ctx: CanvasRenderingContext2D, layer: Layer, scale = 1) {
     ctx.lineWidth = Math.max(1, size * 0.18);
     ctx.lineJoin = 'round';
   }
-  for (let row = 0; row < layer.rows; row++) {
-    for (let col = 0; col < layer.cols; col++) {
-      const label = numbers.get(`${col},${row}`);
-      if (label === undefined) continue;
+  for (let row = rowFrom; row < rowTo; row++) {
+    for (let col = colFrom; col < colTo; col++) {
+      const label = signalIndex(layer, col, row) + 1;
       const x = rect.x + col * tile.w + tile.w / 2;
       const y = rect.y + row * tile.h + tile.h / 2;
       if (halo) ctx.strokeText(String(label), x, y);
@@ -563,6 +598,7 @@ export function renderProject(
     runLabels,
     powerLengths,
     powerLabels,
+    viewport,
   } = options;
   const hairline = 1 / scale;
 
@@ -571,7 +607,7 @@ export function renderProject(
 
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
-    drawTiles(ctx, layer, scale);
+    drawTiles(ctx, layer, scale, viewport);
     if (layer.showSignalFlow) drawRuns(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
     if (layer.showPowerRuns) {
       drawRuns(ctx, layer, powerLengths?.get(layer.id), powerLabels?.get(layer.id), {
