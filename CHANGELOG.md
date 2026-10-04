@@ -5,6 +5,10 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.6.0
+
 - **Cabling can be drawn by hand, against a running total.** The automatic
   plan cuts the wall into equal chains, which is right until the room has an
   opinion — the distro is stage left, a cable has to cross a walkway, two
