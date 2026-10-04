@@ -76,6 +76,12 @@ export default function Editor() {
         return;
       }
       if (e.key === 'Delete' || e.key === 'Backspace') {
+        /*
+         * While a chain is being drawn, backspace takes the last cabinet off
+         * it — the canvas owns the key, and deleting the screen out from
+         * under the chain being drawn on it is never what was meant.
+         */
+        if ((useEditor.getState().cablingDraw?.index ?? -1) >= 0) return;
         e.preventDefault();
         removeSelection();
       }

@@ -135,6 +135,24 @@ export function resizeFromAnchor(
   };
 }
 
+/**
+ * Which cabinet sits under a point, or null when the point is off the screen.
+ *
+ * The right edge belongs to the last cabinet rather than to a cabinet that
+ * does not exist: a point exactly on the boundary is inside, which is what
+ * makes tracing along an edge work instead of dropping every other cabinet.
+ */
+export function cellAtPoint(layer: Layer, point: { x: number; y: number }): [number, number] | null {
+  const rect = layerRect(layer);
+  const tile = tileSize(layer);
+  if (!tile.w || !tile.h) return null;
+  if (point.x < rect.x || point.y < rect.y) return null;
+  if (point.x > rect.x + rect.width || point.y > rect.y + rect.height) return null;
+  const col = Math.min(layer.cols - 1, Math.floor((point.x - rect.x) / tile.w));
+  const row = Math.min(layer.rows - 1, Math.floor((point.y - rect.y) / tile.h));
+  return col >= 0 && row >= 0 ? [col, row] : null;
+}
+
 /** Physical size of a layer in millimetres. */
 export function layerSizeMm(layer: Layer) {
   return {

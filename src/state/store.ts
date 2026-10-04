@@ -81,6 +81,15 @@ interface Snapshot {
 interface EditorState extends Project {
   paletteId: string;
   snapEnabled: boolean;
+  /**
+   * The chain being drawn by hand, if any: which screen, which kind, and
+   * which of that screen's chains is being edited.
+   *
+   * Editor state rather than project state — it is a mode, not something
+   * worth saving — but it lives here because the canvas does the drawing and
+   * the inspector shows the running total, and they have to agree.
+   */
+  cablingDraw: { layerId: string; kind: 'data' | 'power'; index: number } | null;
   processorId: string;
   cabling: CablingSettings;
   pickList: PickListOptions;
@@ -121,6 +130,7 @@ interface EditorState extends Project {
   setCanvas: (patch: Partial<Project['canvas']>) => void;
   setPalette: (id: string) => void;
   setSnapEnabled: (on: boolean) => void;
+  setCablingDraw: (draw: { layerId: string; kind: 'data' | 'power'; index: number } | null) => void;
   setProjectName: (name: string) => void;
   setProcessor: (id: string) => void;
   setCabling: (patch: Partial<CablingSettings>) => void;
@@ -169,6 +179,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   selectedIds: [],
   paletteId: DEFAULT_PALETTE.id,
   snapEnabled: true,
+  cablingDraw: null,
   processorId: 'brompton-sx40',
   cabling: DEFAULT_CABLING,
   pickList: DEFAULT_PICKLIST_OPTIONS,
@@ -400,6 +411,8 @@ export const useEditor = create<EditorState>((set, get) => ({
   },
 
   setSnapEnabled: (on) => set({ snapEnabled: on }),
+
+  setCablingDraw: (draw) => set({ cablingDraw: draw }),
   setProjectName: (name) => set({ name }),
   setProcessor: (id) => set({ processorId: id }),
   setCabling: (patch) => set((s) => ({ cabling: { ...s.cabling, ...patch } })),

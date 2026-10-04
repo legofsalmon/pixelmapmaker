@@ -11,6 +11,7 @@ import type { SignalPath, SignalStart } from '@/lib/types';
 import NumberInput from './NumberInput';
 import Section from './Section';
 import ShapeSection from './ShapeSection';
+import CablingSection from './CablingSection';
 import ViewingSection from './ViewingSection';
 import ContrastSection from './ContrastSection';
 import CollapsiblePanel from './CollapsiblePanel';
@@ -240,6 +241,8 @@ export default function Inspector() {
             </label>
           )}
         </Section>
+
+        <CablingSection layer={layer} />
 
         <Section id="signal" title="Numbering and signal" hint="feed corner, run pattern">
           <label className="checkbox">

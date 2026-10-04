@@ -103,6 +103,14 @@ export interface Layer {
   logo: string | null;
   /** Turn the centre image slowly, for the same reason the flag exists. */
   logoSpin?: boolean;
+  /**
+   * Chains drawn by hand, kept beside the automatic plan rather than
+   * replacing it, so trying something costs nothing. Absent on projects saved
+   * before it existed.
+   */
+  customRuns?: { data: Array<Array<[number, number]>>; power: Array<Array<[number, number]>> };
+  /** Which of the two plans the overlays and the pick list read. */
+  cablingPlan?: 'auto' | 'custom';
   /** Logo width as a fraction of the screen's shorter side. */
   logoScale: number;
   logoOpacity: number;

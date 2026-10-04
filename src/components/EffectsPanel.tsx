@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useEditor } from '@/state/store';
-import { DIRECTION_LABELS, isAnimated, type EffectDirection } from '@/lib/effects';
+import { DIRECTION_LABELS, isAnimated, loopSeconds, type EffectDirection } from '@/lib/effects';
+import { LOGO_SECONDS_PER_TURN } from '@/lib/render';
 import { canRecordVideo, exportVideo } from '@/lib/export';
 import { useRunOverlays } from '@/state/useRunOverlays';
 import NumberInput from './NumberInput';
@@ -22,6 +23,12 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
   const setCanvas = useEditor((s) => s.setCanvas);
   const overlays = useRunOverlays();
 
+  /*
+   * The recording runs for exactly one loop unless told otherwise. Every
+   * frame after that is one the file already has, so a longer recording is a
+   * bigger file of the same video.
+   */
+  const [autoLength, setAutoLength] = useState(true);
   const [seconds, setSeconds] = useState(10);
   const [fps, setFps] = useState(30);
   const [progress, setProgress] = useState<number | null>(null);
@@ -29,17 +36,25 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
   const [done, setDone] = useState<string | null>(null);
   const recordable = canRecordVideo();
 
+  const spinning = layers.some((l) => l.logoSpin && l.logo && l.visible);
+  const loop = loopSeconds(effect, { spinning, turnSeconds: LOGO_SECONDS_PER_TURN });
+  // Round up to a whole frame, so the last frame is not a fraction of one.
+  const loopLength = loop.seconds == null ? null : Math.max(1 / fps, Math.ceil(loop.seconds * fps) / fps);
+  const recordSeconds = autoLength && loopLength != null ? loopLength : seconds;
+
   const record = async () => {
     setError(null);
     setDone(null);
     setProgress(0);
     try {
       const extension = await exportVideo(name, canvas, layers, effect, {
-        seconds,
+        seconds: recordSeconds,
         fps,
         onProgress: setProgress,
       }, overlays);
-      setDone(`Recorded ${seconds}s at ${canvas.width} × ${canvas.height} as .${extension}`);
+      setDone(
+        `Recorded ${Math.round(recordSeconds * 100) / 100}s at ${canvas.width} × ${canvas.height} as .${extension}`
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Recording failed');
     } finally {
@@ -161,7 +176,15 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
             <div className="opt-grid">
               <label className="field">
                 <span>Length (s)</span>
-                <NumberInput min={1} max={120} value={seconds} onChange={setSeconds} />
+                <NumberInput
+                  min={1}
+                  max={120}
+                  value={Math.round(recordSeconds * 100) / 100}
+                  onChange={(v) => {
+                    setAutoLength(false);
+                    setSeconds(v);
+                  }}
+                />
               </label>
               <label className="field">
                 <span>Frame rate</span>
@@ -182,6 +205,25 @@ export default function EffectsPanel({ onClose }: { onClose: () => void }) {
                 {progress !== null ? `Recording ${Math.round(progress * 100)}%` : 'Record'}
               </button>
             </div>
+            {isAnimated(effect) && loopLength != null && (
+              <p className={`note${loop.exact ? '' : ' note--warn'}`}>
+                {autoLength ? (
+                  <>
+                    Recording {Math.round(loopLength * 100) / 100}s — {loop.why}. Past that the
+                    frames repeat, so a longer file is the same video and more of it.
+                    {!loop.exact && ' The centre image will jump where the loop joins.'}
+                  </>
+                ) : (
+                  <>
+                    Set by hand. One loop is {Math.round(loopLength * 100) / 100}s.{' '}
+                    <button type="button" className="linkish" onClick={() => setAutoLength(true)}>
+                      Use one loop
+                    </button>
+                  </>
+                )}
+              </p>
+            )}
+
             <p className="note">
               Recorded at the canvas&rsquo;s native {canvas.width} × {canvas.height}, one frame at a
               time rather than off a wall clock, so the speed is right regardless of how fast the tab

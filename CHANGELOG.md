@@ -5,6 +5,36 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+- **Cabling can be drawn by hand, against a running total.** The automatic
+  plan cuts the wall into equal chains, which is right until the room has an
+  opinion — the distro is stage left, a cable has to cross a walkway, two
+  cabinets hang off a different truss. Drag across the cabinets to trace a
+  chain and it is patched in the order you touch them; the arrow keys do the
+  same from the keyboard. Each chain shows how full it is as you draw —
+  "12 of 16 cabinets, 480,000 of 650,000 px" — and names which ceiling that
+  is, the port's pixels, what the processor will address, or the chain length
+  you set. Power circuits work the same way against watts on the breaker. A
+  chain over its limit turns red on the canvas and in the list rather than
+  being quietly truncated.
+  The drawing aids are the rules, not a separate mode: a cabinet that does
+  not touch the last one is refused, so dragging fast cannot make the chain
+  leap a gap behind the pointer, and dragging back along the chain retracts
+  it. Ctrl is the deliberate override for a chain that really does cross the
+  wall. A cabinet already on another chain is refused outright, because
+  double-patching is the mistake the whole view exists to catch.
+  What is drawn is kept beside the automatic plan rather than replacing it,
+  and a switch on the screen says which one the overlays and the pick list
+  read. Nothing is lost by trying something.
+- **A recording is one loop long, and no longer.** The length was a number
+  you typed, defaulting to ten seconds, and every frame past the first loop
+  was one the file already had: a bigger file of the same video. Every
+  pattern here runs on the same clock, so a loop is one over the speed —
+  four seconds at the default — and that is now what it records. Where a
+  centre image is turning it waits for both to come round, so the join does
+  not jump; where the two would only agree minutes apart it records the
+  pattern's loop and says the image will jump, rather than writing a minute
+  of 4K to keep a joke in step. Typing a length still works and the panel
+  offers the loop back.
 - **A wall of any size now costs the same to draw.** The canvas drew every
   cabinet on every frame, whether or not it was on screen — and a big wall is
   mostly off screen, because 200 cabinets across is 38,400 pixels against a 4K

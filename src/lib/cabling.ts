@@ -8,6 +8,7 @@
 import type { Layer } from './types';
 import { signalOrder } from './geometry';
 import { pixelsPerPortAt, type Processor } from './processors';
+import { reportFor } from './customRuns';
 
 export interface CablingSettings {
   mode: 'auto' | 'manual';
@@ -165,6 +166,32 @@ function plan(
   };
 }
 
+/**
+ * The same counts, for chains that were drawn rather than generated.
+ *
+ * Drawn chains are not all the same length, so `cabinetsPerRun` becomes the
+ * longest of them — it is what the run has to be planned around, and the one
+ * number that is wrong to average. Everything else is counted off the chains
+ * themselves rather than divided out of a total, which is why an uneven plan
+ * still prices correctly.
+ */
+function planFromRuns(runs: Array<Array<[number, number]>>, limitedBy: string, backup = false): RunPlan {
+  const drawn = runs.filter((run) => run.length > 0);
+  const cabinets = drawn.reduce((a, run) => a + run.length, 0);
+  let longHops = 0;
+  for (const run of drawn) {
+    for (let i = 1; i < run.length; i++) if (!adjacent(run[i - 1], run[i])) longHops++;
+  }
+  return {
+    cabinetsPerRun: drawn.reduce((a, run) => Math.max(a, run.length), 0),
+    runs: drawn.length,
+    feedCables: drawn.length,
+    backupFeeds: backup ? drawn.length : 0,
+    jumperCables: Math.max(0, cabinets - drawn.length - longHops),
+    limitedBy,
+  };
+}
+
 /** Are two cabinets edge-to-edge, so a short jumper reaches between them? */
 const adjacent = (a: [number, number], b: [number, number]) =>
   Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) === 1;
@@ -264,14 +291,35 @@ export function cablingForLayer(
     powerOrder.push(order.slice(i, i + perPowerRun));
   }
 
+  /*
+   * A screen switched to its drawn plan is cabled from the chains on it, not
+   * from the generated ones. Each kind falls back on its own: drawing the
+   * data runs and leaving power alone leaves power generated, which is how
+   * most of this gets used.
+   */
+  const drawnData = layer.cablingPlan === 'custom' ? (layer.customRuns?.data ?? []).filter((r) => r.length) : [];
+  const drawnPower = layer.cablingPlan === 'custom' ? (layer.customRuns?.power ?? []).filter((r) => r.length) : [];
+
+  const dataOrder = drawnData.length ? drawnData : runOrder;
+  const powerRunOrder = drawnPower.length ? drawnPower : powerOrder;
+
+  if (drawnData.length) {
+    longHops = 0;
+    for (const run of drawnData) {
+      for (let i = 1; i < run.length; i++) if (!adjacent(run[i - 1], run[i])) longHops++;
+    }
+  }
+
   return {
     layerId: layer.id,
     layerName: layer.name,
     cabinets,
-    data: plan(cabinets, perRun, dataLimit, longHops, settings.backupPorts),
-    power: plan(cabinets, perPowerRun, powerLimit),
-    runOrder,
-    powerOrder,
+    data: drawnData.length
+      ? planFromRuns(drawnData, 'drawn by hand', settings.backupPorts)
+      : plan(cabinets, perRun, dataLimit, longHops, settings.backupPorts),
+    power: drawnPower.length ? planFromRuns(drawnPower, 'drawn by hand') : plan(cabinets, perPowerRun, powerLimit),
+    runOrder: dataOrder,
+    powerOrder: powerRunOrder,
     dataLimits: limits,
     longHops,
   };
@@ -382,6 +430,13 @@ export interface RunOverlays {
   runLabels: Map<string, string[]>;
   powerLengths: Map<string, number>;
   powerLabels: Map<string, string[]>;
+  /**
+   * Hand-drawn chains carrying more than they may, by screen.
+   *
+   * Only drawn plans can be over: a generated one is cut to the limit by
+   * construction, so there is nothing to warn about.
+   */
+  overRuns: Map<string, { data: number[]; power: number[] }>;
 }
 
 export function runOverlays(
@@ -418,5 +473,16 @@ export function runOverlays(
     // "in from 1, out to 2" on the drawing the way it is patched.
     runLabels.set(id, list.map((x) => (x.backup ? `${x.label} \u2192 ${x.backup.label}` : x.label)));
   }
-  return { runLengths, runLabels, powerLengths, powerLabels };
+
+  const overRuns = new Map<string, { data: number[]; power: number[] }>();
+  for (const layer of layers) {
+    if (layer.cablingPlan !== 'custom') continue;
+    const over = {
+      data: reportFor('data', layer, layer.customRuns?.data ?? [], settings, processor).overRuns,
+      power: reportFor('power', layer, layer.customRuns?.power ?? [], settings, processor).overRuns,
+    };
+    if (over.data.length || over.power.length) overRuns.set(layer.id, over);
+  }
+
+  return { runLengths, runLabels, powerLengths, powerLabels, overRuns };
 }

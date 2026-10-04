@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useEditor } from '@/state/store';
 import {
   HANDLE_GRAB_PX,
   anchorFor,
   canResize,
+  cellAtPoint,
   handleAtPoint,
   layerRect,
   rectContains,
@@ -14,6 +15,7 @@ import {
   type Handle,
   type SnapResult,
 } from '@/lib/geometry';
+import { appendCell, runsOf, stepFrom, takenCells, withRun } from '@/lib/customRuns';
 import { renderProject } from '@/lib/render';
 import { useRunOverlays } from '@/state/useRunOverlays';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
@@ -45,7 +47,9 @@ type Drag =
       handle: Handle;
       /** The opposite corner, fixed when the drag began so it cannot drift. */
       anchor: { x: number; y: number };
-    };
+    }
+  /** Tracing a cabling chain across the cabinets. */
+  | { kind: 'trace' };
 
 /** Two diagonals, so the cursor points along the one being dragged. */
 const CURSORS: Record<Handle, string> = {
@@ -78,6 +82,8 @@ export default function CanvasStage() {
   const layers = useEditor((s) => s.layers);
   const selectedIds = useEditor((s) => s.selectedIds);
   const snapEnabled = useEditor((s) => s.snapEnabled);
+  const cablingDraw = useEditor((s) => s.cablingDraw);
+  const setCablingDraw = useEditor((s) => s.setCablingDraw);
   const effect = useEditor((s) => s.effect);
 
   /*
@@ -86,7 +92,7 @@ export default function CanvasStage() {
    * change — this sits inside the render loop, which runs every frame while a
    * test pattern is playing.
    */
-  const { runLengths, runLabels, powerLengths, powerLabels } = useRunOverlays();
+  const { runLengths, runLabels, powerLengths, powerLabels, overRuns } = useRunOverlays();
   const setSelection = useEditor((s) => s.setSelection);
   const toggleSelection = useEditor((s) => s.toggleSelection);
   const updateLayer = useEditor((s) => s.updateLayer);
@@ -152,6 +158,27 @@ export default function CanvasStage() {
     };
   }, [layers]);
 
+  /*
+   * The screen being cabled by hand, if any.
+   *
+   * Only once a chain is actually selected: picking data or power in the
+   * panel chooses which kind to work on and nothing more, and the canvas has
+   * to keep behaving normally until there is somewhere for a cabinet to go.
+   */
+  const drawingLayer =
+    cablingDraw && cablingDraw.index >= 0
+      ? layers.find((l) => l.id === cablingDraw.layerId) ?? null
+      : null;
+  // Memoised because the paint effect depends on it, and a fresh array every
+  // render would repaint the canvas on every render.
+  const drawingRun = useMemo(
+    () =>
+      cablingDraw && drawingLayer
+        ? runsOf(drawingLayer.customRuns, cablingDraw.kind)[cablingDraw.index] ?? []
+        : null,
+    [cablingDraw, drawingLayer]
+  );
+
   // A spinning centre image needs the clock too, not just a test pattern.
   const spinning = layers.some((l) => l.logoSpin && l.logo && l.visible);
 
@@ -211,6 +238,8 @@ export default function CanvasStage() {
       runLabels,
       powerLengths,
       powerLabels,
+      overRuns,
+      drawing: cablingDraw && drawingRun ? { layerId: cablingDraw.layerId, kind: cablingDraw.kind, run: drawingRun } : null,
       // What the viewport is actually showing, in canvas pixels.
       viewport: {
         x: -view.x / view.scale,
@@ -237,7 +266,7 @@ export default function CanvasStage() {
       ctx.strokeRect(x, y, marquee.w * view.scale, marquee.h * view.scale);
       ctx.restore();
     }
-  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels, powerLengths, powerLabels, spinning]);
+  }, [canvas, layers, selectedIds, view, size, snapGuides, marquee, effect, frame, logoVersion, runLengths, runLabels, powerLengths, powerLabels, overRuns, cablingDraw, drawingRun, spinning]);
 
   const hitTest = useCallback(
     (point: { x: number; y: number }): Layer | null => {
@@ -274,6 +303,32 @@ export default function CanvasStage() {
     [layers, selectedIds, view.scale]
   );
 
+  /**
+   * Put one cabinet on the chain being drawn.
+   *
+   * Everything that makes tracing forgiving lives in `appendCell`, not here:
+   * a cabinet that does not touch the last one is refused, so dragging fast
+   * across the wall cannot make the chain leap a gap behind the pointer, and
+   * dragging back along the chain retracts it. Ctrl is the deliberate
+   * override, for a chain that really does cross the wall.
+   */
+  const traceTo = useCallback(
+    (cell: [number, number] | null, allowJump: boolean) => {
+      if (!cablingDraw || !drawingLayer || !cell) return;
+      const runs = runsOf(drawingLayer.customRuns, cablingDraw.kind);
+      const current = runs[cablingDraw.index] ?? [];
+      const result = appendCell(drawingLayer, current, cell, {
+        allowJump,
+        taken: takenCells(runs, cablingDraw.index),
+      });
+      if (!result.added) return;
+      updateLayer(drawingLayer.id, {
+        customRuns: withRun(drawingLayer.customRuns, cablingDraw.kind, cablingDraw.index, result.run),
+      });
+    },
+    [cablingDraw, drawingLayer, updateLayer]
+  );
+
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     const point = toCanvas(e.clientX, e.clientY);
@@ -281,6 +336,15 @@ export default function CanvasStage() {
     const wantsPan = e.button === 1 || e.button === 2 || e.altKey || spaceRef.current;
     if (wantsPan) {
       dragRef.current = { kind: 'pan', startX: e.clientX, startY: e.clientY, originX: view.x, originY: view.y };
+      return;
+    }
+
+    // While a chain is being drawn the canvas belongs to it: a press is a
+    // cabinet going on the chain, not a screen being picked up.
+    if (cablingDraw && drawingLayer) {
+      commit();
+      traceTo(cellAtPoint(drawingLayer, point), e.ctrlKey || e.metaKey);
+      dragRef.current = { kind: 'trace' };
       return;
     }
 
@@ -334,6 +398,11 @@ export default function CanvasStage() {
     const point = toCanvas(e.clientX, e.clientY);
     setCursor(point);
     const drag = dragRef.current;
+
+    if (drag.kind === 'trace') {
+      if (drawingLayer) traceTo(cellAtPoint(drawingLayer, point), e.ctrlKey || e.metaKey);
+      return;
+    }
 
     if (drag.kind === 'none') setActiveHandle(resizeTargetAt(point)?.handle ?? null);
 
@@ -476,6 +545,44 @@ export default function CanvasStage() {
       // The nudge listener is on `window`, so without this an arrow key pressed
       // inside an open dialog moved the screens hidden behind it.
       if (isAnySurfaceOpen()) return;
+
+      /*
+       * Drawing a chain takes the arrow keys over. A whole run can be put in
+       * from the keyboard, which is both quicker than tracing for a straight
+       * chain and the only way to do this without a pointer.
+       */
+      if (cablingDraw && drawingLayer) {
+        const runs = runsOf(drawingLayer.customRuns, cablingDraw.kind);
+        const current = runs[cablingDraw.index] ?? [];
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          setCablingDraw(null);
+          return;
+        }
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+          e.preventDefault();
+          if (!current.length) return;
+          commit();
+          updateLayer(drawingLayer.id, {
+            customRuns: withRun(drawingLayer.customRuns, cablingDraw.kind, cablingDraw.index, current.slice(0, -1)),
+          });
+          return;
+        }
+        const from = current[current.length - 1];
+        // With nothing drawn yet an arrow key starts at the feed corner, so
+        // there is always somewhere for the first press to go.
+        const next = from
+          ? stepFrom(drawingLayer, from, e.key)
+          : e.key in { ArrowLeft: 1, ArrowRight: 1, ArrowUp: 1, ArrowDown: 1 }
+            ? ([0, 0] as [number, number])
+            : null;
+        if (!next) return;
+        e.preventDefault();
+        commit();
+        traceTo(next, e.ctrlKey || e.metaKey);
+        return;
+      }
+
       if (!selectedIds.length) return;
       const step = e.shiftKey ? 10 : 1;
       const map: Record<string, [number, number]> = {
@@ -492,7 +599,7 @@ export default function CanvasStage() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [selectedIds, moveLayerBy, commit]);
+  }, [selectedIds, moveLayerBy, commit, cablingDraw, drawingLayer, traceTo, setCablingDraw, updateLayer]);
 
   const zoomPercent = Math.round(view.scale * 100);
 

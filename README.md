@@ -15,6 +15,9 @@ for the full feature review those two drove.
 - Drag screens directly on the canvas; nothing needs typing to move a wall
 - Drag a corner handle to add or remove cabinets, in whole cabinets, with the
   opposite corner held still
+- Draw the cabling by hand — trace a chain across the cabinets and watch it
+  fill against what the port or the breaker allows, with the automatic plan
+  kept beside it
 - Snapping to canvas edges and centre, to other screens' edges and centres, and
   to the cabinet grid — hold <kbd>Ctrl</kbd> to override
 - Marquee multi-select, arrow-key nudge (<kbd>Shift</kbd> for 10 px), undo/redo

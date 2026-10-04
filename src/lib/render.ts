@@ -25,6 +25,10 @@ export interface RenderOptions {
    * need.
    */
   viewport?: Rect | null;
+  /** Chains past what they may carry, per layer, so they draw as warnings. */
+  overRuns?: Map<string, { data: number[]; power: number[] }>;
+  /** The chain being traced right now, drawn ahead of the settled ones. */
+  drawing?: { layerId: string; kind: 'data' | 'power'; run: Array<[number, number]> } | null;
   snapGuides?: { vertical: number[]; horizontal: number[] } | null;
   /** Animated overlay; omit for a still frame. */
   effect?: EffectSettings;
@@ -64,6 +68,12 @@ export interface RenderOptions {
  * Eight hues before repeating, from the app's own accent family. Each carries
  * a dark halo when drawn, so it stays legible on a light cabinet colour.
  */
+/** The chain being traced right now. Nothing else on the canvas is this. */
+export const DRAWING_COLOUR = '#fbbf24';
+
+/** The one ink reserved for a chain carrying more than it may. */
+export const OVER_LIMIT_COLOUR = '#f43f5e';
+
 export const RUN_COLOURS = [
   '#38bdf8', '#fbbf24', '#4ade80', '#f87171',
   '#c084fc', '#22d3ee', '#fb923c', '#a3e635',
@@ -309,25 +319,49 @@ function drawTiles(
  * the centre line, so both overlays can be on at once and still be read —
  * which is the whole point of looking at them together.
  */
+/** What to draw for one kind of run on one screen. */
+export interface RunDrawing {
+  /** Cabinets per chain, when the chains are the generated ones. */
+  length?: number;
+  labels?: string[];
+  /**
+   * Chains given outright, which is what hand-drawn cabling passes. When
+   * present these are drawn as they are, rather than cut from the signal
+   * order — a drawn chain goes where it was drawn.
+   */
+  runs?: Array<Array<[number, number]>>;
+  /** Indices of chains past their limit, drawn so they cannot be missed. */
+  over?: number[];
+  /** The chain being traced right now, drawn ahead of the settled ones. */
+  drawing?: Array<[number, number]> | null;
+}
+
 function drawRuns(
   ctx: CanvasRenderingContext2D,
   layer: Layer,
-  runLength?: number,
-  runLabels?: string[],
+  spec: RunDrawing = {},
   style: { colours: string[]; dashed?: boolean; widthMul?: number; nudge?: number } = {
     colours: RUN_COLOURS,
   }
 ) {
+  const { length: runLength, labels: runLabels, over = [], drawing } = spec;
   const tile = tileSize(layer);
   const rect = layerRect(layer);
-  const order = signalOrder(layer);
-  if (order.length < 2) return;
 
-  // One chain per port. Absent a plan, the whole screen is one run — which is
-  // the old behaviour, and correct for a screen small enough to need one port.
-  const perRun = Math.max(1, Math.floor(runLength && runLength > 0 ? runLength : order.length));
-  const runs: Array<Array<[number, number]>> = [];
-  for (let i = 0; i < order.length; i += perRun) runs.push(order.slice(i, i + perRun));
+  let runs: Array<Array<[number, number]>>;
+  if (spec.runs) {
+    runs = spec.runs.filter((run) => run.length > 0);
+  } else {
+    const order = signalOrder(layer);
+    if (order.length < 2) return;
+    // One chain per port. Absent a plan, the whole screen is one run — which
+    // is the old behaviour, and correct for a screen small enough to need one
+    // port.
+    const perRun = Math.max(1, Math.floor(runLength && runLength > 0 ? runLength : order.length));
+    runs = [];
+    for (let i = 0; i < order.length; i += perRun) runs.push(order.slice(i, i + perRun));
+  }
+  if (!runs.length && !drawing?.length) return;
 
   const centre = ([col, row]: [number, number]) => ({
     x: rect.x + col * tile.w + tile.w / 2,
@@ -347,10 +381,16 @@ function drawRuns(
   // A single run keeps the old ink, which reads as part of the screen rather
   // than as one arbitrary colour out of eight.
   const single = runs.length < 2;
+  const overSet = new Set(over);
   const inkFor = (i: number) =>
-    single && style.colours === RUN_COLOURS
-      ? contrastInk(layer.color)
-      : style.colours[i % style.colours.length];
+    // A chain past its limit is drawn in warning ink whatever colour its
+    // place in the rota would have given it. Nothing else on the canvas is
+    // this colour, so an over-long chain is the one thing that stands out.
+    overSet.has(i)
+      ? OVER_LIMIT_COLOUR
+      : single && style.colours === RUN_COLOURS
+        ? contrastInk(layer.color)
+        : style.colours[i % style.colours.length];
 
   runs.forEach((run, runIndex) => {
     const colour = inkFor(runIndex);
@@ -414,6 +454,52 @@ function drawRuns(
     const below = first.y + dot + tile.h * 0.2;
     drawRunLabel(ctx, label, first.x, above - tile.h * 0.2 < rect.y ? below : above, tile, colour, rect);
   });
+
+  /*
+   * The chain being traced, over the top of the settled ones.
+   *
+   * Drawn brighter and thicker than anything else, with a ring on the cabinet
+   * the next step will come from: while tracing, the only question that
+   * matters is where the chain is now, and it has to be findable on a wall
+   * covered in other chains.
+   */
+  if (drawing?.length) {
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = 'rgba(0,0,0,0.65)';
+    ctx.lineWidth = width * 3;
+    ctx.beginPath();
+    drawing.forEach((cell, i) => {
+      const p = centre(cell);
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
+    ctx.strokeStyle = DRAWING_COLOUR;
+    ctx.fillStyle = DRAWING_COLOUR;
+    ctx.lineWidth = width * 1.6;
+    ctx.beginPath();
+    drawing.forEach((cell, i) => {
+      const p = centre(cell);
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
+    const start = centre(drawing[0]);
+    ctx.beginPath();
+    ctx.arc(start.x, start.y, dot * 1.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // The live end: a ring, not a blob, so the cabinet under it still reads.
+    const head2 = centre(drawing[drawing.length - 1]);
+    ctx.lineWidth = width * 1.4;
+    ctx.beginPath();
+    ctx.arc(head2.x, head2.y, Math.min(tile.w, tile.h) * 0.32, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
   ctx.restore();
 }
 
@@ -460,7 +546,7 @@ function drawRunLabel(
 
 /** Logo centred on the screen, sized against its shorter side. */
 /** One turn every this many seconds when spin is on — a drift, not a spin. */
-const LOGO_SECONDS_PER_TURN = 12;
+export const LOGO_SECONDS_PER_TURN = 12;
 
 function drawLogo(
   ctx: CanvasRenderingContext2D,
@@ -599,8 +685,38 @@ export function renderProject(
     powerLengths,
     powerLabels,
     viewport,
+    overRuns,
+    drawing,
   } = options;
   const hairline = 1 / scale;
+
+  /*
+   * A screen reads from whichever plan it is switched to. The drawn chains
+   * are passed outright; the generated ones are still described by a length
+   * and cut from the signal order, which is what they have always been.
+   */
+  const tracing = (layer: Layer, kind: 'data' | 'power') =>
+    drawing && drawing.layerId === layer.id && drawing.kind === kind ? drawing.run : null;
+
+  const dataDrawing = (layer: Layer): RunDrawing =>
+    layer.cablingPlan === 'custom'
+      ? {
+          runs: layer.customRuns?.data ?? [],
+          labels: runLabels?.get(layer.id),
+          over: overRuns?.get(layer.id)?.data,
+          drawing: tracing(layer, 'data'),
+        }
+      : { length: runLengths?.get(layer.id), labels: runLabels?.get(layer.id), drawing: tracing(layer, 'data') };
+
+  const powerDrawing = (layer: Layer): RunDrawing =>
+    layer.cablingPlan === 'custom'
+      ? {
+          runs: layer.customRuns?.power ?? [],
+          labels: powerLabels?.get(layer.id),
+          over: overRuns?.get(layer.id)?.power,
+          drawing: tracing(layer, 'power'),
+        }
+      : { length: powerLengths?.get(layer.id), labels: powerLabels?.get(layer.id), drawing: tracing(layer, 'power') };
 
   ctx.fillStyle = canvas.background;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -608,9 +724,9 @@ export function renderProject(
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
     drawTiles(ctx, layer, scale, viewport);
-    if (layer.showSignalFlow) drawRuns(ctx, layer, runLengths?.get(layer.id), runLabels?.get(layer.id));
+    if (layer.showSignalFlow) drawRuns(ctx, layer, dataDrawing(layer));
     if (layer.showPowerRuns) {
-      drawRuns(ctx, layer, powerLengths?.get(layer.id), powerLabels?.get(layer.id), {
+      drawRuns(ctx, layer, powerDrawing(layer), {
         colours: POWER_COLOURS,
         dashed: true,
         widthMul: 1.4,
@@ -675,9 +791,9 @@ export function renderLayerAlone(
   }
   ctx.translate(-rect.x, -rect.y);
   drawTiles(ctx, layer);
-  if (layer.showSignalFlow) drawRuns(ctx, layer, runLength, runLabels);
+  if (layer.showSignalFlow) drawRuns(ctx, layer, { length: runLength, labels: runLabels });
   if (layer.showPowerRuns) {
-    drawRuns(ctx, layer, powerLength, powerLabels, {
+    drawRuns(ctx, layer, { length: powerLength, labels: powerLabels }, {
       colours: POWER_COLOURS,
       dashed: true,
       widthMul: 1.4,

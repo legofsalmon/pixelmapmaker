@@ -230,6 +230,75 @@ const RENDERERS: Record<
   'screen-lines': drawScreenLines,
 };
 
+/**
+ * How long one loop of the pattern takes, in seconds.
+ *
+ * Every pattern here is driven by `phase`, which is `(t/1000) * speed`
+ * wrapped to 0..1, and each one is back to the picture it started from when
+ * that wraps. So a loop is `1 / speed` seconds whatever the pattern — the
+ * sweep has crossed once, the sine has come round, the bands have stepped by
+ * exactly one band.
+ *
+ * Null for a still pattern, which has no loop to wait for.
+ */
+export function patternLoopSeconds(settings: EffectSettings): number | null {
+  if (!isAnimated(settings)) return null;
+  if (!(settings.speed > 0)) return null;
+  return 1 / settings.speed;
+}
+
+/**
+ * The shortest recording that ends exactly where it began.
+ *
+ * Recording past one loop adds file for nothing: the frames repeat. The
+ * catch is the centre image, which turns on its own clock — a recording that
+ * loops the pattern but cuts the logo mid-turn jumps when it repeats. So
+ * where a logo is turning, this looks for the shortest run of whole pattern
+ * loops that is also a whole number of turns.
+ *
+ * It does not always exist inside a sensible length, and where it does it can
+ * still be absurd: 0.35 loops a second against a twelve-second turn agree
+ * after twenty-one loops, which is a minute of 4K nobody asked for to keep a
+ * joke in step. So the search is capped. Past the cap the pattern wins and
+ * `exact` says the centre image will jump, which is the right way round —
+ * the pattern is the point of the recording and the turning image is not.
+ */
+export function loopSeconds(
+  settings: EffectSettings,
+  { spinning = false, turnSeconds = 12, cap = 30 } = {}
+): { seconds: number | null; exact: boolean; loops: number; why: string } {
+  const loop = patternLoopSeconds(settings);
+  if (loop == null) {
+    return { seconds: null, exact: true, loops: 0, why: 'a still pattern has no loop' };
+  }
+  const round1 = (n: number) => Math.round(n * 10) / 10;
+  if (!spinning) {
+    return { seconds: loop, exact: true, loops: 1, why: `one loop of ${settings.kind} at ${settings.speed}/s` };
+  }
+
+  for (let loops = 1; loops * loop <= cap; loops++) {
+    const total = loops * loop;
+    const turns = total / turnSeconds;
+    if (Math.abs(turns - Math.round(turns)) < 1e-6 && Math.round(turns) >= 1) {
+      return {
+        seconds: total,
+        exact: true,
+        loops,
+        why: `${loops} loop${loops === 1 ? '' : 's'} of the pattern and ${Math.round(turns)} turn${
+          Math.round(turns) === 1 ? '' : 's'
+        } of the centre image`,
+      };
+    }
+  }
+
+  return {
+    seconds: loop,
+    exact: false,
+    loops: 1,
+    why: `one loop of the pattern — the centre image takes ${turnSeconds}s a turn and will not come round inside ${round1(cap)}s`,
+  };
+}
+
 /** Draw the current frame of `settings` over `area` at time `timeMs`. */
 export function drawEffect(
   ctx: CanvasRenderingContext2D,

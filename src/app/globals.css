@@ -1109,3 +1109,74 @@ a svg,
   align-items: flex-start;
 }
 .crash h1 { font-size: 20px; }
+
+/* ---------- cabling drawn by hand ---------- */
+
+/*
+ * A two-way switch between the data chains and the power ones. A radio group
+ * rather than two buttons, because picking one deselects the other and that
+ * is what a radio means — the tab-stop behaviour follows for free.
+ */
+.seg {
+  display: flex;
+  gap: var(--s0);
+  margin: var(--s3) 0;
+  padding: var(--s0);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.seg button {
+  flex: 1;
+  padding: var(--s1) var(--s2);
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  cursor: pointer;
+}
+.seg button.is-on { background: var(--accent-soft); color: var(--ink); }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.runlist { list-style: none; margin: var(--s3) 0; padding: 0; display: flex; flex-direction: column; gap: var(--s2); }
+
+.runlist__item {
+  padding: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+/* The chain being drawn, and the one carrying too much, each get their own
+   edge — they are the two things worth finding in a list of twenty. */
+.runlist__item.is-editing { border-color: var(--warn); }
+.runlist__item.is-over { border-color: var(--danger); }
+
+.runlist__head { display: flex; justify-content: space-between; gap: var(--s2); align-items: baseline; }
+.runlist__count { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* How full the chain is. Decoration only: the same figure is in the text
+   above it, so nothing is carried by the bar alone. */
+.runlist__bar {
+  height: 4px;
+  margin: var(--s1) 0;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.runlist__bar span { display: block; height: 100%; background: var(--accent); }
+.is-over .runlist__bar span { background: var(--danger); }
+
+.runlist__why { margin: 0; color: var(--ink-2); font-size: 0.85em; }
+.runlist__actions { display: flex; gap: var(--s1); margin-top: var(--s2); }
+.runlist__actions button {
+  padding: var(--s1) var(--s2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.runlist__actions button:hover:not(:disabled) { background: var(--accent-soft); }
+.runlist__actions button:disabled { opacity: 0.45; cursor: default; }
+
+.note--live { color: var(--warn); }
