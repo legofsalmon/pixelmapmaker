@@ -303,6 +303,35 @@ export function signalIndex(layer: Layer, col: number, row: number) {
   return major * minor + n;
 }
 
+/**
+ * `signalOrder`, kept between calls.
+ *
+ * The ordering depends on four fields and nothing else, so on a wall that is
+ * not being re-shaped it is the same array every time — and building it on a
+ * 200 x 200 wall allocates forty thousand pairs, twice a frame while both
+ * overlays are drawn. The callers only ever slice what comes back, so one
+ * copy can be shared.
+ *
+ * Bounded to a handful of entries: a project has a few screens, and each one
+ * has one ordering.
+ */
+const ORDER_CACHE = new Map<string, Array<[number, number]>>();
+const ORDER_CACHE_LIMIT = 12;
+
+export function signalOrderCached(layer: Layer): Array<[number, number]> {
+  const key = `${layer.cols}|${layer.rows}|${layer.signalStart}|${layer.signalPath}`;
+  const held = ORDER_CACHE.get(key);
+  if (held) return held;
+  const order = signalOrder(layer);
+  ORDER_CACHE.set(key, order);
+  // Oldest out first; insertion order is what Map iterates.
+  if (ORDER_CACHE.size > ORDER_CACHE_LIMIT) {
+    const oldest = ORDER_CACHE.keys().next().value;
+    if (oldest !== undefined) ORDER_CACHE.delete(oldest);
+  }
+  return order;
+}
+
 export function signalOrder(layer: Layer): Array<[number, number]> {
   const { cols, rows, signalStart, signalPath } = layer;
   const vertical = signalPath.startsWith('vertical');

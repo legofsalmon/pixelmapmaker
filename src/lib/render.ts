@@ -6,7 +6,7 @@ import {
   handlePoint,
   layerRect,
   signalIndex,
-  signalOrder,
+  signalOrderCached,
   tileSize,
   type Rect,
 } from './geometry';
@@ -336,13 +336,41 @@ export interface RunDrawing {
   drawing?: Array<[number, number]> | null;
 }
 
+/** Does a run come anywhere near the window? */
+export function runIntersects(
+  run: Array<[number, number]>,
+  rect: Rect,
+  tile: { w: number; h: number },
+  view: Rect
+) {
+  let minCol = Infinity;
+  let maxCol = -Infinity;
+  let minRow = Infinity;
+  let maxRow = -Infinity;
+  for (const [col, row] of run) {
+    if (col < minCol) minCol = col;
+    if (col > maxCol) maxCol = col;
+    if (row < minRow) minRow = row;
+    if (row > maxRow) maxRow = row;
+  }
+  // The run's own box, grown by a cabinet so a line leaving the window still
+  // enters it from the right place.
+  const x = rect.x + (minCol - 1) * tile.w;
+  const y = rect.y + (minRow - 1) * tile.h;
+  const w = (maxCol - minCol + 3) * tile.w;
+  const h = (maxRow - minRow + 3) * tile.h;
+  return x < view.x + view.width && x + w > view.x && y < view.y + view.height && y + h > view.y;
+}
+
 function drawRuns(
   ctx: CanvasRenderingContext2D,
   layer: Layer,
   spec: RunDrawing = {},
   style: { colours: string[]; dashed?: boolean; widthMul?: number; nudge?: number } = {
     colours: RUN_COLOURS,
-  }
+  },
+  scale = 1,
+  viewport?: Rect | null
 ) {
   const { length: runLength, labels: runLabels, over = [], drawing } = spec;
   const tile = tileSize(layer);
@@ -352,7 +380,7 @@ function drawRuns(
   if (spec.runs) {
     runs = spec.runs.filter((run) => run.length > 0);
   } else {
-    const order = signalOrder(layer);
+    const order = signalOrderCached(layer);
     if (order.length < 2) return;
     // One chain per port. Absent a plan, the whole screen is one run — which
     // is the old behaviour, and correct for a screen small enough to need one
@@ -392,7 +420,20 @@ function drawRuns(
         ? contrastInk(layer.color)
         : style.colours[i % style.colours.length];
 
+  /*
+   * A chain outside the window is skipped whole.
+   *
+   * On a wall far bigger than the canvas most chains are nowhere near the
+   * view, and each one costs a polyline through every cabinet on it. The
+   * chains that do cross the window are drawn entire — clipping a polyline
+   * properly is more work than letting the canvas discard the ends.
+   */
+  const onScreen = viewport
+    ? runs.map((run) => runIntersects(run, rect, tile, viewport))
+    : runs.map(() => true);
+
   runs.forEach((run, runIndex) => {
+    if (!onScreen[runIndex]) return;
     const colour = inkFor(runIndex);
 
     // A dark halo under the line, so a run colour stays readable whatever the
@@ -445,9 +486,22 @@ function drawRuns(
       ctx.fill();
     }
 
-    // Which output this chain belongs to, at the cabinet it starts from.
+    /*
+     * Which output this chain belongs to, at the cabinet it starts from.
+     *
+     * Only when it can actually be read. Each pill costs a font parse, a
+     * `measureText` and a rounded rectangle, and on a 200 x 200 wall there
+     * are two and a half thousand of them — a quarter of the frame spent
+     * drawing text a pixel high. The test is the on-screen size, as it is
+     * for the cabinet numbers, so the exports keep every label whatever the
+     * viewport was zoomed to.
+     */
     const label = runLabels?.[runIndex];
     if (!label) return;
+    // Only in the viewport. The exporters pass no window and draw at scale 1,
+    // where every label belongs on the drawing that goes to site however
+    // small the cabinets happen to be.
+    if (viewport && labelSize(tile, label) * scale < MIN_LEGIBLE_PX) return;
     // Above the start dot, unless that would hang the pill off the top of the
     // screen — a run starting in the top row puts it below instead.
     const above = first.y - dot - tile.h * 0.2;
@@ -504,6 +558,18 @@ function drawRuns(
 }
 
 /** A pill carrying a run's port label, kept inside the tile it belongs to. */
+/**
+ * How big a port label is drawn, in canvas pixels.
+ *
+ * Its own function so the legibility test and the drawing cannot disagree
+ * about the answer: skipping a label the drawing would have made readable,
+ * or drawing one the test thought too small, are both worse than either
+ * behaviour on its own.
+ */
+function labelSize(tile: { w: number; h: number }, text: string) {
+  return Math.max(6, Math.min(tile.h * 0.22, (tile.w * 0.62) / Math.max(4, text.length * 0.5)));
+}
+
 function drawRunLabel(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -513,7 +579,7 @@ function drawRunLabel(
   colour: string,
   bounds: { x: number; y: number; width: number; height: number }
 ) {
-  const fontSize = Math.max(6, Math.min(tile.h * 0.22, tile.w * 0.62 / Math.max(4, text.length * 0.5)));
+  const fontSize = labelSize(tile, text);
   ctx.save();
   ctx.font = `600 ${fontSize}px ui-sans-serif, system-ui, sans-serif`;
   ctx.textAlign = 'center';
@@ -724,14 +790,16 @@ export function renderProject(
   const visible = layers.filter((l) => l.visible);
   for (const layer of visible) {
     drawTiles(ctx, layer, scale, viewport);
-    if (layer.showSignalFlow) drawRuns(ctx, layer, dataDrawing(layer));
+    if (layer.showSignalFlow) drawRuns(ctx, layer, dataDrawing(layer), undefined, scale, viewport);
     if (layer.showPowerRuns) {
-      drawRuns(ctx, layer, powerDrawing(layer), {
-        colours: POWER_COLOURS,
-        dashed: true,
-        widthMul: 1.4,
-        nudge: 0.14,
-      });
+      drawRuns(
+        ctx,
+        layer,
+        powerDrawing(layer),
+        { colours: POWER_COLOURS, dashed: true, widthMul: 1.4, nudge: 0.14 },
+        scale,
+        viewport
+      );
     }
     const logo = logos?.get(layer.id);
     if (logo) drawLogo(ctx, layer, logo, timeMs);

@@ -5,7 +5,21 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
-_Nothing yet._
+- **The signal overlay costs what it shows, not what the wall holds.**
+  Switching the run overlay on took a 40,000-cabinet wall from 49.7 frames a
+  second to 6.6, blocking the main thread 79% of the time — which is why it
+  had never shown up: it is off by default, so none of the earlier profiling
+  touched it. A quarter of that frame turned out to be port labels. There is
+  one per chain, so a wall that size draws two and a half thousand of them
+  every frame, each costing a font parse, a `measureText` and a rounded
+  rectangle, at a size the zoom made a pixel high. They now stand down when
+  they are too small to read, as the cabinet numbers already did, and come
+  back on the way in. Chains nowhere near the window are skipped whole, and
+  the signal ordering — forty thousand pairs, rebuilt twice a frame — is
+  worked out once and kept. The wall now runs at 36.1 frames a second with
+  the overlay on, blocking 1%, and the cost no longer grows with the wall.
+  Exports are untouched and checked: they pass no window, so they keep every
+  chain and every label however the viewport happened to be zoomed.
 
 ## 0.6.0
 
