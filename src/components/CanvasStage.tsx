@@ -17,6 +17,7 @@ import {
 } from '@/lib/geometry';
 import { appendCell, runsOf, stepFrom, takenCells, withRun } from '@/lib/customRuns';
 import { renderProject } from '@/lib/render';
+import { CHROME } from '@/lib/chrome';
 import { useRunOverlays } from '@/state/useRunOverlays';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 import { isAnimated } from '@/lib/effects';
@@ -212,7 +213,7 @@ export default function CanvasStage() {
     ctx.clearRect(0, 0, size.width, size.height);
 
     // Workspace backdrop, then the project in canvas space.
-    ctx.fillStyle = '#05070b';
+    ctx.fillStyle = CHROME.canvas;
     ctx.fillRect(0, 0, size.width, size.height);
 
     ctx.save();
@@ -257,8 +258,8 @@ export default function CanvasStage() {
 
     if (marquee) {
       ctx.save();
-      ctx.strokeStyle = '#38bdf8';
-      ctx.fillStyle = 'rgba(56,189,248,0.12)';
+      ctx.strokeStyle = CHROME.accent;
+      ctx.fillStyle = CHROME.accentSoft;
       ctx.lineWidth = 1;
       const x = view.x + marquee.x * view.scale;
       const y = view.y + marquee.y * view.scale;

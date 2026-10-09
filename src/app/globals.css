@@ -1,30 +1,61 @@
-:root {
-  /* Surfaces — a deliberately stepped ramp, so grouping by background works
+:root,
+[data-theme],
+[data-density] {
+  /*
+   * Colours come from the shared design system (src/ds/tokens.css, vendored by
+   * `npm run ds:sync`). These are the app's own names pointed at its roles.
+   * They are declared on every element that can set a theme, not on :root
+   * alone: a custom property is computed where it is declared, so an alias on
+   * :root only would keep the root's theme inside a [data-theme] island.
+   */
+
+  /* Surfaces: a deliberately stepped ramp, so grouping by background works
      without needing a border on top of every fill. */
-  --bg: #05070b;
-  --panel: #101620;
-  --panel-2: #1a2230;
-  --panel-3: #242e3e;
+  --bg: var(--ds-surface-ground);
+  --panel: var(--ds-surface-panel);
+  --panel-2: var(--ds-surface-inset);
+  --panel-3: var(--ds-surface-raised);
+  --panel-3-hover: var(--ds-surface-raised-hover);
+  /* Behind the map: the workspace the project canvas sits on. */
+  --canvas: var(--ds-surface-canvas);
 
   /* Three text levels, and no more. Two cannot rank a dense screen; four stops
-     being a ranking. All three clear 4.5:1 on every surface above. */
-  --ink: #e9eef7;
-  --ink-2: #aab6c8;
-  --ink-3: #8d9bb0;
+     being a ranking. All three clear 4.5:1 on every surface above, which the
+     design system's own check holds. */
+  --ink: var(--ds-ink-primary);
+  --ink-2: var(--ds-ink-secondary);
+  --ink-3: var(--ds-ink-tertiary);
 
   /* Two border tokens on purpose. WCAG 1.4.11 exempts decorative dividers but
      not the boundary that identifies a control, so those cannot share a value:
-     --line is 1.33:1 and fine for a rule, --line-control is 3.18:1 at worst. */
-  --line: #252e3c;
-  --line-control: #6b7b94;
+     --line is for a rule, --line-control clears 3:1 against the surfaces. */
+  --line: var(--ds-line-subtle);
+  --line-control: var(--ds-line-control);
 
-  --accent: #38bdf8;
-  --accent-ink: #04222e;
-  --accent-soft: #14384d;
-  --warn: #fbbf24;
-  --danger: #f87171;
-  --ok: #4ade80;
+  /* One accent, one meaning: the selection (UX.md). --accent-ink is the text
+     that sits on an accent fill. */
+  --accent: var(--ds-accent);
+  --accent-ink: var(--ds-accent-on);
+  --accent-soft: var(--ds-accent-soft);
 
+  /* Status. Each is mostly used as text or a border, so each takes the ink
+     role, with the soft fill behind a verdict or a banner. */
+  --warn: var(--ds-warn-ink);
+  --warn-soft: var(--ds-warn-soft);
+  --danger: var(--ds-bad-ink);
+  --danger-soft: var(--ds-bad-soft);
+  --ok: var(--ds-ok-ink);
+  --ok-soft: var(--ds-ok-soft);
+
+  /* Washes over whatever is behind: hover on a bare button, a menu item. */
+  --wash: var(--ds-wash-hover);
+  --wash-strong: var(--ds-wash-pressed);
+  --veil: var(--ds-veil);
+  --shadow-menu: var(--ds-elevation-menu);
+  --shadow-modal: var(--ds-elevation-modal);
+}
+
+:root {
   /*
    * 4pt spacing scale for layout. Off-grid values are bugs, not taste.
    * --s0 is the deliberate half-step for optical alignment beside a 1px
@@ -98,9 +129,9 @@ a { color: var(--accent); }
   height: 26px;
   border-radius: 6px;
   background:
-    linear-gradient(135deg, #38bdf8 0 50%, #1b6ef3 50% 100%),
-    repeating-linear-gradient(90deg, #0000 0 4px, #0003 4px 5px);
-  box-shadow: inset 0 0 0 1px #ffffff22;
+    linear-gradient(135deg, #38bdf8 0 50%, #1b6ef3 50% 100%), /* not a token: brand mark */
+    repeating-linear-gradient(90deg, #0000 0 4px, #0003 4px 5px); /* not a token: brand mark */
+  box-shadow: inset 0 0 0 1px #ffffff22; /* not a token: the brand mark */
 }
 
 .toolbar__name {
@@ -178,7 +209,7 @@ a { color: var(--accent); }
   background: var(--panel-3);
   border: 1px solid var(--line-control);
   border-radius: var(--radius);
-  box-shadow: 0 16px 40px #000000b0;
+  box-shadow: var(--shadow-menu);
   padding: var(--s1);
 }
 .menu__list--start, .popover { left: 0; }
@@ -199,7 +230,7 @@ a { color: var(--accent); }
   padding: var(--s2);
   text-align: left;
 }
-.menu__item:hover:not(:disabled) { background: #ffffff14; }
+.menu__item:hover:not(:disabled) { background: var(--wash); }
 .menu__item:disabled { opacity: 0.4; cursor: not-allowed; }
 .menu__item em { color: var(--ink-3); font-style: normal; font-size: 11px; }
 .menu__item--danger { color: var(--danger); }
@@ -277,7 +308,7 @@ a { color: var(--accent); }
   border-color: var(--line-control);
   font-weight: 500;
 }
-.btn--secondary:hover { background: #2b3648; filter: none; }
+.btn--secondary:hover { background: var(--panel-3-hover); filter: none; }
 
 /* Tier 3 — occasional. No fill at all, so it cannot compete. */
 .btn--quiet {
@@ -286,11 +317,11 @@ a { color: var(--accent); }
   border-color: transparent;
   font-weight: 500;
 }
-.btn--quiet:hover { background: #ffffff12; color: var(--ink); filter: none; }
+.btn--quiet:hover { background: var(--wash); color: var(--ink); filter: none; }
 
 /* Destructive actions never borrow the accent. */
 .btn--danger { background: none; color: var(--danger); border-color: var(--line-control); }
-.btn--danger:hover { background: #f8717118; filter: none; }
+.btn--danger:hover { background: var(--danger-soft); filter: none; }
 
 .btn-row { display: flex; gap: var(--s2); flex-wrap: wrap; }
 
@@ -367,8 +398,9 @@ a { color: var(--accent); }
 .cab__meta { display: flex; flex-wrap: wrap; gap: var(--s2); color: var(--ink-2); font-size: 11px; }
 
 .pill {
-  background: #1e3a5f;
-  color: #bfe3ff;
+  /* A label, not the selection, so it stays neutral: the accent is spoken for. */
+  background: var(--panel-3);
+  color: var(--ink);
   border-radius: 999px;
   padding: 0 var(--s2);
   font-variant-numeric: tabular-nums;
@@ -436,7 +468,7 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.layer__actions button:hover { background: #ffffff14; color: var(--ink); }
+.layer__actions button:hover { background: var(--wash); color: var(--ink); }
 /*
  * These are toggles with a fixed name, so the pressed state has to be visible
  * rather than implied by the icon swap alone. Same treatment as .btn.is-on:
@@ -486,7 +518,7 @@ a { color: var(--accent); }
   display: flex;
   align-items: center;
   gap: var(--s2);
-  background: #0e1219dd;
+  background: color-mix(in srgb, var(--panel) 87%, transparent);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: var(--s1) var(--s3);
@@ -508,7 +540,7 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.stage__hud button:hover { background: #ffffff18; }
+.stage__hud button:hover { background: var(--wash-strong); }
 .stage__zoom, .stage__coords { color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .stage__coords { border-left: 1px solid var(--line); padding-left: var(--s2); }
 
@@ -534,7 +566,7 @@ a { color: var(--accent); }
 .modal {
   position: fixed;
   inset: 0;
-  background: #000000b0;
+  background: var(--veil);
   display: grid;
   place-items: center;
   padding: var(--s5);
@@ -658,7 +690,7 @@ a { color: var(--accent); }
 .swatch {
   width: 22px;
   height: 22px;
-  border: 1px solid #ffffff2a;
+  border: 1px solid var(--wash-strong);
   border-radius: 5px;
   cursor: pointer;
   padding: 0;
@@ -753,9 +785,9 @@ a { color: var(--accent); }
   border-radius: var(--radius);
   border: 1px solid;
 }
-.verdict--ok { background: #0d2a1a; border-color: #1f6d43; color: #9ff0c4; }
-.verdict--warn { background: #2b2410; border-color: #7a6320; color: #f2d99a; }
-.verdict--bad { background: #2c1113; border-color: #7d2a30; color: #ffb4b8; }
+.verdict--ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ink); }
+.verdict--warn { background: var(--warn-soft); border-color: var(--warn); color: var(--ink); }
+.verdict--bad { background: var(--danger-soft); border-color: var(--danger); color: var(--ink); }
 
 /* ---------- docked panel (test patterns) ---------- */
 
@@ -780,7 +812,7 @@ a { color: var(--accent); }
 .modal__panel--docked {
   max-width: 430px;
   max-height: calc(100dvh - 24px);
-  box-shadow: 0 18px 50px #000000aa;
+  box-shadow: var(--shadow-modal);
 }
 .modal__panel--docked .opt-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
 
@@ -814,7 +846,7 @@ a svg,
   min-width: 28px;
   min-height: 28px;
 }
-.btn--icon:hover { background: #ffffff14; color: var(--ink); }
+.btn--icon:hover { background: var(--wash); color: var(--ink); }
 
 /* The heading is the dialog's focus entry point, so it must not show a caret
    outline when focused programmatically — the ring is enough. */
@@ -1050,7 +1082,8 @@ a svg,
   width: 104px;
   height: 58px;
   border-radius: 4px;
-  background: var(--bg);
+  /* The same ground EffectPicker paints its thumbnails on. */
+  background: var(--canvas);
 }
 /* "None" draws nothing, which is exactly what it does to the canvas. A dotted
    edge keeps an empty tile from reading as a thumbnail that failed to load. */
@@ -1092,8 +1125,8 @@ a svg,
 }
 .banner svg { flex: none; }
 .banner--danger {
-  background: #2a1416;
-  color: #fecaca;
+  background: var(--danger-soft);
+  color: var(--ink);
   border-bottom-color: var(--danger);
 }
 

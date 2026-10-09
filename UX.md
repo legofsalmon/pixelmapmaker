@@ -96,6 +96,16 @@ every morning.
 Hierarchy is a *ranking*. Rank on size, weight, colour and space **before**
 reaching for a border, a box or an icon. Chrome is the last resort.
 
+**Colours come from the shared design system** (the private
+`legofsalmon/design-system` repo, vendored into `src/ds/` by `npm run ds:sync`).
+`globals.css` keeps its own names (`--panel`, `--ink-2`, `--accent`) and points
+each at a role; the canvases read the same roles through `src/lib/chrome.ts`.
+Its grammar is this app's: neutral at rest, cyan for the selection, amber for
+attention, red for stop. Change a colour there, not here;
+`scripts/test-design-system.mjs` fails on a literal colour in `globals.css` or a
+hand edit under `src/ds/`. The map's own colours (cabinets, run and power
+colours, patterns) are content and stay in `render.ts` and `palettes.ts`.
+
 - **Three text levels, no more.** Primary, secondary, tertiary — as tokens.
   Two is too few to rank a dense screen; four stops being a ranking.
 - **Weight and colour carry the ranking, not size.** Vertical space is the
@@ -147,7 +157,7 @@ is not a focus indicator.
 accessible name to carry state means a user cannot query state without
 activating the control.
 
-**Contrast.** Text tokens here already pass comfortably. The trap is
+**Contrast.** The text roles pass AA on every surface, which the design system's own check holds. The trap is
 `1.4.11 Non-text Contrast`: control boundaries need 3:1, decorative dividers do
 not. Use separate tokens so one low-contrast value cannot silently drop every
 bordered control below the line.
