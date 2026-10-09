@@ -5,6 +5,15 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+- **The colours are the studio's shared design system's.** The chrome moves
+  from cool navy greys to the neutral greys every app now shares: the ground
+  lifts from `#05070b` to `#141415`, panels and text go neutral, and the
+  selection cyan is `#39c2ff` where it was `#38bdf8`. The pitch pill in the
+  cabinet library goes neutral too, since blue there was borrowing the
+  selection's colour. The verdicts and the error banner keep their meaning on
+  the shared soft fills. Still dark only; corners, type and the map's own
+  colours are unchanged.
+
 - **The signal overlay costs what it shows, not what the wall holds.**
   Switching the run overlay on took a 40,000-cabinet wall from 49.7 frames a
   second to 6.6, blocking the main thread 79% of the time — which is why it

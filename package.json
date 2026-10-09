@@ -10,6 +10,8 @@
     "lint": "eslint .",
     "test": "node scripts/test.mjs",
     "typecheck": "tsc --noEmit",
+    "ds:sync": "node ../design-system/scripts/sync.mjs --to src/ds --files tokens.css,tokens.js,tokens.d.ts",
+    "ds:check": "node ../design-system/scripts/sync.mjs --check src/ds",
     "scrape": "node scripts/scraper/index.mjs",
     "release": "node scripts/release.mjs"
   },

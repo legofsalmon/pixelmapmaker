@@ -11,6 +11,7 @@ import {
   type Rect,
 } from './geometry';
 import { contrastInk, shade } from './palettes';
+import { CHROME } from './chrome';
 import { drawEffect, type EffectSettings } from './effects';
 
 export interface RenderOptions {
@@ -698,7 +699,7 @@ function drawSelection(ctx: CanvasRenderingContext2D, layer: Layer, scale: numbe
   const hairline = 1 / scale;
   const rect = layerRect(layer);
   ctx.save();
-  ctx.strokeStyle = '#38bdf8';
+  ctx.strokeStyle = CHROME.accent;
   ctx.lineWidth = hairline * 2;
   ctx.setLineDash([]);
   ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
@@ -714,8 +715,8 @@ function drawSelection(ctx: CanvasRenderingContext2D, layer: Layer, scale: numbe
    */
   if (canResize(layer, scale)) {
     const size = hairline * 8;
-    ctx.fillStyle = '#38bdf8';
-    ctx.strokeStyle = '#0b1220';
+    ctx.fillStyle = CHROME.accent;
+    ctx.strokeStyle = CHROME.accentOn;
     ctx.lineWidth = hairline;
     for (const handle of HANDLES) {
       const at = handlePoint(rect, handle);

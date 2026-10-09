@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { drawEffect, EFFECT_LABELS, type EffectKind, type EffectSettings } from '@/lib/effects';
+import { CHROME } from '@/lib/chrome';
 
 /** Thumbnail size in CSS pixels. Wide enough to read a pattern, small enough
  *  that all eight fit the docked panel without pushing the canvas away. */
@@ -40,7 +41,7 @@ function Thumb({ kind, settings }: { kind: EffectKind; settings: EffectSettings 
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#05070b';
+    ctx.fillStyle = CHROME.canvas;
     ctx.fillRect(0, 0, W, H);
     if (kind === 'none') return;
     // Full opacity and a fat line: at 104px the panel's own settings would
