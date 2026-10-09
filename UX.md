@@ -212,6 +212,32 @@ the user to stop reading messages.
 5. Spacing on the grid, text in one of three levels, accent not borrowed?
 6. If it animates, does it have a job and does it respect reduced motion?
 7. If it can fail, does the message name what happened and what to do next?
+8. Has it been through the shared design system's questions (below), and
+   does the PR's **Design** section say what behaviour it designs for?
+
+### The shared design system
+
+This brief sits under the shared design system in
+[legofsalmon/design-system](https://github.com/legofsalmon/design-system),
+checked out beside this repository as `../design-system`, which borrowed
+several rules from this page. Before a change a person will see or touch,
+read its `docs/designing.md` and answer its questions, then the pages it points
+to: `principles.md`, `behavioural.md`, `navigation.md`, `states.md`,
+`components.md` and `motion.md`.
+
+- **Write the reasoning down.** A PR that changes what a person sees or
+  touches has a short **Design** section: the job it serves, the behaviour it
+  designs for with the effect named (Default Effect, Loss Aversion…), and any
+  departure from the system and why.
+- **Send back what you learn.** A gap, a departure that was right, or
+  something people did that neither this brief nor the system predicted: add
+  it to the design system's `docs/learnings.md` in a PR there, or list it
+  under **Learnings** in the PR's Design section. When this page changes, ask
+  whether the system should change with it.
+
+pixelmapmaker takes the system's colour tokens (`npm run ds:sync`, and
+`npm run ds:check` to see whether the copy is behind). Density, fonts,
+corners and the shared components come later.
 
 ---
 
