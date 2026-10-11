@@ -222,13 +222,15 @@ This brief sits under the shared design system in
 checked out beside this repository as `../design-system`, which borrowed
 several rules from this page. Before a change a person will see or touch,
 read its `docs/designing.md` and answer its questions, then the pages it points
-to: `principles.md`, `behavioural.md`, `navigation.md`, `states.md`,
-`components.md` and `motion.md`.
+to: `principles.md`, `behavioural.md`, `nngroup.md` (the usability research
+and the ten heuristics every change is checked against), `navigation.md`,
+`states.md`, `components.md` and `motion.md`.
 
 - **Write the reasoning down.** A PR that changes what a person sees or
   touches has a short **Design** section: the job it serves, the behaviour it
   designs for with the effect named (Default Effect, Loss Aversion…), and any
-  departure from the system and why.
+  departure from the system and why, and any problem the heuristic check
+  rated 3 that it leaves open.
 - **Send back what you learn.** A gap, a departure that was right, or
   something people did that neither this brief nor the system predicted: add
   it to the design system's `docs/learnings.md` in a PR there, or list it
