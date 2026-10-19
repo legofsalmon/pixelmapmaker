@@ -212,6 +212,47 @@ a { color: var(--accent); }
 .split .menu__trigger:active,
 .split .menu__trigger[aria-expanded='true'] { background: var(--ds-accent-hover); color: var(--accent-ink); }
 
+/* ---------- motion ---------- */
+
+/*
+ * The design system's durations and curves (docs/motion.md). A control's
+ * colour changes in place at `fast`; the press itself answers at `instant`.
+ * Nothing here travels, so reduced motion needs no rule of its own: the
+ * tokens already cap every fade at 120ms and zero every offset.
+ */
+:where(.btn, .btn--icon, .input, .menu__item, .cab__main, .cab__fav, .layer,
+  .layer__actions button, .stage__hud button, .icon-row button, .fx__item,
+  .seg button, .tabs button, .mobile-tabs button, .runlist__actions button,
+  .section__head, .panel__toggle, .swatch, .toolbar__name) {
+  transition:
+    background-color var(--ds-duration-fast) var(--ds-ease-standard),
+    border-color var(--ds-duration-fast) var(--ds-ease-standard),
+    box-shadow var(--ds-duration-fast) var(--ds-ease-standard),
+    color var(--ds-duration-fast) var(--ds-ease-standard);
+}
+:where(.btn, .btn--icon, .menu__item, .cab__main, .cab__fav, .layer__actions button,
+  .stage__hud button, .icon-row button, .fx__item, .seg button, .runlist__actions button):active {
+  transition-duration: var(--ds-duration-instant);
+}
+
+/*
+ * Small things arrive near where they were asked for: a menu or a popover
+ * drops offset-small from its trigger and fades in at `base`. They are
+ * mounted on open, so a keyframe on mount is the whole of it; they leave at
+ * once, which is quicker than any exit.
+ */
+@keyframes pmm-drop {
+  from { opacity: 0; translate: 0 calc(-1 * var(--ds-motion-offset-small)); }
+}
+/* Large things settle in: a dialog grows from scale-enter and rises
+   offset-medium at `slow`, while its veil fades. */
+@keyframes pmm-settle {
+  from { opacity: 0; scale: var(--ds-motion-scale-enter); translate: 0 var(--ds-motion-offset-medium); }
+}
+@keyframes pmm-fade {
+  from { opacity: 0; }
+}
+
 /* ---------- menus and popovers ---------- */
 
 .menu { position: relative; display: inline-flex; }
@@ -230,6 +271,8 @@ a { color: var(--accent); }
   box-shadow: var(--shadow-menu);
   padding: var(--s1);
 }
+.menu__list,
+.popover { animation: pmm-drop var(--ds-duration-base) var(--ds-ease-enter); }
 .menu__list--start, .popover { left: 0; }
 .menu__list--end { right: 0; }
 
@@ -673,6 +716,7 @@ a { color: var(--accent); }
   place-items: center;
   padding: var(--s5);
   z-index: 50;
+  animation: pmm-fade var(--ds-duration-slow) var(--ds-ease-standard);
 }
 .modal__panel {
   background: var(--panel);
@@ -682,6 +726,7 @@ a { color: var(--accent); }
   width: 100%;
   max-height: 90dvh;
   overflow: auto;
+  animation: pmm-settle var(--ds-duration-slow) var(--ds-ease-emphasized-enter);
 }
 .modal__head {
   display: flex;
@@ -764,7 +809,7 @@ a { color: var(--accent); }
   font-size: 11px;
   font-weight: 600;
   opacity: 0;
-  transition: opacity 0.12s;
+  transition: opacity var(--ds-duration-fast) var(--ds-ease-standard);
 }
 .cab__main:hover .cab__add,
 .cab__main:focus-visible .cab__add { opacity: 1; }
@@ -976,7 +1021,6 @@ a svg,
   font-weight: 600;
   padding: var(--s2) var(--s3);
   text-decoration: none;
-  transition: top 0.12s ease;
 }
 .skip-link:focus-visible { top: 0; }
 
@@ -999,20 +1043,20 @@ a svg,
 }
 
 /*
- * Reduced motion. The animated test patterns are the reason this matters more
- * here than in most apps — the clock is also stopped in JS, so a pattern holds
- * its first frame rather than moving.
+ * Reduced motion removes movement, not meaning (docs/motion.md). The tokens
+ * do most of it: under prefers-reduced-motion, or data-motion="reduced" on
+ * <html>, every offset is 0, nothing scales, and no fade runs past 120ms, so
+ * a menu or a dialog still fades in and says that it opened. What turns is
+ * stopped here: a fold's chevron jumps rather than rotating. The busy
+ * spinner keeps turning in place, because it is what says "working". The
+ * animated test patterns are the reason this matters more here than in most
+ * apps; the canvas clock asks src/lib/motion.ts, so a pattern holds its
+ * first frame rather than moving.
  */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+  :root:not([data-motion='full']) :is(.section__chevron, .panel__chevron) { transition: none; }
 }
+[data-motion='reduced'] :is(.section__chevron, .panel__chevron) { transition: none; }
 
 /* ---------- status bar ---------- */
 
@@ -1082,7 +1126,7 @@ a svg,
   font-weight: 400;
   font-size: 11px;
 }
-.section__chevron { transform: rotate(-90deg); transition: transform 0.12s ease; }
+.section__chevron { transform: rotate(-90deg); transition: transform var(--ds-duration-base) var(--ds-ease-standard); }
 .section__head[aria-expanded='true'] .section__chevron { transform: none; }
 .section__head[aria-expanded='true'] { color: var(--ink); }
 
@@ -1146,11 +1190,8 @@ a svg,
 @media (hover: hover) {
   .panel__toggle:hover { color: var(--ink); }
 }
-.panel__chevron { flex: none; transition: transform 0.12s ease; }
+.panel__chevron { flex: none; transition: transform var(--ds-duration-base) var(--ds-ease-standard); }
 .panel__toggle[aria-expanded='false'] .panel__chevron { transform: rotate(-90deg); }
-@media (prefers-reduced-motion: reduce) {
-  .panel__chevron { transition: none; }
-}
 
 /*
  * A collapsed panel is head-only, and `.app__rail > .panel { flex: 0 0 auto }`

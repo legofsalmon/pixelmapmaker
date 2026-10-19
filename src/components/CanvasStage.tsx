@@ -24,6 +24,7 @@ import { isAnimated } from '@/lib/effects';
 import { cachedLogos, loadLayerLogos } from '@/lib/logos';
 import type { Layer } from '@/lib/types';
 import Icon from './Icon';
+import { prefersReducedMotion } from '@/lib/motion';
 
 interface View {
   /** Screen pixels per canvas pixel. */
@@ -188,7 +189,7 @@ export default function CanvasStage() {
   // just holds on its first frame rather than moving.
   useEffect(() => {
     if (!isAnimated(effect) && !spinning) return;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    if (prefersReducedMotion()) return;
     let raf = 0;
     startedAt.current = performance.now();
     const tick = () => {
