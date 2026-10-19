@@ -1,18 +1,32 @@
 'use client';
 
+import { createElement } from 'react';
+import { iconFrame, icons as SHARED } from '../ds/icons.js';
+
 /**
- * A small outlined icon set, drawn inline.
+ * The icons, drawn inline.
  *
  * Emoji were doing this job before, which meant every platform drew its own
  * thing — different weights, different colours, and a lock or an eye rendering
  * as a full-colour picture next to monochrome text. These are stroke paths on
  * a 24-unit grid that take their colour from `currentColor`, so they match the
- * text around them and change with the theme.
+ * text around them.
  *
- * Inline rather than an icon package: it is a dozen shapes and nothing to
- * install, load or tree-shake.
+ * Where the shared design system's set (src/ds/icons.js, vendored by
+ * `npm run ds:sync`) has an icon for the same meaning, it is drawn from there,
+ * under the set's name, so a close or a delete looks the same in every one of
+ * the studio's apps. The rest are this app's own until the set has them
+ * (an eye, a lock and unlock pair, undo and redo, layer order, duplicate, the
+ * favourite star, zoom, the pattern, the canvas frame and the align family),
+ * drawn with the set's pen so the two sit together.
  */
-export type IconName =
+
+/** Drawn from the shared set. */
+type SharedName = 'close' | 'delete' | 'external' | 'error' | 'settings' | 'document';
+const SHARED_NAMES: ReadonlySet<string> = new Set<SharedName>(['close', 'delete', 'external', 'error', 'settings', 'document']);
+
+/** This app's own. */
+type OwnName =
   | 'eye'
   | 'eye-off'
   | 'lock'
@@ -20,25 +34,22 @@ export type IconName =
   | 'arrow-up'
   | 'arrow-down'
   | 'duplicate'
-  | 'close'
   | 'star'
   | 'plus'
   | 'minus'
-  | 'external'
-  | 'warning'
   | 'chevron-down'
   | 'arrow-undo'
   | 'arrow-redo'
   | 'pattern'
   | 'frame'
-  | 'settings'
-  | 'document'
   | 'align-left'
   | 'align-hcentre'
   | 'align-right'
   | 'align-top'
   | 'align-vcentre'
   | 'align-bottom';
+
+export type IconName = SharedName | OwnName;
 
 interface IconProps {
   name: IconName;
@@ -61,7 +72,7 @@ function alignIcon(guide: string, bars: Array<[number, number, number, number]>)
   );
 }
 
-const PATHS: Record<IconName, React.ReactNode> = {
+const PATHS: Record<OwnName, React.ReactNode> = {
   eye: (
     <>
       <path d="M2 12c2.2-3.8 5.7-6 10-6s7.8 2.2 10 6c-2.2 3.8-5.7 6-10 6s-7.8-2.2-10-6Z" />
@@ -88,13 +99,6 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M8 10.5V7.5a4 4 0 0 1 7.5-2" />
     </>
   ),
-  warning: (
-    <>
-      <path d="M12 3.6 2.6 19.9h18.8L12 3.6Z" />
-      <path d="M12 9.6v4.6" />
-      <path d="M12 17.1h.01" />
-    </>
-  ),
   'arrow-up': (
     <>
       <path d="M12 19.5V5" />
@@ -113,12 +117,6 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M15.5 18.5a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2" />
     </>
   ),
-  close: (
-    <>
-      <path d="m6 6 12 12" />
-      <path d="M18 6 6 18" />
-    </>
-  ),
   star: <path d="m12 3.6 2.6 5.3 5.9.85-4.25 4.15 1 5.85L12 16.99 6.75 19.75l1-5.85L3.5 9.75l5.9-.85Z" />,
   plus: (
     <>
@@ -127,13 +125,6 @@ const PATHS: Record<IconName, React.ReactNode> = {
     </>
   ),
   minus: <path d="M5.5 12h13" />,
-  external: (
-    <>
-      <path d="M14 4h6v6" />
-      <path d="m20 4-8.5 8.5" />
-      <path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" />
-    </>
-  ),
   'chevron-down': <path d="m6 9.5 6 6 6-6" />,
   'arrow-undo': (
     <>
@@ -158,18 +149,6 @@ const PATHS: Record<IconName, React.ReactNode> = {
     <>
       <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
       <path d="M3.5 9.5h17M8 5.5v13" />
-    </>
-  ),
-  settings: (
-    <>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3" />
-    </>
-  ),
-  document: (
-    <>
-      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
-      <path d="M14 3v5h5" />
     </>
   ),
   'align-left': alignIcon('M4 3.5v17', [
@@ -198,23 +177,28 @@ const PATHS: Record<IconName, React.ReactNode> = {
   ]),
 };
 
+const isShared = (name: IconName): name is SharedName => SHARED_NAMES.has(name);
+
 export default function Icon({ name, size = 16, filled = false, className }: IconProps) {
   return (
     <svg
       className={className}
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      viewBox={iconFrame.viewBox}
       fill={filled ? 'currentColor' : 'none'}
       stroke="currentColor"
-      strokeWidth="1.75"
+      // One pen for every icon, the shared set's.
+      strokeWidth={iconFrame['stroke-width']}
       strokeLinecap="round"
       strokeLinejoin="round"
       // Decorative: every icon sits in a control that already has a label.
       aria-hidden="true"
       focusable="false"
     >
-      {PATHS[name]}
+      {isShared(name)
+        ? SHARED[name].map(([tag, attrs], i) => createElement(tag, { key: i, ...attrs }))
+        : PATHS[name]}
     </svg>
   );
 }

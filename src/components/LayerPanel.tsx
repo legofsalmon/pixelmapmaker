@@ -100,7 +100,7 @@ export default function LayerPanel() {
                       removeLayer(layer.id);
                     }}
                   >
-                    <Icon name="close" />
+                    <Icon name="delete" />
                   </button>
                 </div>
               </li>

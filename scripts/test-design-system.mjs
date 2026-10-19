@@ -44,7 +44,7 @@ function check(name, condition, detail = '') {
 
 console.log('\nVendored copies');
 const vendored = fs.readdirSync(DS).sort();
-const WANTED = ['base.css', 'tokens.css', 'tokens.d.ts', 'tokens.js'];
+const WANTED = ['base.css', 'icons.d.ts', 'icons.js', 'tokens.css', 'tokens.d.ts', 'tokens.js'];
 check(`src/ds holds ${WANTED.join(', ')}`, WANTED.every((f) => vendored.includes(f)), `(found ${vendored.join(', ')})`);
 const versions = new Set();
 for (const file of vendored) {

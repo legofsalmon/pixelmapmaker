@@ -123,7 +123,7 @@ export default function Editor() {
           kept, which stays true until it is fixed.
         */
         <p className="banner banner--danger" role="alert">
-          <Icon name="warning" size={16} />
+          <Icon name="error" size={16} />
           <span>{storageError}</span>
         </p>
       )}

@@ -166,7 +166,7 @@ export default function CablingSection({ layer }: { layer: Layer }) {
                     setRuns(withoutRun(layer.customRuns, kind, i));
                   }}
                 >
-                  <Icon name="close" />
+                  <Icon name="delete" />
                 </button>
               </div>
             </li>
