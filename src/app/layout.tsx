@@ -1,4 +1,16 @@
 import type { Metadata, Viewport } from 'next';
+/*
+ * IBM Plex, self-hosted from the OFL @fontsource packages so the type is the
+ * same offline, at the wall, as it is in the office. Only the weights the
+ * stylesheet asks for: Sans regular (and its italic), medium and semibold for
+ * the interface, Mono regular and semibold for the numbers that change.
+ */
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/400-italic.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
 import '../ds/tokens.css';
 import './globals.css';
 import { color } from '../ds/tokens.js';
