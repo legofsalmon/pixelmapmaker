@@ -1,5 +1,18 @@
 import type { Metadata, Viewport } from 'next';
+/*
+ * IBM Plex, self-hosted from the OFL @fontsource packages so the type is the
+ * same offline, at the wall, as it is in the office. Only the weights the
+ * stylesheet asks for: Sans regular (and its italic), medium and semibold for
+ * the interface, Mono regular and semibold for the numbers that change.
+ */
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/400-italic.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
 import '../ds/tokens.css';
+import '../ds/base.css';
 import './globals.css';
 import { color } from '../ds/tokens.js';
 
@@ -18,8 +31,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // Dark only until a light theme has been tried on the verify job's phone
-    // screens (docs/adoption.md in the design-system repo).
-    <html lang="en-GB" data-theme="dark">
+    // screens (docs/adoption.md in the design-system repo). The regular
+    // density is the 32px control the editor was already built on.
+    <html lang="en-GB" data-theme="dark" data-density="regular">
       <body>{children}</body>
     </html>
   );

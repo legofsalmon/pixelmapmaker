@@ -68,7 +68,7 @@ export default function CollapsiblePanel({
   };
 
   return (
-    <section className={`panel${open ? ' is-open' : ''}`}>
+    <section className="panel">
       <header className="panel__head">
         <h2 className="panel__heading">
           <button className="panel__toggle" type="button" onClick={toggle} aria-expanded={open}>

@@ -96,15 +96,30 @@ every morning.
 Hierarchy is a *ranking*. Rank on size, weight, colour and space **before**
 reaching for a border, a box or an icon. Chrome is the last resort.
 
-**Colours come from the shared design system** (the private
-`legofsalmon/design-system` repo, vendored into `src/ds/` by `npm run ds:sync`).
-`globals.css` keeps its own names (`--panel`, `--ink-2`, `--accent`) and points
-each at a role; the canvases read the same roles through `src/lib/chrome.ts`.
-Its grammar is this app's: neutral at rest, cyan for the selection, amber for
-attention, red for stop. Change a colour there, not here;
-`scripts/test-design-system.mjs` fails on a literal colour in `globals.css` or a
-hand edit under `src/ds/`. The map's own colours (cabinets, run and power
-colours, patterns) are content and stay in `render.ts` and `palettes.ts`.
+**The look comes from the shared design system** (the private
+`legofsalmon/design-system` repo, vendored into `src/ds/` by `npm run ds:sync`:
+the tokens, `base.css` and the icon set).
+`globals.css` keeps its own names (`--panel`, `--ink-2`, `--accent`,
+`--control-h`, `--radius-control`) and points each at a role; the canvases read
+the same roles through `src/lib/chrome.ts`. Its grammar is this app's: neutral
+at rest, cyan for the selection and anything toggled on, amber for attention,
+red for stop. Change a value there, not here;
+`scripts/test-design-system.mjs` fails on a literal colour in `globals.css`, a
+hand edit under `src/ds/`, the stylesheets loading out of order, or a state
+drawn from a class instead of its ARIA attribute. The map's own colours
+(cabinets, run and power colours, patterns, the amber of the chain being drawn,
+the pink snap guides) are content or the editor's own meanings and stay in
+`render.ts` and `palettes.ts`.
+
+The controls are this app's own, drawn in the system's states
+(`states.md`): hover only where a pointer hovers, pressed sinks, selected and
+toggled-on are the accent wash with an accent edge, disabled is
+`ink.disabled` and never an opacity, busy waits `timing.wait` before it shows.
+Type is IBM Plex Sans, self-hosted from `@fontsource` so it works offline, with
+IBM Plex Mono for numbers that change under the hand (the status bar, the HUD,
+number fields). Corners are the regular density's: 4px on a control, 6px on a
+panel or card, 8px on what floats. Icons come from the shared set where it has
+the meaning, and the app's own are drawn with the same pen.
 
 - **Three text levels, no more.** Primary, secondary, tertiary — as tokens.
   Two is too few to rank a dense screen; four stops being a ranking.
@@ -119,7 +134,8 @@ colours, patterns) are content and stay in `render.ts` and `palettes.ts`.
   (`--s0`) where something has to sit optically level with a 1px border.
 - **Control size is not layout spacing.** Forcing button padding onto the
   spacing scale is what left inputs at 29px, buttons at 33px and selects at
-  31px — three heights in one row. Controls get their own token.
+  31px — three heights in one row. Controls get their own token: the design
+  system's regular density, 32px.
 - **Group with a spacing ratio of about 2×**, not a divider. Tighten inside the
   group before widening between groups.
 - **Borders are a tax.** Prefer proximity and a shared background. Spend a
@@ -165,7 +181,10 @@ bordered control below the line.
 **Motion.** Every non-essential animation must be removable via
 `prefers-reduced-motion`, and the interface must stay comprehensible with all
 motion off. This matters more here than in most apps, because the test patterns
-are deliberately, continuously animated.
+are deliberately, continuously animated. Durations and curves are the design
+system's tokens; reduced motion (the media query, or `data-motion="reduced"`
+on `<html>`) removes movement and keeps the short fades that say something
+opened, and the canvas clock reads the same mode through `src/lib/motion.ts`.
 
 **Async.** Live regions must exist in the DOM *before* they have content —
 several screen readers only announce mutations. Progress that lives only on a
@@ -237,9 +256,12 @@ and the ten heuristics every change is checked against), `navigation.md`,
   under **Learnings** in the PR's Design section. When this page changes, ask
   whether the system should change with it.
 
-pixelmapmaker takes the system's colour tokens (`npm run ds:sync`, and
-`npm run ds:check` to see whether the copy is behind). Density, fonts,
-corners and the shared components come later.
+pixelmapmaker takes the system at 0.4.0 (`npm run ds:sync`, and
+`npm run ds:check` to see whether the copy is behind): the colours, the
+regular density's control size and corners, the type, `base.css`, the motion
+and the icons where the set has the meaning, with its own controls drawn in
+the shared states rather than `components.css`. It stays dark only until a
+light theme has been tried on the verify job's phones.
 
 ---
 

@@ -6,7 +6,7 @@
  * <html> and its own styles rather than relying on anything above it. The
  * colours are the design system's, read from its JS so no stylesheet is needed.
  */
-import { color } from '../ds/tokens.js';
+import { color, font, radius } from '../ds/tokens.js';
 
 const c = color.dark;
 
@@ -27,7 +27,10 @@ export default function GlobalError({
           placeItems: 'center',
           background: c.surface.ground,
           color: c.ink.primary,
-          font: '14px/1.5 ui-sans-serif, system-ui, sans-serif',
+          // Plex only if the page already loaded it; the root layout that
+          // imports the files is what failed, so the system stack is the
+          // likely face here.
+          font: `14px/1.5 ${font.stack.sans}`,
         }}
       >
         <main style={{ maxWidth: '40ch', padding: 24, textAlign: 'center' }}>
@@ -40,7 +43,7 @@ export default function GlobalError({
             onClick={retry}
             style={{
               font: 'inherit', fontWeight: 600, cursor: 'pointer',
-              padding: '8px 16px', borderRadius: 6,
+              padding: '8px 16px', borderRadius: radius.regular.control,
               border: 0, background: c.accent.default, color: c.accent.on,
             }}
           >

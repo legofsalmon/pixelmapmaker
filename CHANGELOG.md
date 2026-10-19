@@ -5,6 +5,22 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+- **The rest of the studio's design system: type, corners, states and
+  motion.** The interface is set in IBM Plex Sans, bundled so it works
+  offline, and the numbers that change as you drag (the status bar, the zoom
+  and coordinates, number fields) in IBM Plex Mono, so they stop jittering.
+  Corners tighten from 8px to 4px on controls, 6px on cards and 8px on menus
+  and dialogs, and the small capitals over fields and panels are one size. A
+  selected screen, a chosen pattern or segment and a favourite now all look
+  the same: a cyan wash with a cyan edge (the favourite star was amber, which
+  elsewhere means something needs a look). Disabled controls are a known grey
+  rather than see-through, buttons no longer stay lit after a tap on a phone,
+  and menus and dialogs fade in briefly. Export no longer flickers a busy
+  state on a quick PNG: it says "Rendering the PNG…" only once the render has
+  taken a second, and opening a file now says that instead. A playing test
+  pattern names itself on its button. With reduced motion, menus and dialogs
+  still fade (briefly) and the busy spinner still turns; nothing slides.
+
 - **The colours are the studio's shared design system's.** The chrome moves
   from cool navy greys to the neutral greys every app now shares: the ground
   lifts from `#05070b` to `#141415`, panels and text go neutral, and the

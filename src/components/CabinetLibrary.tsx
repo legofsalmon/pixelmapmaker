@@ -55,7 +55,7 @@ function CabinetRow({
         <span className="cab__add">+ Add screen</span>
       </button>
       <button
-        className={`cab__fav${favourite ? ' is-on' : ''}`}
+        className="cab__fav"
         type="button"
         onClick={onToggleFavourite}
         /* Stable name plus aria-pressed, so state can be queried without
