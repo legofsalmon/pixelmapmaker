@@ -30,8 +30,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // Dark only until a light theme has been tried on the verify job's phone
-    // screens (docs/adoption.md in the design-system repo).
-    <html lang="en-GB" data-theme="dark">
+    // screens (docs/adoption.md in the design-system repo). The regular
+    // density is the 32px control the editor was already built on.
+    <html lang="en-GB" data-theme="dark" data-density="regular">
       <body>{children}</body>
     </html>
   );
