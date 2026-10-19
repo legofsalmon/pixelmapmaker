@@ -12,6 +12,7 @@ import '@fontsource/ibm-plex-sans/600.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/600.css';
 import '../ds/tokens.css';
+import '../ds/base.css';
 import './globals.css';
 import { color } from '../ds/tokens.js';
 

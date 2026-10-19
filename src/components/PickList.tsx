@@ -71,16 +71,16 @@ export default function PickList({ onClose }: { onClose: () => void }) {
       }
     >
         <nav className="tabs no-print">
-          <button type="button" className={tab === 'list' ? 'is-active' : ''} aria-current={tab === 'list'} onClick={() => setTab('list')}>
+          <button type="button" aria-current={tab === 'list'} onClick={() => setTab('list')}>
             Pick list
           </button>
-          <button type="button" className={tab === 'cabling' ? 'is-active' : ''} aria-current={tab === 'cabling'} onClick={() => setTab('cabling')}>
+          <button type="button" aria-current={tab === 'cabling'} onClick={() => setTab('cabling')}>
             Cabling
           </button>
-          <button type="button" className={tab === 'power' ? 'is-active' : ''} aria-current={tab === 'power'} onClick={() => setTab('power')}>
+          <button type="button" aria-current={tab === 'power'} onClick={() => setTab('power')}>
             Power
           </button>
-          <button type="button" className={tab === 'st2110' ? 'is-active' : ''} aria-current={tab === 'st2110'} onClick={() => setTab('st2110')}>
+          <button type="button" aria-current={tab === 'st2110'} onClick={() => setTab('st2110')}>
             ST 2110
           </button>
         </nav>

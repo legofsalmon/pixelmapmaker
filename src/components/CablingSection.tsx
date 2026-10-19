@@ -103,7 +103,6 @@ export default function CablingSection({ layer }: { layer: Layer }) {
             type="button"
             role="radio"
             aria-checked={kind === k.value}
-            className={kind === k.value ? 'is-on' : undefined}
             onClick={() => setCablingDraw({ layerId: layer.id, kind: k.value, index: -1 })}
           >
             {k.label}

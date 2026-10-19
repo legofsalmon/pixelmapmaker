@@ -72,7 +72,7 @@ export default function Section({
   };
 
   return (
-    <div className={`section${open ? ' is-open' : ''}`}>
+    <div className="section">
       <button className="section__head" type="button" onClick={toggle} aria-expanded={open}>
         <Icon name="chevron-down" size={14} className="section__chevron" />
         <span>{title}</span>

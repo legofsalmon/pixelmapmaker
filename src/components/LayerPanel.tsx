@@ -48,7 +48,7 @@ export default function LayerPanel() {
             const rect = layerRect(layer);
             const selected = selectedIds.includes(layer.id);
             return (
-              <li key={layer.id} className={`layer${selected ? ' is-selected' : ''}`}>
+              <li key={layer.id} className="layer">
                 <span className="layer__swatch" style={{ background: layer.color }} aria-hidden />
                 <button
                   className="layer__main"

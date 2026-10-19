@@ -92,19 +92,13 @@
   color-scheme: dark;
 }
 
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  height: 100%;
-  background: var(--bg);
-  color: var(--ink);
-  /* IBM Plex Sans at the body style: 13px on 1.45, as before, so nothing
-     reflows; the system stack stands in until the files arrive. */
-  font: var(--ds-text-body);
-  font-variant-numeric: tabular-nums;
-  -webkit-font-smoothing: antialiased;
-}
+/*
+ * The page defaults (box sizing, the ground, the ink, the body style in IBM
+ * Plex Sans with tabular figures, and the one focus ring) are the design
+ * system's base.css, vendored beside the tokens. What is left here is only
+ * what this app adds.
+ */
+html, body { height: 100%; }
 
 h1, h2, h3, h4 { margin: 0; font-weight: var(--ds-weight-semibold); }
 a { color: var(--accent); }
@@ -191,9 +185,17 @@ a { color: var(--accent); }
   clip-path: inset(50%);
 }
 
-/* A toggled mode reads as on without borrowing the accent from selection. */
-.btn.is-on,
-.btn.is-on:hover { background: var(--accent-soft); color: var(--ink); filter: none; }
+/*
+ * A test pattern playing is a mode, so it shows twice: the button takes the
+ * toggled-on look and its label names the pattern ("Pattern: Sonar"). It
+ * opens a dialog rather than toggling, so there is no aria-pressed to draw
+ * it from, and data-on carries it instead.
+ */
+.btn[data-on='true'] {
+  background: var(--accent-soft);
+  border-color: var(--ds-accent);
+  color: var(--ds-accent-ink);
+}
 
 .split { display: flex; align-items: stretch; }
 .split > .btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
@@ -204,7 +206,11 @@ a { color: var(--accent); }
   padding: 0 var(--s1);
   margin-left: 1px;
 }
-.split .menu__trigger:hover { background: var(--accent); filter: brightness(1.08); }
+@media (hover: hover) {
+  .split .menu__trigger:hover { background: var(--ds-accent-hover); color: var(--accent-ink); }
+}
+.split .menu__trigger:active,
+.split .menu__trigger[aria-expanded='true'] { background: var(--ds-accent-hover); color: var(--accent-ink); }
 
 /* ---------- menus and popovers ---------- */
 
@@ -217,8 +223,9 @@ a { color: var(--accent); }
   top: calc(100% + var(--s1));
   z-index: 40;
   min-width: 230px;
-  background: var(--panel-3);
-  border: 1px solid var(--line-control);
+  /* What floats: the overlay surface, a strong edge and the menu's shadow. */
+  background: var(--ds-surface-overlay);
+  border: 1px solid var(--ds-line-strong);
   border-radius: var(--radius-overlay);
   box-shadow: var(--shadow-menu);
   padding: var(--s1);
@@ -241,8 +248,12 @@ a { color: var(--accent); }
   padding: var(--s2);
   text-align: left;
 }
-.menu__item:hover:not(:disabled) { background: var(--wash); }
-.menu__item:disabled { opacity: 0.4; cursor: not-allowed; }
+@media (hover: hover) {
+  .menu__item:hover:not(:disabled) { background: var(--wash); }
+}
+.menu__item:active:not(:disabled) { background: var(--wash-strong); }
+.menu__item:disabled,
+.menu__item:disabled em { color: var(--ds-ink-disabled); cursor: not-allowed; }
 .menu__item em { color: var(--ink-3); font-style: normal; font-size: 11px; }
 .menu__item--danger { color: var(--danger); }
 .menu__item--separated { margin-top: var(--s2); padding-top: var(--s2); box-shadow: inset 0 1px 0 var(--line-control); }
@@ -269,17 +280,13 @@ a { color: var(--accent); }
   min-width: 0;
   width: 100%;
 }
-.input:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
-
-/*
- * One focus indicator for everything. Previously exactly one element had a
- * designed focus style and one removed its outline outright.
- */
-:where(a, button, select, input, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
+@media (hover: hover) {
+  .input:hover:not(:disabled):not(:focus) { border-color: var(--ink-3); }
 }
+/* A field's ring sits flush over its edge, as the system's field draws it.
+   Everything else takes base.css's ring, 2px of focus, 2px outside. */
+.input:focus-visible { border-color: var(--ds-focus); outline-offset: -1px; }
+.input:disabled { color: var(--ds-ink-disabled); background: transparent; border-color: var(--line); cursor: not-allowed; }
 /* A number someone types is set like the readouts: mono, tabular, slashed zero. */
 .input[type='number'] { font-family: var(--ds-font-mono); font-variant-numeric: tabular-nums slashed-zero; }
 .input--num { width: 78px; }
@@ -309,8 +316,22 @@ a { color: var(--accent); }
   justify-content: center;
   gap: var(--s2);
 }
-.btn:hover { filter: brightness(1.08); }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+/*
+ * The states are the design system's (states.md): hover only where a
+ * pointer hovers, so a tap never leaves a button lit; pressed sinks; disabled
+ * is a known colour on no fill, never an opacity.
+ */
+@media (hover: hover) {
+  .btn:hover:not(:disabled) { background: var(--ds-accent-hover); }
+}
+.btn:active:not(:disabled) { background: var(--ds-accent-hover); }
+.btn:disabled,
+.btn:disabled:hover {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ds-ink-disabled);
+  cursor: not-allowed;
+}
 
 /* Tier 2 — used several times a session. Bordered, quiet, readable. */
 .btn--secondary {
@@ -319,7 +340,10 @@ a { color: var(--accent); }
   border-color: var(--line-control);
   font-weight: 500;
 }
-.btn--secondary:hover { background: var(--panel-3-hover); filter: none; }
+@media (hover: hover) {
+  .btn--secondary:hover:not(:disabled) { background: var(--panel-3-hover); }
+}
+.btn--secondary:active:not(:disabled) { background: var(--panel-2); }
 
 /* Tier 3 — occasional. No fill at all, so it cannot compete. */
 .btn--quiet {
@@ -328,11 +352,52 @@ a { color: var(--accent); }
   border-color: transparent;
   font-weight: 500;
 }
-.btn--quiet:hover { background: var(--wash); color: var(--ink); filter: none; }
+@media (hover: hover) {
+  .btn--quiet:hover:not(:disabled) { background: var(--wash); color: var(--ink); }
+}
+.btn--quiet:active:not(:disabled) { background: var(--wash-strong); color: var(--ink); }
+.btn--quiet:disabled { border-color: transparent; }
 
 /* Destructive actions never borrow the accent. */
 .btn--danger { background: none; color: var(--danger); border-color: var(--line-control); }
-.btn--danger:hover { background: var(--danger-soft); filter: none; }
+@media (hover: hover) {
+  .btn--danger:hover:not(:disabled) { background: var(--danger-soft); border-color: var(--ds-bad); }
+}
+.btn--danger:active:not(:disabled) { background: var(--danger-soft); }
+
+/*
+ * Busy, as the system's button draws it (states.md, rule 16): no second press
+ * at once, but the label stays until the work has run --ds-timing-wait, so a
+ * quick export never flashes a spinner. Then the spinner takes the label's
+ * place at the same size; the label stays in the accessibility tree.
+ */
+.btn[aria-busy='true'] {
+  position: relative;
+  cursor: progress;
+  pointer-events: none;
+  animation: pmm-busy-ink 0s var(--ds-timing-wait) both;
+}
+.btn[aria-busy='true']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: var(--ds-size-icon);
+  height: var(--ds-size-icon);
+  margin: auto;
+  border: var(--ds-space-half) solid var(--ink-2);
+  border-inline-end-color: transparent;
+  border-radius: var(--ds-radius-pill);
+  animation:
+    pmm-spin var(--ds-motion-cycle-spin) linear infinite,
+    pmm-busy-show 0s var(--ds-timing-wait) both;
+}
+.btn:not(.btn--secondary):not(.btn--quiet):not(.btn--danger)[aria-busy='true']::before {
+  border-color: var(--accent-ink);
+  border-inline-end-color: transparent;
+}
+@keyframes pmm-busy-ink { to { color: transparent; } }
+@keyframes pmm-busy-show { from { opacity: 0; } }
+@keyframes pmm-spin { to { rotate: 1turn; } }
 
 .btn-row { display: flex; gap: var(--s2); flex-wrap: wrap; }
 
@@ -403,7 +468,10 @@ a { color: var(--accent); }
   gap: var(--s0);
   min-width: 0;
 }
-.cab__main:hover { background: var(--panel-3); border-color: var(--line-control); }
+@media (hover: hover) {
+  .cab__main:hover { background: var(--panel-3); }
+}
+.cab__main:active { background: var(--panel-2); }
 .cab__title { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2); }
 .cab__title em { color: var(--ink-2); font-style: normal; font-size: 11px; }
 .cab__meta { display: flex; flex-wrap: wrap; gap: var(--s2); color: var(--ink-2); font-size: 11px; }
@@ -428,8 +496,18 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.cab__fav:hover { color: var(--ink); }
-.cab__fav.is-on { color: var(--warn); border-color: var(--warn); }
+@media (hover: hover) {
+  .cab__fav:hover { color: var(--ink); background: var(--panel-3); }
+}
+.cab__fav:active { background: var(--panel-2); }
+/* A favourite is a latched toggle, so it is drawn as one: the filled star on
+   the accent wash with an accent edge. It was amber, which here means
+   attention, and nothing about a favourite needs a look. */
+.cab__fav[aria-pressed='true'] {
+  background: var(--accent-soft);
+  border-color: var(--ds-accent);
+  color: var(--ds-accent-ink);
+}
 
 .custom-form {
   display: flex;
@@ -451,7 +529,13 @@ a { color: var(--accent); }
   border-radius: var(--radius-panel);
   padding: var(--s1) var(--s2);
 }
-.layer.is-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+/* Selected is drawn from the row button's aria-pressed, so the look cannot
+   drift from what a screen reader hears: the accent wash and edge. */
+.layer:has(> .layer__main[aria-pressed='true']) {
+  background: var(--accent-soft);
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 1px var(--ds-accent) inset;
+}
 .layer__swatch { width: 12px; height: 26px; border-radius: 3px; flex: none; }
 .layer__main {
   flex: 1;
@@ -479,16 +563,20 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.layer__actions button:hover { background: var(--wash); color: var(--ink); }
+@media (hover: hover) {
+  .layer__actions button:hover { background: var(--wash); color: var(--ink); }
+}
+.layer__actions button:active { background: var(--wash-strong); }
 /*
  * These are toggles with a fixed name, so the pressed state has to be visible
- * rather than implied by the icon swap alone. Same treatment as .btn.is-on:
+ * rather than implied by the icon swap alone. Drawn as any toggled button is:
  * reads as on without borrowing the accent that means selection.
  */
 .layer__actions button[aria-pressed='true'],
 .layer__actions button[aria-pressed='true']:hover {
   background: var(--accent-soft);
-  color: var(--ink);
+  color: var(--ds-accent-ink);
+  box-shadow: inset 0 0 0 1px var(--ds-accent);
 }
 
 /* ---------- stats ---------- */
@@ -551,7 +639,10 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.stage__hud button:hover { background: var(--wash-strong); }
+@media (hover: hover) {
+  .stage__hud button:hover { background: var(--wash); }
+}
+.stage__hud button:active { background: var(--wash-strong); }
 .stage__zoom, .stage__coords { color: var(--ink-2); font-family: var(--ds-font-mono); font-variant-numeric: tabular-nums slashed-zero; }
 .stage__coords { border-left: 1px solid var(--line); padding-left: var(--s2); }
 
@@ -638,7 +729,7 @@ a { color: var(--accent); }
     padding: var(--s3) var(--s2);
     cursor: pointer;
   }
-  .mobile-tabs button.is-active { color: var(--ink); border-bottom-color: var(--accent); }
+  .mobile-tabs button[aria-current='true'] { color: var(--ink); border-bottom-color: var(--ds-accent); }
 
   .app__body { grid-template-columns: 1fr; }
   .app__rail, .app__centre { display: none; }
@@ -692,7 +783,10 @@ a { color: var(--accent); }
   align-items: center;
   justify-content: center;
 }
-.icon-row button:hover { background: var(--panel-3); border-color: var(--line-control); }
+@media (hover: hover) {
+  .icon-row button:hover { background: var(--panel-3); }
+}
+.icon-row button:active { background: var(--wash-strong); }
 
 .gap-row { display: flex; gap: var(--s2); align-items: center; }
 .gap-row .input--num { width: 78px; flex: none; }
@@ -706,7 +800,9 @@ a { color: var(--accent); }
   cursor: pointer;
   padding: 0;
 }
-.swatch:hover { outline: 2px solid var(--accent); outline-offset: 1px; }
+@media (hover: hover) {
+  .swatch:hover { border-color: var(--ink-2); }
+}
 
 .linkish {
   background: none;
@@ -764,7 +860,10 @@ a { color: var(--accent); }
   font: inherit;
   padding: var(--s2) var(--s3);
 }
-.tabs button.is-active { color: var(--ink); border-bottom-color: var(--accent); }
+@media (hover: hover) {
+  .tabs button:hover { color: var(--ink); }
+}
+.tabs button[aria-current='true'] { color: var(--ink); border-bottom-color: var(--ds-accent); }
 
 .opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s3); align-items: end; }
 
@@ -855,11 +954,14 @@ a svg,
   min-width: var(--control-h);
   min-height: var(--control-h);
 }
-.btn--icon:hover { background: var(--wash); color: var(--ink); }
+@media (hover: hover) {
+  .btn--icon:hover { background: var(--wash); color: var(--ink); }
+}
+.btn--icon:active { background: var(--wash-strong); }
 
 /* The heading is the dialog's focus entry point, so it must not show a caret
    outline when focused programmatically — the ring is enough. */
-.modal__head h2:focus { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--radius-control); }
+.modal__head h2:focus { outline: var(--ds-size-focus-ring) solid var(--ds-focus); outline-offset: 4px; border-radius: var(--radius-control); }
 
 /* ---------- skip link, progress, reduced motion ---------- */
 
@@ -889,7 +991,7 @@ a svg,
 
 /* The canvas is a focus stop now, so it needs to show it. */
 .stage__canvas:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: var(--ds-size-focus-ring) solid var(--ds-focus);
   outline-offset: -4px;
   /* The canvas background is the user's choice, so the ring needs its own
      backing to keep 3:1 against whatever is behind it. */
@@ -970,7 +1072,9 @@ a svg,
   padding: var(--s3) 0;
   text-align: left;
 }
-.section__head:hover { color: var(--ink); }
+@media (hover: hover) {
+  .section__head:hover { color: var(--ink); }
+}
 .section__head em {
   margin-left: auto;
   color: var(--ink-3);
@@ -979,8 +1083,8 @@ a svg,
   font-size: 11px;
 }
 .section__chevron { transform: rotate(-90deg); transition: transform 0.12s ease; }
-.section.is-open .section__chevron { transform: none; }
-.section.is-open .section__head { color: var(--ink); }
+.section__head[aria-expanded='true'] .section__chevron { transform: none; }
+.section__head[aria-expanded='true'] { color: var(--ink); }
 
 .section__body { display: flex; flex-direction: column; gap: var(--s3); padding-bottom: var(--s4); }
 
@@ -1039,9 +1143,11 @@ a svg,
   text-align: start;
   cursor: pointer;
 }
-.panel__toggle:hover { color: var(--ink); }
+@media (hover: hover) {
+  .panel__toggle:hover { color: var(--ink); }
+}
 .panel__chevron { flex: none; transition: transform 0.12s ease; }
-.panel:not(.is-open) .panel__chevron { transform: rotate(-90deg); }
+.panel__toggle[aria-expanded='false'] .panel__chevron { transform: rotate(-90deg); }
 @media (prefers-reduced-motion: reduce) {
   .panel__chevron { transition: none; }
 }
@@ -1052,7 +1158,7 @@ a svg,
  * rail without any further rule. What is needed is that a collapsed head keeps
  * its full-width divider rather than collapsing against the next head.
  */
-.panel:not(.is-open) .panel__head { border-bottom: 0; }
+.panel:has(.panel__toggle[aria-expanded='false']) .panel__head { border-bottom: 0; }
 
 /* ---------- test-pattern picker ---------- */
 
@@ -1075,16 +1181,20 @@ a svg,
   font: inherit;
   cursor: pointer;
 }
-.fx__item:hover { background: var(--panel-3); color: var(--ink); }
+@media (hover: hover) {
+  .fx__item:hover:not([aria-checked='true']) { background: var(--panel-3); color: var(--ink); }
+}
+.fx__item:active { background: var(--wash-strong); }
 /*
  * Selection is the accent's one job, so the chosen pattern takes it — the
  * thumbnail is already a picture, and a picture needs an unmistakable frame
  * rather than a slightly different border.
  */
-.fx__item.is-on {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent) inset;
-  color: var(--ink);
+.fx__item[aria-checked='true'] {
+  background: var(--accent-soft);
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 1px var(--ds-accent) inset;
+  color: var(--ds-accent-ink);
 }
 .fx__canvas,
 .fx__none {
@@ -1179,8 +1289,15 @@ a svg,
   font: inherit;
   cursor: pointer;
 }
-.seg button.is-on { background: var(--accent-soft); color: var(--ink); }
-.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+@media (hover: hover) {
+  .seg button:hover:not([aria-checked='true']) { background: var(--wash); }
+}
+.seg button[aria-checked='true'] {
+  background: var(--accent-soft);
+  color: var(--ds-accent-ink);
+  box-shadow: inset 0 0 0 1px var(--ds-accent);
+}
+.seg button:focus-visible { outline-offset: -2px; }
 
 .runlist { list-style: none; margin: var(--s3) 0; padding: 0; display: flex; flex-direction: column; gap: var(--s2); }
 
@@ -1220,7 +1337,10 @@ a svg,
   font: inherit;
   cursor: pointer;
 }
-.runlist__actions button:hover:not(:disabled) { background: var(--accent-soft); }
-.runlist__actions button:disabled { opacity: 0.45; cursor: default; }
+@media (hover: hover) {
+  .runlist__actions button:hover:not(:disabled) { background: var(--wash); }
+}
+.runlist__actions button:active:not(:disabled) { background: var(--wash-strong); }
+.runlist__actions button:disabled { color: var(--ds-ink-disabled); cursor: not-allowed; }
 
 .note--live { color: var(--warn); }

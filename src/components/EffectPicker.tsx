@@ -78,7 +78,7 @@ export default function EffectPicker({
           role="radio"
           aria-checked={value === o.value}
           tabIndex={value === o.value ? 0 : -1}
-          className={`fx__item${value === o.value ? ' is-on' : ''}`}
+          className="fx__item"
           onClick={() => onChange(o.value)}
           onKeyDown={(e) => {
             const step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1

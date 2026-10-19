@@ -13,6 +13,12 @@
  *   3. The app's stylesheet keeps its colours in the design system: outside
  *      the lines that say why they are not a token, globals.css has no literal
  *      colour, and its own names only point at roles.
+ *   4. The vendored stylesheets load, and in the right order: the tokens,
+ *      then base.css's page defaults, then the app's own globals.css, so the
+ *      app's rules sit on top of the system's rather than under them.
+ *   5. State is drawn from ARIA (states.md): no component sets an is-on,
+ *      is-active or is-selected class for a state its aria-pressed,
+ *      aria-checked, aria-current or aria-selected already carries.
  *
  *   node scripts/test-design-system.mjs
  */
@@ -38,7 +44,9 @@ function check(name, condition, detail = '') {
 
 console.log('\nVendored copies');
 const vendored = fs.readdirSync(DS).sort();
-check('src/ds holds tokens.css, tokens.js and tokens.d.ts', ['tokens.css', 'tokens.d.ts', 'tokens.js'].every((f) => vendored.includes(f)), `(found ${vendored.join(', ')})`);
+const WANTED = ['base.css', 'tokens.css', 'tokens.d.ts', 'tokens.js'];
+check(`src/ds holds ${WANTED.join(', ')}`, WANTED.every((f) => vendored.includes(f)), `(found ${vendored.join(', ')})`);
+const versions = new Set();
 for (const file of vendored) {
   const text = fs.readFileSync(path.join(DS, file), 'utf8');
   const newline = text.indexOf('\n');
@@ -47,9 +55,12 @@ for (const file of vendored) {
     check(`${file} carries the design system's stamp`, false, '(src/ds holds only what `npm run ds:sync` vendors)');
     continue;
   }
+  versions.add(stamp[1]);
   const sum = createHash('sha256').update(text.slice(newline + 1)).digest('hex').slice(0, 16);
   check(`${file} is design-system ${stamp[1]} as vendored`, sum === stamp[3], '(edited by hand: make the change in the design-system repo, then `npm run ds:sync`)');
 }
+
+check('every vendored copy is the same design-system version', versions.size === 1, `(found ${[...versions].join(', ')}: run \`npm run ds:sync\`)`);
 
 console.log('\nRoles the app reads');
 const tokensCss = fs.readFileSync(path.join(DS, 'tokens.css'), 'utf8');
@@ -87,6 +98,22 @@ blanked.forEach((line, i) => {
   for (const c of line.match(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/g) ?? []) literals.push(`globals.css:${i + 1} ${c}`);
 });
 check('globals.css has no literal colour outside print and marked exceptions', literals.length === 0, `\n    ${literals.join('\n    ')}`);
+
+console.log('\nLoad order');
+const layout = fs.readFileSync(path.join(root, 'src', 'app', 'layout.tsx'), 'utf8');
+const at = (spec) => layout.indexOf(`import '${spec}'`);
+const order = ['../ds/tokens.css', '../ds/base.css', './globals.css'].map(at);
+check('layout.tsx imports tokens.css, then base.css, then globals.css', order.every((i) => i >= 0) && order[0] < order[1] && order[1] < order[2], `(positions ${order.join(', ')})`);
+
+console.log('\nState from ARIA');
+const stateClasses = [];
+for (const file of sources(path.join(root, 'src', 'components'))) {
+  const text = fs.readFileSync(file, 'utf8');
+  for (const m of text.matchAll(/['"` ]is-(on|active|selected)\b/g)) stateClasses.push(`${path.relative(root, file)}: is-${m[1]}`);
+}
+check('no component draws a state with an is-on, is-active or is-selected class', stateClasses.length === 0, `\n    ${stateClasses.join('\n    ')}`);
+const css = globals;
+check('globals.css draws no state with an is-on, is-active or is-selected class', !/\.is-(on|active|selected)\b/.test(css));
 
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

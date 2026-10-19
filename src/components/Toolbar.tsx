@@ -1,10 +1,12 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CANVAS_PRESETS, useEditor } from '@/state/store';
 import { PALETTES } from '@/lib/palettes';
 import { exportCanvasPng, exportCompositionJson, readProjectFile } from '@/lib/export';
 import { useRunOverlays } from '@/state/useRunOverlays';
+import { EFFECT_LABELS } from '@/lib/effects';
+import { timing } from '../ds/tokens.js';
 import Icon from './Icon';
 import Menu from './Menu';
 import NumberInput from './NumberInput';
@@ -34,7 +36,10 @@ export default function Toolbar({
   onShowEffects: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState(false);
+  /** What is working, in words, or null. */
+  const [busy, setBusy] = useState<string | null>(null);
+  /** The work that has run past timing.wait: only then is it worth saying. */
+  const [slowFor, setSlowFor] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<null | { title: string; body: string; label: string; run: () => void }>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,17 +68,29 @@ export default function Toolbar({
 
   const hasScreens = layers.length > 0;
 
-  const withBusy = async (fn: () => Promise<void> | void) => {
-    setBusy(true);
+  // A quick export says nothing beyond the press; one that runs past
+  // timing.wait (1s) says what is working (design system rule 16).
+  useEffect(() => {
+    if (!busy) return;
+    const t = window.setTimeout(() => setSlowFor(busy), timing.wait);
+    return () => window.clearTimeout(t);
+  }, [busy]);
+
+  const withBusy = async (working: string, fn: () => Promise<void> | void) => {
+    if (busy) return;
+    setBusy(working);
     setError(null);
     try {
       await fn();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'That did not work. Try again.');
     } finally {
-      setBusy(false);
+      setBusy(null);
+      setSlowFor(null);
     }
   };
+  const PNG = 'Rendering the PNG…';
+  const effectLabel = EFFECT_LABELS.find((o) => o.value === effectKind)?.label;
 
   /** Replacing the project loses unsaved work, so both routes ask first. */
   const askBeforeReplacing = (title: string, body: string, label: string, run: () => void) => {
@@ -229,12 +246,13 @@ export default function Toolbar({
       {/* Tier 3 grouped by job, then the one primary action. */}
       <div className="toolbar__group toolbar__group--end">
         <button
-          className={`btn btn--quiet${effectKind !== 'none' ? ' is-on' : ''}`}
+          className="btn btn--quiet"
+          data-on={effectKind !== 'none' || undefined}
           type="button"
           onClick={onShowEffects}
           aria-haspopup="dialog"
         >
-          <Icon name="pattern" /> Patterns
+          <Icon name="pattern" /> {effectKind !== 'none' && effectLabel ? `Pattern: ${effectLabel}` : 'Patterns'}
         </button>
 
         <Menu
@@ -252,18 +270,19 @@ export default function Toolbar({
           <button
             className="btn"
             type="button"
-            disabled={busy || !hasScreens}
-            onClick={() => withBusy(() => exportCanvasPng(name, canvas, layers, false, overlays))}
+            disabled={!hasScreens}
+            aria-busy={busy === PNG || undefined}
+            onClick={() => withBusy(PNG, () => exportCanvasPng(name, canvas, layers, false, overlays))}
           >
-            Export PNG
+            <span>Export PNG</span>
           </button>
           <Menu
             label=""
             ariaLabel="More export options"
             align="end"
             items={[
-              { label: 'Export PNG', hint: 'opaque background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, false, overlays)) },
-              { label: 'Export PNG with alpha', hint: 'transparent background', disabled: busy || !hasScreens, onSelect: () => withBusy(() => exportCanvasPng(name, canvas, layers, true, overlays)) },
+              { label: 'Export PNG', hint: 'opaque background', disabled: !!busy || !hasScreens, onSelect: () => withBusy(PNG, () => exportCanvasPng(name, canvas, layers, false, overlays)) },
+              { label: 'Export PNG with alpha', hint: 'transparent background', disabled: !!busy || !hasScreens, onSelect: () => withBusy(PNG, () => exportCanvasPng(name, canvas, layers, true, overlays)) },
             ]}
           />
         </div>
@@ -278,7 +297,7 @@ export default function Toolbar({
           const file = e.target.files?.[0];
           e.target.value = '';
           if (!file) return;
-          await withBusy(async () => loadProject(await readProjectFile(file)));
+          await withBusy('Opening the file…', async () => loadProject(await readProjectFile(file)));
         }}
       />
 
@@ -293,7 +312,7 @@ export default function Toolbar({
         />
       )}
 
-      <p className="toolbar__status" role="status">{busy ? 'Rendering the PNG…' : ''}</p>
+      <p className="toolbar__status" role="status">{busy && slowFor === busy ? busy : ''}</p>
       <p className="toolbar__error" role="alert">{error ?? ''}</p>
     </header>
   );

@@ -108,7 +108,6 @@ export default function Editor() {
           <button
             key={tab}
             type="button"
-            className={mobilePanel === tab ? 'is-active' : ''}
             aria-current={mobilePanel === tab}
             onClick={() => setMobilePanel(tab)}
           >
