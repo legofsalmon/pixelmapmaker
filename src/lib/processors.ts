@@ -100,6 +100,33 @@ export const PROCESSORS: Processor[] = [
     note: 'Twenty Gigabit Ethernet ports, load capacity up to 9 million pixels.',
   },
   {
+    id: 'novastar-mx30',
+    brand: 'NovaStar',
+    model: 'MX30',
+    ports: 10,
+    portType: '1G',
+    totalPixels: 6_500_000,
+    /*
+     * NovaStar publish no per-port receiving-card limit for this one, and the
+     * MX40 Pro's 512 does not carry over — a sibling's figure is not this
+     * one's. They cap the port by bandwidth instead: "the used load capacity
+     * of Ethernet ports is the sum of the resolutions of all cabinets with
+     * load". So the planning chain length in CablingSettings decides, which
+     * is what null means here.
+     */
+    maxCabinetsPerPort: null,
+    baselineBitDepth: 8,
+    baselineHz: 60,
+    sourceUrl:
+      'https://oss.novastar.tech/uploads/2025/10/MX30-LED-Display-Controller-Specifications-V1.5.0.pdf',
+    note:
+      'Ten Gigabit Ethernet ports and 6.5 million pixels across the device, which lands just '
+      + 'under the ten ports\u2019 own 659,722 each at 8-bit 60 Hz, so the device cap binds first. '
+      + 'The two 10G optical ports add no capacity: OPT 1 carries the data of ports 1 to 10 and '
+      + 'OPT 2 is a copy of it. At 10-bit the receiving cards decide, not the processor \u2014 '
+      + 'NovaStar quote 494,792 a port on A10s Pro/A8s Pro and 329,861 on other Armor cards.',
+  },
+  {
     id: 'novastar-mctrl4k',
     brand: 'NovaStar',
     model: 'MCTRL4K',
@@ -236,6 +263,16 @@ export const pixelsPerPort = (p: Processor) => Math.floor(p.totalPixels / Math.m
  *
  * Returned as a multiplier against whatever the manufacturer quoted, rather
  * than as an absolute, so each processor is scaled from its own baseline.
+ *
+ * The refresh term is exact, but the bit-depth one is optimistic: hardware
+ * pads colour that does not fill a byte, so 10-bit costs more on the wire
+ * than ten eighths of 8-bit. NovaStar publish both endings for the MX30 —
+ * 10-bit runs at 32 bits a pixel on an A10s Pro and 48 on other Armor cards,
+ * against the 30 this assumes — and which you get is the receiving card's
+ * doing, not the processor's. So a 10-bit port reads high here: about a
+ * twentieth over the A10s Pro figure, and some three fifths over the other
+ * one. Pinning it down needs a receiving-card field the app does not have
+ * yet; until then 10-bit is the number to treat with suspicion.
  */
 export function signalScale(p: Processor, bitDepth: number, refreshHz: number) {
   const bits = Math.max(1, bitDepth);

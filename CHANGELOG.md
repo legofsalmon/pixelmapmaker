@@ -1,10 +1,31 @@
 # Changelog
 
-Release notes for tagged versions. GitHub releases are cut by hand from
-these, so this file is the source rather than a copy of them.
+Release notes for tagged versions. The release workflow reads the section
+for the version in `package.json` and publishes it as the GitHub release
+body, so this file is the source and the release is the copy.
 
 ## Unreleased
 
+- **The NovaStar MX30 joins the processor list.** Ten Gigabit ports and 6.5
+  million pixels across the device, taken from NovaStar's own specification
+  rather than inferred from a sibling: the MX40 Pro's limit of 512 cabinets a
+  port appears nowhere in the MX30's sheet, so the entry claims no cabinet
+  limit and lets the chain length decide. The two 10G optical ports add no
+  capacity either — OPT 1 carries the data of ports 1 to 10 and OPT 2 is a
+  copy of OPT 1.
+- **The processor library has tests now, and they found something.** Every
+  refresh rate NovaStar publish for the MX30 is pinned against what the app
+  derives, with the check written so the app can come in under the published
+  figure but never over it — planning more pixels onto a port than it carries
+  is the failure that costs a site visit. All eight rates pass. The tests also
+  record the one place the app and the manufacturer part company, which is
+  colour depth: hardware pads colour that does not fill a byte, so NovaStar
+  quote 494,792 pixels a port at 10-bit on an A10s Pro and 329,861 on other
+  Armor cards, where the app's straight-line model says 520,000. Which of the
+  two you get is the receiving card's doing, not the processor's, and there is
+  no receiving-card field yet — so 10-bit port counts read high, by a
+  twentieth at best and three fifths at worst. Written down in the test, in
+  `signalScale` and here, rather than left to be discovered on site.
 - **A ratio for an arrangement, not just for one screen.** A single screen has
   always carried its aspect ratio under its resolution on the status bar. Put
   two on the canvas and the row vanished: there is no one resolution to give,
