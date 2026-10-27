@@ -20,21 +20,38 @@ export interface LayerTotals {
   aspectRatio: string;
 }
 
+/** Greatest common divisor, for reducing a pixel count to a pair. */
+const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
+
 /**
- * A shape as the one number people quote for it: width over height.
+ * Above this on either side, a reduced pair has stopped being a name.
+ * 16:9 and 5:3 are things people say; 427:240 is just the fraction again.
+ */
+const PAIR_LIMIT = 40;
+
+function reducedPair(w: number, h: number) {
+  const d = gcd(Math.round(w), Math.round(h));
+  const rw = Math.round(w) / d;
+  const rh = Math.round(h) / d;
+  return rw > PAIR_LIMIT || rh > PAIR_LIMIT ? null : `${rw}:${rh}`;
+}
+
+/**
+ * A shape, given first as the number you can compare and then as the name it
+ * goes by, when it has one.
  *
- * This used to reduce to a pair — 16:9, 4:3 — and only fall back to a decimal
- * when the pair came out as something nobody says out loud, like 427:240.
- * Two forms for one idea meant the tidy case and the awkward case could not
- * be compared at a glance, and a wall built from cabinets lands on the
- * awkward side more often than not: ten 176-pixel cabinets by six is 5:3,
- * which is true and tells you nothing about how close to 16:9 it is. The
- * decimal does, it is the form the trade writes anyway — 1.78:1, 2.39:1 —
- * and every shape now gets the same one.
+ * Width over height is the form the trade writes — 1.78:1, 2.39:1 — and it
+ * is the half that answers the question actually being asked, which is
+ * usually how close to 16:9 something is. The reduced pair is the half people
+ * recognise, so it comes along in brackets. It is dropped rather than forced
+ * when reducing leads nowhere: a 10 x 6 wall of 176-pixel cabinets is 5:3 and
+ * worth saying, 854 x 480 is 427:240 and is not.
  */
 export function aspectRatio(w: number, h: number) {
   if (!w || !h) return '—';
-  return `${(w / h).toFixed(2)}:1`;
+  const decimal = `${(w / h).toFixed(2)}:1`;
+  const pair = reducedPair(w, h);
+  return pair ? `${decimal} (${pair})` : decimal;
 }
 
 export function layerTotals(layer: Layer): LayerTotals {

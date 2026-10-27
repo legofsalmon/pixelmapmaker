@@ -6,16 +6,19 @@ body, so this file is the source and the release is the copy.
 
 ## Unreleased
 
-- **Every aspect ratio is a decimal now.** The status bar and the inspector
-  used to reduce a shape to a pair of whole numbers — 16:9, 4:3 — and switch
-  to a decimal only when the pair came out as something nobody says out loud,
-  like 427:240. A wall built from cabinets lands on that side more often than
-  not: ten 176-pixel cabinets by six is 5:3, which is true and tells you
-  nothing about how close to 16:9 it is. Width over height to two places does
-  tell you, it is the form the trade writes anyway, and it means two screens a
-  hair apart in shape stop reading as unrelated strings. 16:9 is 1.78:1, a
-  square is 1.00:1, a portrait screen is 0.56:1, and the extent of a
-  multi-screen build is given the same way.
+- **Aspect ratios lead with the decimal and keep the name.** The status bar
+  and the inspector used to give a shape only as a reduced pair — 16:9, 4:3 —
+  switching to a decimal just when the pair came out as something nobody says
+  out loud, like 427:240. The trouble is that two screens a hair apart in
+  shape then read as unrelated: 1920 × 1080 was 16:9 and 854 × 480 was
+  1.78:1, which is the same wall twice. Width over height comes first now, to
+  two places, with the pair after it in brackets — `1.78:1 (16:9)`,
+  `1.33:1 (4:3)`, `1.67:1 (5:3)` for the ten-by-six wall of 176-pixel
+  cabinets. Where reducing leads nowhere the brackets are dropped rather than
+  filled with noise, so 854 × 480 is just `1.78:1`. A square reads
+  `1.00:1 (1:1)` and a portrait screen goes below one at `0.56:1 (9:16)`
+  instead of flipping. The extent of a multi-screen build is given the same
+  way.
 - **The NovaStar MX30 joins the processor list.** Ten Gigabit ports and 6.5
   million pixels across the device, taken from NovaStar's own specification
   rather than inferred from a sibling: the MX40 Pro's limit of 512 cabinets a
