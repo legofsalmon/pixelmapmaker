@@ -20,17 +20,21 @@ export interface LayerTotals {
   aspectRatio: string;
 }
 
-/** Greatest common divisor, for reducing a pixel count to an aspect ratio. */
-const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
-
+/**
+ * A shape as the one number people quote for it: width over height.
+ *
+ * This used to reduce to a pair — 16:9, 4:3 — and only fall back to a decimal
+ * when the pair came out as something nobody says out loud, like 427:240.
+ * Two forms for one idea meant the tidy case and the awkward case could not
+ * be compared at a glance, and a wall built from cabinets lands on the
+ * awkward side more often than not: ten 176-pixel cabinets by six is 5:3,
+ * which is true and tells you nothing about how close to 16:9 it is. The
+ * decimal does, it is the form the trade writes anyway — 1.78:1, 2.39:1 —
+ * and every shape now gets the same one.
+ */
 export function aspectRatio(w: number, h: number) {
   if (!w || !h) return '—';
-  const d = gcd(Math.round(w), Math.round(h));
-  const rw = Math.round(w) / d;
-  const rh = Math.round(h) / d;
-  // Reduce awkward ratios like 427:240 to a decimal form people recognise.
-  if (rw > 40 || rh > 40) return `${(w / h).toFixed(2)}:1`;
-  return `${rw}:${rh}`;
+  return `${(w / h).toFixed(2)}:1`;
 }
 
 export function layerTotals(layer: Layer): LayerTotals {

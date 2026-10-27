@@ -2,9 +2,11 @@
  * The ratio under the resolution, and the extent it is given for.
  *
  * `aspectRatio` is the one number on the status bar a client repeats back at
- * you, and it had no test. The awkward cases are where it earns one: a ratio
- * that reduces to something nobody says out loud, and a multi-screen build
- * where there is no single resolution to take a ratio of.
+ * you, and it had no test. It gives width over height to two places, the way
+ * the trade writes it, so the cases worth pinning are the ones where that is
+ * not obviously right: a square, a portrait screen, a shape that only just
+ * misses 16:9, and a multi-screen build where there is no single resolution
+ * to take a ratio of at all.
  *
  *   node --experimental-strip-types --no-warnings scripts/test-extent.mjs
  */
@@ -35,21 +37,40 @@ const layer = (over = {}) => ({
   ...over,
 });
 
-console.log('\nRatios people recognise');
+console.log('\nWidth over height, to two places');
 {
-  check('16:9', aspectRatio(1920, 1080) === '16:9');
-  check('4:3', aspectRatio(1024, 768) === '4:3');
-  check('1:1', aspectRatio(500, 500) === '1:1');
-  check('5:3, as a ten-by-six wall of square cabinets comes out', aspectRatio(1760, 1056) === '5:3');
-  check('taller than wide keeps its order', aspectRatio(1080, 1920) === '9:16');
+  check('16:9 reads 1.78:1', aspectRatio(1920, 1080) === '1.78:1', aspectRatio(1920, 1080));
+  check('4:3 reads 1.33:1', aspectRatio(1024, 768) === '1.33:1', aspectRatio(1024, 768));
+  check('square reads 1.00:1, not 1:1', aspectRatio(500, 500) === '1.00:1', aspectRatio(500, 500));
+  check('a ten-by-six wall of square cabinets reads 1.67:1',
+    aspectRatio(1760, 1056) === '1.67:1', aspectRatio(1760, 1056));
+  check('cinemascope reads 2.39:1', aspectRatio(2048, 858) === '2.39:1', aspectRatio(2048, 858));
+  check('an ultra-wide extent reads 2.63:1', aspectRatio(2780, 1056) === '2.63:1', aspectRatio(2780, 1056));
 }
 
-console.log('\nRatios nobody says out loud become a decimal');
+console.log('\nTaller than wide goes under one rather than flipping');
 {
-  // 427:240 reduces no further and tells you nothing; 1.78:1 does.
-  check('an awkward one falls back', aspectRatio(854, 480) === '1.78:1', aspectRatio(854, 480));
-  check('and a very wide one too', /:1$/.test(aspectRatio(2780, 1056)), aspectRatio(2780, 1056));
-  check('reading as the number it is', aspectRatio(2780, 1056) === '2.63:1', aspectRatio(2780, 1056));
+  check('portrait 9:16 reads 0.56:1', aspectRatio(1080, 1920) === '0.56:1', aspectRatio(1080, 1920));
+  check('and is not the same as its landscape self',
+    aspectRatio(1080, 1920) !== aspectRatio(1920, 1080));
+}
+
+console.log('\nOne form for every shape, which is the point of the change');
+{
+  /*
+   * The old function gave 16:9 as a pair and 854 x 480 as a decimal, so two
+   * screens a hair apart in shape read as unrelated strings. They should not.
+   */
+  check('854 x 480 is close enough to 16:9 to read the same',
+    aspectRatio(854, 480) === aspectRatio(1920, 1080), aspectRatio(854, 480));
+
+  const shapes = [[1920, 1080], [1024, 768], [500, 500], [1760, 1056], [1080, 1920], [2780, 1056]];
+  check('every shape comes back in the same format',
+    shapes.every(([w, h]) => /^\d+\.\d\d:1$/.test(aspectRatio(w, h))),
+    shapes.map(([w, h]) => aspectRatio(w, h)).join(' '));
+
+  check('the second place is kept even when it is a zero',
+    aspectRatio(1000, 500) === '2.00:1', aspectRatio(1000, 500));
 }
 
 console.log('\nNothing to divide');
