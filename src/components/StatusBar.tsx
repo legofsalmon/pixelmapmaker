@@ -1,8 +1,8 @@
 'use client';
 
 import { useEditor } from '@/state/store';
-import { kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
-import { layerSizeMm } from '@/lib/geometry';
+import { aspectRatio, kgToLbs, layerTotals, mmToFeetInches, projectTotals } from '@/lib/calc';
+import { contentBounds, layerSizeMm } from '@/lib/geometry';
 
 /**
  * The answer, always on screen.
@@ -26,6 +26,16 @@ export default function StatusBar() {
   const size = single ? layerSizeMm(single) : null;
   const one = single ? layerTotals(single) : null;
 
+  /*
+   * With more than one screen in scope there is no single resolution to give —
+   * two screens are two outputs, and adding their widths together would be a
+   * number describing nothing. What they do have between them is an extent:
+   * the box the arrangement occupies, which is the frame it has to be fed
+   * into and the shape a client sees. Its ratio is the useful half, so it sits
+   * under the figure the way a screen's own does.
+   */
+  const extent = single ? null : contentBounds(scope);
+
   return (
     <dl className="statusbar" aria-label={selectedIds.length ? 'Selected screen totals' : 'Project totals'}>
       <div>
@@ -45,6 +55,15 @@ export default function StatusBar() {
         <div>
           <dt>Resolution</dt>
           <dd>{one.widthPx} × {one.heightPx}<em>{one.aspectRatio}</em></dd>
+        </div>
+      )}
+      {extent && (
+        <div>
+          <dt>Extent</dt>
+          <dd>
+            {Math.round(extent.width)} × {Math.round(extent.height)}
+            <em>{aspectRatio(extent.width, extent.height)} · {scope.length} screens together</em>
+          </dd>
         </div>
       )}
       <div>

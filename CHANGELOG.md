@@ -5,6 +5,17 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+- **A ratio for an arrangement, not just for one screen.** A single screen has
+  always carried its aspect ratio under its resolution on the status bar. Put
+  two on the canvas and the row vanished: there is no one resolution to give,
+  because two screens are two outputs and adding their widths together
+  describes nothing. What they share is an extent — the box the arrangement
+  occupies, which is the frame it has to be fed into and the shape a client
+  sees — so that is what is shown, with its ratio under it and labelled as
+  what it is, since the megapixel figure beside it is the real pixel count.
+  Hidden screens do not stretch it. `aspectRatio` also gained its first tests,
+  including the awkward ones: 854 × 480 reduces to 427:240, which tells nobody
+  anything, so it reads 1.78:1 instead.
 - **The rest of the studio's design system: type, corners, states and
   motion.** The interface is set in IBM Plex Sans, bundled so it works
   offline, and the numbers that change as you drag (the status bar, the zoom
