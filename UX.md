@@ -257,7 +257,9 @@ and the ten heuristics every change is checked against), `navigation.md`,
   whether the system should change with it.
 
 pixelmapmaker takes the system at 0.4.0 (`npm run ds:sync`, and
-`npm run ds:check` to see whether the copy is behind): the colours, the
+`npm run ds:check` to see whether the copy is behind; the design system's own
+checker, `src/ds/ds-check.mjs`, is vendored with it and fails the tests on a
+hand edit in `src/ds/`): the colours, the
 regular density's control size and corners, the type, `base.css`, the motion
 and the icons where the set has the meaning, with its own controls drawn in
 the shared states rather than `components.css`. It stays dark only until a

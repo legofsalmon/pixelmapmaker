@@ -1,15 +1,14 @@
 /**
  * The shared design system, as this app takes it.
  *
- *   1. src/ds/ holds only what the design system's scripts/sync.mjs vendored,
- *      untouched since. Each copy opens with a stamp: the version, the file,
- *      and a hash of everything after the stamp line. A hand edit there is a
- *      fix the design-system repo should get, and the next `npm run ds:sync`
- *      would silently drop it. Whether a copy is BEHIND the design system needs
- *      a checkout of that private repo (`npm run ds:check`); whether it was
- *      edited here does not, so CI holds this half.
- *   2. Every `var(--ds-…)` the app reads is one tokens.css defines, so a
- *      misspelt role cannot fall back to nothing without anyone noticing.
+ *   1. src/ds/ holds what the design system's scripts/sync.mjs vendored,
+ *      untouched since, and every `var(--ds-…)` the app reads is one
+ *      tokens.css defines. Both are the design system's own checker,
+ *      src/ds/ds-check.mjs, vendored with the rest: a hand edit there is a fix
+ *      the design-system repo should get, and a misspelt role would fall back
+ *      to nothing. Whether a copy is behind the published system is
+ *      `npm run ds:check`, which warns rather than fails.
+ *   2. src/ds holds the files this app takes.
  *   3. The app's stylesheet keeps its colours in the design system: outside
  *      the lines that say why they are not a token, globals.css has no literal
  *      colour, and its own names only point at roles.
@@ -22,10 +21,10 @@
  *
  *   node scripts/test-design-system.mjs
  */
-import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { main as dsCheck } from '../src/ds/ds-check.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DS = path.join(root, 'src', 'ds');
@@ -41,30 +40,6 @@ function check(name, condition, detail = '') {
     console.log(`  ✗ ${name} ${detail}`);
   }
 }
-
-console.log('\nVendored copies');
-const vendored = fs.readdirSync(DS).sort();
-const WANTED = ['base.css', 'icons.d.ts', 'icons.js', 'tokens.css', 'tokens.d.ts', 'tokens.js'];
-check(`src/ds holds ${WANTED.join(', ')}`, WANTED.every((f) => vendored.includes(f)), `(found ${vendored.join(', ')})`);
-const versions = new Set();
-for (const file of vendored) {
-  const text = fs.readFileSync(path.join(DS, file), 'utf8');
-  const newline = text.indexOf('\n');
-  const stamp = /@letissier\/design-system (\S+) · (\S+) · sha256-([0-9a-f]{16}) · /.exec(text.slice(0, newline));
-  if (!stamp) {
-    check(`${file} carries the design system's stamp`, false, '(src/ds holds only what `npm run ds:sync` vendors)');
-    continue;
-  }
-  versions.add(stamp[1]);
-  const sum = createHash('sha256').update(text.slice(newline + 1)).digest('hex').slice(0, 16);
-  check(`${file} is design-system ${stamp[1]} as vendored`, sum === stamp[3], '(edited by hand: make the change in the design-system repo, then `npm run ds:sync`)');
-}
-
-check('every vendored copy is the same design-system version', versions.size === 1, `(found ${[...versions].join(', ')}: run \`npm run ds:sync\`)`);
-
-console.log('\nRoles the app reads');
-const tokensCss = fs.readFileSync(path.join(DS, 'tokens.css'), 'utf8');
-const defined = new Set([...tokensCss.matchAll(/^\s*(--ds-[a-z0-9-]+)\s*:/gm)].map((m) => m[1]));
 function* sources(dir) {
   for (const name of fs.readdirSync(dir)) {
     const p = path.join(dir, name);
@@ -73,14 +48,14 @@ function* sources(dir) {
     else if (/\.(css|tsx?)$/.test(name)) yield p;
   }
 }
-const unknown = [];
-for (const file of sources(path.join(root, 'src'))) {
-  const text = fs.readFileSync(file, 'utf8');
-  for (const m of text.matchAll(/var\((--ds-[a-z0-9-]+)/g)) {
-    if (!defined.has(m[1])) unknown.push(`${path.relative(root, file)}: ${m[1]}`);
-  }
-}
-check('every var(--ds-…) read is defined by tokens.css', unknown.length === 0, `\n    ${unknown.join('\n    ')}`);
+
+console.log('\nVendored copies, and the roles the app reads');
+const said = [];
+const code = await dsCheck(['src/ds', '--reads', 'src', '--offline'], { cwd: root, env: {}, log: (l) => said.push(l), warn: (l) => said.push(l) });
+check('src/ds is as vendored and every var(--ds-…) read is defined (ds-check.mjs)', code === 0, `\n    ${said.join('\n    ')}`);
+const vendored = fs.readdirSync(DS).sort();
+const WANTED = ['base.css', 'ds-check.mjs', 'icons.d.ts', 'icons.js', 'tokens.css', 'tokens.d.ts', 'tokens.js'];
+check(`src/ds holds ${WANTED.join(', ')}`, WANTED.every((f) => vendored.includes(f)), `(found ${vendored.join(', ')})`);
 
 console.log('\nThe stylesheet');
 const GLOBALS = path.join(root, 'src', 'app', 'globals.css');

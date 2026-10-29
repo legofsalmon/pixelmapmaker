@@ -44,6 +44,8 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      # Whether src/ds is behind the published design system: a warning, not a failure.
+      - run: npm run ds:check
       - run: npm run build
 
   release:
