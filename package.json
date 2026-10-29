@@ -10,8 +10,8 @@
     "lint": "eslint .",
     "test": "node scripts/test.mjs",
     "typecheck": "tsc --noEmit",
-    "ds:sync": "node ../design-system/scripts/sync.mjs --to src/ds --files tokens.css,base.css,tokens.js,tokens.d.ts,icons.js,icons.d.ts",
-    "ds:check": "node ../design-system/scripts/sync.mjs --check src/ds",
+    "ds:sync": "node src/ds/ds-check.mjs src/ds --sync --offline",
+    "ds:check": "node src/ds/ds-check.mjs src/ds --reads src",
     "scrape": "node scripts/scraper/index.mjs",
     "release": "node scripts/release.mjs"
   },
