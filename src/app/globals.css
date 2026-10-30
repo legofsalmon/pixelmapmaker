@@ -335,7 +335,7 @@ a { color: var(--accent); }
 .input--num { width: 78px; }
 /* A field that takes negatives, with the ± a phone keypad doesn't have. */
 .num-signed { display: flex; gap: var(--s1); min-width: 0; }
-.num-signed__flip { flex: none; border-color: var(--line-control); font-family: var(--ds-font-mono); }
+.num-signed .num-signed__flip { flex: none; border-color: var(--line-control); font-family: var(--ds-font-mono); }
 .input--color { width: 40px; min-height: var(--control-h); padding: var(--s0); cursor: pointer; }
 
 .field { display: flex; flex-direction: column; gap: var(--s0); min-width: 0; }
