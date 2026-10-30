@@ -624,11 +624,11 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
                   <div className="grid2">
                     <label className="field">
                       <span>Across (m)</span>
-                      <NumberInput step={0.1} value={round2(placement.x)} onChange={(x) => setPlacement({ x })} />
+                      <NumberInput min={-500} max={500} step={0.1} value={round2(placement.x)} onChange={(x) => setPlacement({ x })} />
                     </label>
                     <label className="field">
                       <span>Forward (m)</span>
-                      <NumberInput step={0.1} value={round2(placement.z)} onChange={(z) => setPlacement({ z })} />
+                      <NumberInput min={-500} max={500} step={0.1} value={round2(placement.z)} onChange={(z) => setPlacement({ z })} />
                     </label>
                     <label className="field">
                       <span>Off the floor (m)</span>
