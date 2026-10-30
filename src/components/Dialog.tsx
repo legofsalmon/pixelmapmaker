@@ -17,6 +17,8 @@ interface DialogProps {
    */
   docked?: boolean;
   wide?: boolean;
+  /** Fills the window, for a view that is all picture, like the 3D one. */
+  full?: boolean;
   /**
    * The control to return focus to. A menu item cannot be used: it is
    * unmounted in the same commit that mounts this dialog, so by the time the
@@ -49,6 +51,7 @@ export default function Dialog({
   actions,
   docked = false,
   wide = false,
+  full = false,
   restoreFocusTo,
 }: DialogProps) {
   const panel = useRef<HTMLDivElement>(null);
@@ -116,7 +119,7 @@ export default function Dialog({
 
   return (
     <div
-      className={`modal${docked ? ' modal--docked' : ''}`}
+      className={`modal${docked ? ' modal--docked' : ''}${full ? ' modal--full' : ''}`}
       role={docked ? 'region' : 'dialog'}
       aria-modal={docked ? undefined : true}
       aria-labelledby={titleId}
@@ -128,7 +131,7 @@ export default function Dialog({
     >
       <div
         ref={panel}
-        className={`modal__panel${docked ? ' modal__panel--docked' : ''}${wide ? ' sheet' : ' modal__panel--narrow'}`}
+        className={`modal__panel${docked ? ' modal__panel--docked' : ''}${full ? ' modal__panel--full' : wide ? ' sheet' : ' modal__panel--narrow'}`}
       >
         <header className="modal__head no-print">
           <h2 id={titleId} ref={heading} tabIndex={-1}>{title}</h2>

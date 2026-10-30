@@ -37,6 +37,18 @@ for the full feature review those two drove.
 - The pixel map is unchanged by any of it: a curved wall unrolls a flat
   rectangle of pixels, so the canvas, the export and the signal order stay put
 
+**3D view**
+- Every screen in 3D, built from the same hinged cabinets as the plan view,
+  so flat, curved and folded walls stand exactly as they will be built
+- The front shows the real pixel map, test patterns and logos included
+- Turn the rig round to see the back: cabinet numbers as a technician reads
+  them from behind, every data run with its port and every power circuit
+  with its breaker, from the same plan as the pick list, auto or drawn
+- Screens stand where the canvas puts them, or set each one's place on
+  stage by hand: across, forward, off the floor and turned
+- Front, back, side, top and angled views, a 1.8 m figure for scale, arrow
+  keys as well as drag and pinch, and a PNG of whatever is on screen
+
 **Cabinet library**
 - 550 real cabinets scraped from manufacturer spec pages and datasheets
 - Filter by brand, type, indoor/outdoor and pitch range; search; favourites
