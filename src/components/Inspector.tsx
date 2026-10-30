@@ -113,11 +113,11 @@ export default function Inspector() {
           </label>
           <label className="field">
             <span>X offset (px)</span>
-            <NumberInput value={layer.x} onChange={(x) => change('x', x)} />
+            <NumberInput signed value={layer.x} onChange={(x) => change('x', x)} />
           </label>
           <label className="field">
             <span>Y offset (px)</span>
-            <NumberInput value={layer.y} onChange={(y) => change('y', y)} />
+            <NumberInput signed value={layer.y} onChange={(y) => change('y', y)} />
           </label>
         </div>
 

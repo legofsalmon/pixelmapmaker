@@ -16,6 +16,12 @@ interface NumberInputProps {
    * than what was asked for — 5 m of 600 mm cabinets settles at 4.8.
    */
   snap?: (value: number) => number;
+  /**
+   * Show the ± button even with no `min`. A field whose `min` is below zero
+   * gets it anyway; an unbounded one says so here, since most unbounded
+   * fields (a gap, a count) never want a negative.
+   */
+  signed?: boolean;
   className?: string;
   placeholder?: string;
   required?: boolean;
@@ -47,6 +53,7 @@ export default function NumberInput({
   max,
   step,
   snap,
+  signed,
   className = 'input',
   placeholder,
   required,
@@ -147,7 +154,7 @@ export default function NumberInput({
     />
   );
 
-  if (min == null || min >= 0) return input;
+  if (!signed && (min == null || min >= 0)) return input;
 
   return (
     <span className="num-signed">
