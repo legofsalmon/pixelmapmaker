@@ -57,8 +57,12 @@ const mmPerPx = (layer: Layer) => ({
  * screen sits lowest on the canvas stands on the floor with the rest raised by
  * the difference. A centre screen with IMAG either side comes out right; a
  * side wall turned to face in needs placing by hand.
+ *
+ * `baseElevation` is where the lowest screen's bottom edge sits — the
+ * support settings' "wall bottom", so the 3D view and the support report
+ * stand the wall at the same height.
  */
-export function canvasPlacements(layers: Layer[]): Map<string, StagePlacement> {
+export function canvasPlacements(layers: Layer[], baseElevation = 0): Map<string, StagePlacement> {
   const placed = new Map<string, StagePlacement>();
   if (!layers.length) return placed;
 
@@ -77,7 +81,7 @@ export function canvasPlacements(layers: Layer[]): Map<string, StagePlacement> {
   const middle = (Math.min(...raw.map((r) => r.left)) + Math.max(...raw.map((r) => r.right))) / 2;
   const floor = Math.max(...raw.map((r) => r.bottom));
   for (const r of raw) {
-    placed.set(r.id, { x: r.centreX - middle, z: 0, elevation: floor - r.bottom, rotation: 0 });
+    placed.set(r.id, { x: r.centreX - middle, z: 0, elevation: Math.max(0, baseElevation) + floor - r.bottom, rotation: 0 });
   }
   return placed;
 }

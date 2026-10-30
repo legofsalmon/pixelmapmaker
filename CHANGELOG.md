@@ -5,6 +5,18 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+- **What holds the wall up, and who is looking at it, in 3D.** The 3D view
+  now draws the support the Support structure report works out: truss
+  uprights where it puts them, each on its baseplate with a block of
+  ballast that weighs what the report asks for, or a flying beam with a
+  motor and chain at every hang point. A curved wall is assessed as flat in
+  the report, and the view says its uprights are that flat answer laid
+  along the curve. The audience from the Viewing section is marked on the
+  floor, nearest and furthest lines with a viewer at each, and two new views
+  look from a standing viewer's eye in the front and back rows. Unplaced
+  screens now stand at the report's wall height instead of on the floor, so
+  the two agree.
+
 - **A 3D view, with the back of the wall.** "3D view" in the toolbar shows
   every screen standing on a floor beside a 1.8 m figure. Each cabinet column
   is a flat box hinged where the curve controls put the joints, so an arc, an
