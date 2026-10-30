@@ -65,6 +65,26 @@ export interface WallShape {
   folds: Array<{ joint: number; angle: number }>;
 }
 
+/**
+ * A screen's place on stage, in metres and degrees.
+ *
+ * The canvas is a pixel map, not a floor plan: two screens of different pitch
+ * that sit side by side in pixels are not side by side in metres, and a side
+ * wall turned to face the audience looks the same on the canvas as one that
+ * faces straight out. So the stage position is its own thing, kept beside the
+ * pixel position rather than derived from it.
+ */
+export interface StagePlacement {
+  /** Centre of the wall, left (−) or right (+) of the stage centre line. */
+  x: number;
+  /** Towards the audience (+) or upstage (−). */
+  z: number;
+  /** Bottom edge of the wall above the floor. */
+  elevation: number;
+  /** Turn in plan, degrees. Positive turns the face toward stage left, the audience's right. */
+  rotation: number;
+}
+
 export type SignalStart = 'tl' | 'tr' | 'bl' | 'br';
 export type SignalPath = 'serpentine' | 'raster' | 'vertical-serpentine' | 'vertical-raster';
 
@@ -78,6 +98,11 @@ export interface Layer {
   rows: number;
   /** How the wall is bent in plan. Absent on projects saved before shapes. */
   shape?: WallShape;
+  /**
+   * Where the wall physically stands, for the 3D view. Absent means "follow
+   * the canvas", which is right for most rigs and costs nothing to set.
+   */
+  stage?: StagePlacement;
   /** Top-left position in canvas pixels. */
   x: number;
   y: number;

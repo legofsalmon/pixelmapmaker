@@ -5,6 +5,23 @@ these, so this file is the source rather than a copy of them.
 
 ## Unreleased
 
+- **A 3D view, with the back of the wall.** "3D view" in the toolbar shows
+  every screen standing on a floor beside a 1.8 m figure. Each cabinet column
+  is a flat box hinged where the curve controls put the joints, so an arc, an
+  L, a U or a box is the shape the plan view and the spec sheet already
+  describe, and the front carries the real pixel map with any test pattern
+  running. Turn it round, or press Back, and the cabinets show their backs:
+  numbered as seen from behind (first column on the right), with every data
+  run, its port and its direction, and every power circuit and its breaker,
+  drawn from the same plan as the pick list and the canvas whether it was
+  generated or drawn by hand. The back always shows the cabling, even with the
+  canvas overlays off. Screens stand where the canvas puts them, converted to
+  metres at each one's own pitch, until you place one by hand: across, toward
+  the audience, off the floor and turned, which is how a side wall angled in
+  is set. That placement is stored with the screen and moves nothing on the
+  pixel map. three.js loads only when the view is first opened, so the editor
+  starts as fast as before.
+
 - **The rest of the studio's design system: type, corners, states and
   motion.** The interface is set in IBM Plex Sans, bundled so it works
   offline, and the numbers that change as you drag (the status bar, the zoom

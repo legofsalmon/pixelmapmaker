@@ -28,12 +28,14 @@ export default function Toolbar({
   onShowPickList,
   onShowSupport,
   onShowEffects,
+  onShow3d,
 }: {
   onShowSpecSheet: () => void;
   onShowSave: () => void;
   onShowPickList: () => void;
   onShowSupport: () => void;
   onShowEffects: () => void;
+  onShow3d: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   /** What is working, in words, or null. */
@@ -253,6 +255,18 @@ export default function Toolbar({
           aria-haspopup="dialog"
         >
           <Icon name="pattern" /> {effectKind !== 'none' && effectLabel ? `Pattern: ${effectLabel}` : 'Patterns'}
+        </button>
+
+        {/* Its own button rather than a report: it is a way of looking at the
+            rig, used while laying it out, not a document that goes to site. */}
+        <button
+          className="btn btn--quiet"
+          type="button"
+          onClick={onShow3d}
+          disabled={!hasScreens}
+          aria-haspopup="dialog"
+        >
+          3D view
         </button>
 
         <Menu

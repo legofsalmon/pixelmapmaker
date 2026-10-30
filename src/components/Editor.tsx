@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import CabinetLibrary from './CabinetLibrary';
 import CanvasStage from './CanvasStage';
 import Inspector from './Inspector';
@@ -17,12 +18,27 @@ import Toolbar from './Toolbar';
 import { persistProject, restoreProject, useEditor } from '@/state/store';
 import { isAnySurfaceOpen, isTypingTarget } from '@/lib/surfaces';
 
+/*
+ * three.js is most of a megabyte, and most sessions never turn a wall round.
+ * Loaded when the 3D view is first opened, so the editor itself starts as
+ * fast as it did before the view existed.
+ */
+const Viewer3D = dynamic(() => import('./Viewer3D'), {
+  ssr: false,
+  loading: () => (
+    <div className="modal" role="status">
+      <p className="modal__panel modal__panel--narrow viewer3d__loading">Loading the 3D view…</p>
+    </div>
+  ),
+});
+
 export default function Editor() {
   const [showSpecSheet, setShowSpecSheet] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [showPickList, setShowPickList] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
   const [showEffects, setShowEffects] = useState(false);
+  const [show3d, setShow3d] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'library' | 'canvas' | 'screen'>('canvas');
   const undo = useEditor((s) => s.undo);
   const redo = useEditor((s) => s.redo);
@@ -101,6 +117,7 @@ export default function Editor() {
         onShowPickList={() => setShowPickList(true)}
         onShowSupport={() => setShowSupport(true)}
         onShowEffects={() => setShowEffects(true)}
+        onShow3d={() => setShow3d(true)}
       />
 
       <nav className="mobile-tabs no-print" aria-label="Panels">
@@ -151,6 +168,7 @@ export default function Editor() {
       {showPickList && <PickList onClose={() => setShowPickList(false)} />}
       {showSupport && <SupportPanel onClose={() => setShowSupport(false)} />}
       {showEffects && <EffectsPanel onClose={() => setShowEffects(false)} />}
+      {show3d && <Viewer3D onClose={() => setShow3d(false)} />}
     </div>
   );
 }

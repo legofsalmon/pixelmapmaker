@@ -876,3 +876,42 @@ export function renderLayerAlone(
 }
 
 export { contentBounds };
+
+/**
+ * The face of one screen for the 3D view: what the audience sees on it.
+ *
+ * The same tiles, logo, label and test pattern as the canvas, without the
+ * run overlays — in 3D those are drawn on the back, where the cables are.
+ * The caller scales the context to fit a texture; this draws in the layer's
+ * own pixels, with its top-left at the origin. A canvas-wide pattern is swept
+ * across the canvas as it is in the editor, so a sweep travels across two
+ * screens in 3D exactly as it does on the map.
+ */
+export function renderLayerFace(
+  ctx: CanvasRenderingContext2D,
+  canvas: CanvasSettings,
+  layer: Layer,
+  options: { effect?: EffectSettings; timeMs?: number; logo?: CanvasImageSource } = {}
+) {
+  const { effect, timeMs = 0, logo } = options;
+  const rect = layerRect(layer);
+  ctx.save();
+  ctx.translate(-rect.x, -rect.y);
+  drawTiles(ctx, layer);
+  if (logo) drawLogo(ctx, layer, logo, timeMs);
+  drawLayerLabel(ctx, layer);
+  if (effect) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(rect.x, rect.y, rect.width, rect.height);
+    ctx.clip();
+    drawEffect(
+      ctx,
+      canvas.effectScope === 'per-screen' ? rect : { x: 0, y: 0, width: canvas.width, height: canvas.height },
+      effect,
+      timeMs
+    );
+    ctx.restore();
+  }
+  ctx.restore();
+}
