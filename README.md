@@ -46,6 +46,10 @@ for the full feature review those two drove.
   with its breaker, from the same plan as the pick list, auto or drawn
 - Screens stand where the canvas puts them, or set each one's place on
   stage by hand: across, forward, off the floor and turned
+- The support from the support report: truss uprights, baseplates and
+  ballast, or a flying beam and hang points
+- The audience from the Viewing section on the floor, and views from a
+  standing viewer's eye in the front and back rows
 - Front, back, side, top and angled views, a 1.8 m figure for scale, arrow
   keys as well as drag and pinch, and a PNG of whatever is on screen
 

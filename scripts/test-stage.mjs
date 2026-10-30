@@ -148,6 +148,9 @@ console.log('\nPositions read off the canvas');
     placementFor(layer({ id: 'l', stage: { x: NaN, z: 0, elevation: 0, rotation: 0 } }), placed) === placed.get('l')
   );
   check('nothing to place, nothing placed', canvasPlacements([]).size === 0);
+  const raised = canvasPlacements([high, low], 0.5);
+  near('the support settings set the lowest screen\'s height', raised.get('w').elevation, 0.5);
+  near('and the rest keep their gap above it', raised.get('h').elevation, 2.5);
   const bounds = sceneBounds([wallSolid(layer(), { x: 0, z: 0, elevation: 2, rotation: 0 })]);
   near('the scene always includes the floor', bounds.min[1], 0);
 }
@@ -186,6 +189,55 @@ console.log('\nThe back');
   const custom = rearRuns(drawn, runOverlays(withEveryRun([drawn]), settings, processor, 1));
   check('a hand-drawn plan is drawn as drawn', custom.data.runs.length === 1 && custom.data.runs[0].length === 2);
   check('with its power too', custom.power.runs.length === 1);
+}
+
+console.log('\nSupports and the audience');
+{
+  const { rigForWall, audienceZone, alongWall, EYE_HEIGHT_M } = await import('../src/lib/rig.ts');
+  const { supportForLayer, DEFAULT_SUPPORT } = await import('../src/lib/support.ts');
+
+  const flat = layer({ cols: 12, rows: 6, spec: { weightKg: 8, power: { max: 200, avg: 70 } } });
+  const solid = wallSolid(flat, { x: 0, z: 0, elevation: 0.5, rotation: 0 });
+  const p = alongWall(solid, 1.5);
+  near('a point along a flat wall', p.x, -1.5);
+  near('faces the audience', p.nz, 1);
+
+  const result = supportForLayer(flat, DEFAULT_SUPPORT);
+  const rig = rigForWall(solid, result, DEFAULT_SUPPORT);
+  check('one upright per upright the report counts', rig.uprights.length === result.ground.uprights);
+  const xs = rig.uprights.map((u) => u.x);
+  near('the end uprights are flush with the wall ends', xs[0] - DEFAULT_SUPPORT.trussDepth / 2, -3);
+  near('…at both ends', xs[xs.length - 1] + DEFAULT_SUPPORT.trussDepth / 2, 3);
+  if (xs.length > 2) near('and evenly spaced', xs[1] - xs[0], result.ground.spacing, 1e-6);
+  near('behind the wall, against its back', rig.uprights[0].z, -0.08 - DEFAULT_SUPPORT.trussDepth / 2);
+  check('as tall as the truss set', rig.uprights.every((u) => u.height >= DEFAULT_SUPPORT.trussHeight));
+  check('carrying the ballast the report asks for', rig.uprights[0].ballastKg === result.ground.ballastNeededPerUpright);
+
+  const curved = layer({ cols: 12, rows: 6, shape: arc(6), spec: { weightKg: 8, power: { max: 200, avg: 70 } } });
+  const bent = wallSolid(curved, origin);
+  const curvedRig = rigForWall(bent, supportForLayer(curved, DEFAULT_SUPPORT), DEFAULT_SUPPORT);
+  const mid = curvedRig.uprights[Math.floor(curvedRig.uprights.length / 2)];
+  const end = curvedRig.uprights[0];
+  check('on a curve the uprights follow the wall back', end.z > mid.z);
+  check('and turn with it', Math.abs(end.angle) > 0.05 && Math.abs(mid.angle) < Math.abs(end.angle));
+
+  const hung = { ...DEFAULT_SUPPORT, mode: 'hanging' };
+  const hangResult = supportForLayer(flat, hung);
+  const hangRig = rigForWall(solid, hangResult, hung);
+  check('one hang point per point the report counts', hangRig.hangPoints.length === hangResult.hanging.points);
+  check('no uprights when flown', hangRig.uprights.length === 0);
+  check('the beam is above the wall', hangRig.beamHeight > solid.bounds.max[1]);
+
+  const weightless = layer({ spec: { weightKg: null } });
+  const none = rigForWall(wallSolid(weightless, origin), supportForLayer(weightless, DEFAULT_SUPPORT), DEFAULT_SUPPORT);
+  check('a panel with no weight draws nothing and says why', none.uprights.length === 0 && !!none.unavailable);
+
+  const zone = audienceZone(sceneBounds([solid]), { nearestM: 5, furthestM: 30 });
+  near('the front row is measured from the front of the rig', zone.nearestZ, 5);
+  near('and so is the back', zone.furthestZ, 30);
+  near('a viewer stands at eye height', zone.furthestEye[1], EYE_HEIGHT_M);
+  const swapped = audienceZone(sceneBounds([solid]), { nearestM: 30, furthestM: 5 });
+  check('distances typed the wrong way round still make a room', swapped.nearestZ <= swapped.furthestZ);
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

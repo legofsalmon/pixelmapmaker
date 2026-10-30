@@ -14,7 +14,7 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 const src = path.join(root, '..', 'src');
 
 function resolveFile(base) {
-  for (const candidate of [base, `${base}.ts`, `${base}.tsx`, path.join(base, 'index.ts')]) {
+  for (const candidate of [base, `${base}.ts`, `${base}.tsx`, `${base}.js`, path.join(base, 'index.ts')]) {
     if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) return candidate;
   }
   return base;

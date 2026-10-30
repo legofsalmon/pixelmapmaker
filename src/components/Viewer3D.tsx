@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { useEditor } from '@/state/store';
 import { cablingForProject, processorsRequired, runOverlays } from '@/lib/cabling';
 import { findProcessor } from '@/lib/processors';
@@ -19,13 +20,15 @@ import {
   type WallSolid,
 } from '@/lib/stage';
 import { loadLayerLogos } from '@/lib/logos';
+import { supportForLayer } from '@/lib/support';
+import { audienceZone, rigForWall, type AudienceZone, type WallRig } from '@/lib/rig';
 import { prefersReducedMotion } from '@/lib/motion';
 import { CHROME } from '@/lib/chrome';
 import type { Layer, StagePlacement } from '@/lib/types';
 import Dialog from './Dialog';
 import NumberInput from './NumberInput';
 
-type View = 'front' | 'back' | 'top' | 'side' | 'angle';
+type View = 'front' | 'back' | 'top' | 'side' | 'angle' | 'front-row' | 'back-row';
 
 const VIEWS: Array<{ value: View; label: string }> = [
   { value: 'angle', label: 'Angle' },
@@ -42,6 +45,32 @@ const DIRECTIONS: Record<View, Vec3> = {
   back: [0, 0.04, -1],
   side: [1, 0.08, 0.02],
   top: [0, 1, 0.002],
+  // The two audience views stand at a viewer's eye rather than looking in
+  // from a direction; see aimCamera.
+  'front-row': [0, 0, 1],
+  'back-row': [0, 0, 1],
+};
+
+const EYE_VIEWS: Array<{ value: View; label: string }> = [
+  { value: 'front-row', label: 'Front row' },
+  { value: 'back-row', label: 'Back row' },
+];
+
+const STEEL = '#a4a7ad';
+const PLATE = '#55585e';
+const BALLAST = '#8a8780';
+const MOTOR = '#2f3034';
+/** Concrete, for sizing a ballast block from its mass. */
+const BALLAST_DENSITY = 2400;
+
+const VIEW_WORDS: Record<View, string> = {
+  angle: 'the front at an angle',
+  front: 'the front',
+  back: 'the back',
+  side: 'the side',
+  top: 'above',
+  'front-row': 'the nearest viewer\'s eye',
+  'back-row': 'the furthest viewer\'s eye',
 };
 
 const FOV = 40;
@@ -124,6 +153,95 @@ function scaleFigure() {
   return figure;
 }
 
+/** A box of the given size, centred at a point and turned in plan. */
+function box(w: number, h: number, d: number, colour: string, x: number, y: number, z: number, angle: number) {
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    new THREE.MeshStandardMaterial({ color: colour, roughness: 0.7, metalness: colour === STEEL ? 0.5 : 0 })
+  );
+  mesh.position.set(x, y, z);
+  mesh.rotation.y = angle;
+  return mesh;
+}
+
+/**
+ * A square box-truss upright: four chords and a rung every half metre. Only
+ * a sketch of truss, but enough that it reads as truss and not as a post.
+ */
+function trussGeometry(size: number, height: number) {
+  const parts: THREE.BufferGeometry[] = [];
+  const r = Math.max(0.012, size * 0.08);
+  const half = size / 2 - r;
+  for (const [cx, cz] of [[-half, -half], [half, -half], [half, half], [-half, half]]) {
+    const chord = new THREE.CylinderGeometry(r, r, height, 6);
+    chord.translate(cx, height / 2, cz);
+    parts.push(chord);
+  }
+  const rungs = Math.max(1, Math.floor(height / 0.5));
+  for (let i = 0; i <= rungs; i++) {
+    const y = (i / rungs) * height;
+    const a = new THREE.BoxGeometry(size, r, r);
+    a.translate(0, y, -half);
+    const b = a.clone();
+    b.translate(0, 0, half * 2);
+    const c = new THREE.BoxGeometry(r, r, size);
+    c.translate(-half, y, 0);
+    const d = c.clone();
+    d.translate(half * 2, 0, 0);
+    parts.push(a, b, c, d);
+  }
+  return mergeGeometries(parts);
+}
+
+/** Everything that holds one wall up, as the support report has it. */
+function rigObjects(rig: WallRig, trussSize: number, plate: { width: number; depth: number }) {
+  const group = new THREE.Group();
+  const steel = new THREE.MeshStandardMaterial({ color: STEEL, roughness: 0.45, metalness: 0.5 });
+  for (const u of rig.uprights) {
+    const truss = new THREE.Mesh(trussGeometry(trussSize, u.height), steel);
+    truss.position.set(u.x, 0, u.z);
+    truss.rotation.y = u.angle;
+    group.add(truss);
+    group.add(box(plate.width, 0.03, plate.depth, PLATE, u.plateX, 0.015, u.plateZ, u.angle));
+    if (u.ballastKg > 0) {
+      // A block of concrete that weighs what the report asks for, on the
+      // plate behind the upright, so a heavy answer looks heavy.
+      const footprint = Math.min(plate.width, 0.6) * Math.min(plate.depth, 0.6);
+      const height = Math.min(1.5, u.ballastKg / BALLAST_DENSITY / Math.max(0.05, footprint));
+      const side = Math.sqrt(footprint);
+      const backX = u.plateX - Math.sin(u.angle) * (plate.depth / 2 - side / 2);
+      const backZ = u.plateZ - Math.cos(u.angle) * (plate.depth / 2 - side / 2);
+      group.add(box(side, height, side, BALLAST, backX, 0.03 + height / 2, backZ, u.angle));
+    }
+  }
+  if (rig.beamHeight != null && rig.hangPoints.length) {
+    const beam = rig.beamHeight;
+    const points = rig.hangPoints;
+    // The flying beam, point to point along the wall, square truss on its side.
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      const length = Math.hypot(b.x - a.x, b.z - a.z);
+      const angle = Math.atan2(-(b.z - a.z), b.x - a.x);
+      group.add(box(length + 0.3, 0.3, 0.3, STEEL, (a.x + b.x) / 2, beam, (a.z + b.z) / 2, angle));
+    }
+    if (points.length === 1) {
+      const p = points[0];
+      group.add(box(1, 0.3, 0.3, STEEL, p.x, beam, p.z, p.angle));
+    }
+    for (const p of points) {
+      group.add(box(0.28, 0.32, 0.28, MOTOR, p.x, beam - 0.33, p.z, p.angle));
+      const drop = beam - 0.5 - p.wallTop;
+      if (drop > 0.01) {
+        const chain = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, drop, 6), steel);
+        chain.position.set(p.x, p.wallTop + drop / 2, p.z);
+        group.add(chain);
+      }
+    }
+  }
+  return group;
+}
+
 /** Words painted on the floor, read from the front. */
 function floorLabel(text: string, width: number) {
   const canvas = makeCanvas(512, 96);
@@ -163,8 +281,11 @@ interface Rig {
   flight: { from: THREE.Vector3; to: THREE.Vector3; target: THREE.Vector3; fromTarget: THREE.Vector3; start: number } | null;
 }
 
-/** Point the camera at the whole rig from one of the named directions. */
-function aimCamera(t: Rig, solids: WallSolid[], view: View, instant: boolean) {
+/**
+ * Point the camera at the whole rig from one of the named directions, or from
+ * a viewer's eye in the front or back row.
+ */
+function aimCamera(t: Rig, solids: WallSolid[], view: View, instant: boolean, zone?: AudienceZone | null) {
   const bounds = sceneBounds(solids);
   const centre = new THREE.Vector3(
     (bounds.min[0] + bounds.max[0]) / 2,
@@ -178,7 +299,10 @@ function aimCamera(t: Rig, solids: WallSolid[], view: View, instant: boolean) {
   const halfH = Math.atan(Math.tan(halfV) * t.camera.aspect);
   const distance = Math.max(radius, 1) / Math.tan(Math.min(halfV, halfH));
   const direction = new THREE.Vector3(...DIRECTIONS[view]).normalize();
-  const to = centre.clone().addScaledVector(direction, distance);
+  let to = centre.clone().addScaledVector(direction, distance);
+  if (zone && (view === 'front-row' || view === 'back-row')) {
+    to = new THREE.Vector3(...(view === 'front-row' ? zone.nearestEye : zone.furthestEye));
+  }
 
   if (instant || prefersReducedMotion()) {
     t.camera.position.copy(to);
@@ -218,6 +342,8 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
   const cabling = useEditor((s) => s.cabling);
   const processorId = useEditor((s) => s.processorId);
   const customProcessors = useEditor((s) => s.customProcessors);
+  const support = useEditor((s) => s.support);
+  const audience = useEditor((s) => s.audience);
   const updateLayer = useEditor((s) => s.updateLayer);
   const commit = useEditor((s) => s.commit);
 
@@ -226,6 +352,8 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
   const [view, setView] = useState<View>('angle');
   const [showData, setShowData] = useState(true);
   const [showPower, setShowPower] = useState(true);
+  const [showSupports, setShowSupports] = useState(true);
+  const [showAudience, setShowAudience] = useState(true);
   const [placingId, setPlacingId] = useState<string | null>(
     () => selectedIds.find((id) => allLayers.some((l) => l.id === id && l.visible)) ?? null
   );
@@ -247,11 +375,19 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
     return runOverlays(withEveryRun(allLayers), cabling, processor, boxes);
   }, [allLayers, cabling, processorId, customProcessors]);
 
-  const fromCanvas = useMemo(() => canvasPlacements(layers), [layers]);
+  // Unplaced screens stand at the support settings' wall height, so the
+  // picture and the support report agree on where the wall's bottom edge is.
+  const fromCanvas = useMemo(() => canvasPlacements(layers, support.wallBottom), [layers, support.wallBottom]);
   const solids = useMemo(
     () => layers.map((l) => wallSolid(l, placementFor(l, fromCanvas))),
     [layers, fromCanvas]
   );
+  const supports = useMemo(() => layers.map((l) => supportForLayer(l, support)), [layers, support]);
+  const rigs = useMemo(
+    () => solids.map((solid, i) => rigForWall(solid, supports[i], support)),
+    [solids, supports, support]
+  );
+  const zone = useMemo(() => (solids.length ? audienceZone(sceneBounds(solids), audience) : null), [solids, audience]);
 
   const host = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -262,6 +398,8 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
     controls: OrbitControls;
     walls: THREE.Group;
     furniture: THREE.Group;
+    /** Supports and the audience, rebuilt on their own so a toggle does not redraw the walls. */
+    extras: THREE.Group;
     faces: Array<{ layer: Layer; canvas: HTMLCanvasElement; texture: THREE.CanvasTexture; scale: number }>;
     maxTexture: number;
     flight: { from: THREE.Vector3; to: THREE.Vector3; target: THREE.Vector3; fromTarget: THREE.Vector3; start: number } | null;
@@ -305,12 +443,13 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
 
     const walls = new THREE.Group();
     const furniture = new THREE.Group();
-    scene.add(walls, furniture);
+    const extras = new THREE.Group();
+    scene.add(walls, furniture, extras);
 
     const gl = renderer.getContext();
     const maxTexture = Math.min(MAX_TEXTURE, gl.getParameter(gl.MAX_TEXTURE_SIZE) as number);
 
-    three.current = { renderer, scene, camera, controls, walls, furniture, faces: [], maxTexture, flight: null, framed: false };
+    three.current = { renderer, scene, camera, controls, walls, furniture, extras, faces: [], maxTexture, flight: null, framed: false };
 
     const resize = () => {
       const w = box.clientWidth;
@@ -329,6 +468,7 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
       controls.dispose();
       disposeGroup(walls);
       disposeGroup(furniture);
+      disposeGroup(extras);
       renderer.dispose();
       three.current = null;
     };
@@ -439,6 +579,56 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
     }
   }, [layers, solids, overlays, showData, showPower, animated, paintFace, logosReady]);
 
+  // Supports and audience, on their own so switching either off is instant.
+  useEffect(() => {
+    const t = three.current;
+    if (!t) return;
+    disposeGroup(t.extras);
+    t.extras.clear();
+
+    if (showSupports) {
+      const plate = { width: support.plateWidth, depth: support.plateFront + support.plateBack };
+      for (const rig of rigs) t.extras.add(rigObjects(rig, support.trussDepth, plate));
+    }
+
+    if (showAudience && zone) {
+      const width = zone.maxX - zone.minX;
+      const depth = zone.furthestZ - zone.nearestZ;
+      const centreX = (zone.minX + zone.maxX) / 2;
+      if (depth > 0.01) {
+        const floor = new THREE.Mesh(
+          new THREE.PlaneGeometry(width, depth),
+          new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.05, depthWrite: false })
+        );
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.set(centreX, 0.003, (zone.nearestZ + zone.furthestZ) / 2);
+        t.extras.add(floor);
+      }
+      // The front and back of the audience, as lines across the floor with
+      // their distances, and a viewer standing at each.
+      for (const [z, words] of [
+        [zone.nearestZ, `NEAREST ${audience.nearestM} m`],
+        [zone.furthestZ, `FURTHEST ${audience.furthestM} m`],
+      ] as const) {
+        const line = new THREE.Mesh(
+          new THREE.PlaneGeometry(width, 0.06),
+          new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35, depthWrite: false })
+        );
+        line.rotation.x = -Math.PI / 2;
+        line.position.set(centreX, 0.004, z);
+        t.extras.add(line);
+        const label = floorLabel(words, Math.max(2.4, width * 0.18));
+        label.position.set(zone.minX + Math.max(2.4, width * 0.18) / 2 + 0.3, 0.005, z + 0.5);
+        t.extras.add(label);
+        // To one side, so a viewer does not stand in the eye-line of the views
+        // taken from their own row.
+        const viewer = scaleFigure();
+        viewer.position.set(zone.minX + 0.6, 0, z);
+        t.extras.add(viewer);
+      }
+    }
+  }, [rigs, zone, showSupports, showAudience, support, audience]);
+
   // The render loop. Faces are repainted only when something on them moves.
   useEffect(() => {
     let frame = 0;
@@ -472,7 +662,7 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
   }, [animated, paintFace]);
 
   const flyTo = (next: View) => {
-    if (three.current) aimCamera(three.current, solids, next, false);
+    if (three.current) aimCamera(three.current, solids, next, false, zone);
     setView(next);
   };
 
@@ -547,7 +737,7 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
             className="viewer3d__canvas"
             tabIndex={0}
             role="img"
-            aria-label={`The screens in 3D, seen from the ${view === 'angle' ? 'front at an angle' : view}. Drag or use the arrow keys to turn round them, and plus or minus to zoom.`}
+            aria-label={`The screens in 3D, seen from ${VIEW_WORDS[view]}. Drag or use the arrow keys to turn round them, and plus or minus to zoom.`}
             onKeyDown={onKeyDown}
           />
           {error && (
@@ -572,6 +762,20 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
               </button>
             ))}
           </div>
+          <div className="seg" role="radiogroup" aria-label="Look from the audience">
+            {EYE_VIEWS.map((v) => (
+              <button
+                key={v.value}
+                type="button"
+                role="radio"
+                aria-checked={view === v.value}
+                disabled={!zone}
+                onClick={() => flyTo(v.value)}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
           <p className="note">
             Drag to turn round the rig, scroll or pinch to zoom, right-drag or two fingers to slide. The figure is 1.8 m tall.
           </p>
@@ -589,6 +793,7 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
             <p className="note">
               Drawn as a technician sees it from behind, so the first column is on the right. The chains are the
               ones on the pick list{layers.some((l) => l.cablingPlan === 'custom') ? ', including the ones drawn by hand' : ''}.
+              The uprights stand in front of it; switch them off below to read it clearly.
             </p>
           </section>
 
@@ -654,6 +859,44 @@ export default function Viewer3D({ onClose }: { onClose: () => void }) {
                 )}
               </>
             )}
+          </section>
+
+          <section>
+            <h4 className="viewer3d__heading">What holds it up</h4>
+            <label className="checkbox">
+              <input type="checkbox" checked={showSupports} onChange={(e) => setShowSupports(e.target.checked)} />
+              {support.mode === 'hanging' ? 'Flying beam and hang points' : 'Uprights, baseplates and ballast'}
+            </label>
+            {supports.map((r, i) => (
+              <p key={r.layerId} className="note">
+                <strong>{layers[i]?.name}:</strong>{' '}
+                {r.unavailable
+                  ? r.unavailable
+                  : r.ground
+                    ? `${r.ground.uprights} upright${r.ground.uprights === 1 ? '' : 's'} at ${r.ground.spacing.toFixed(2)} m, ${Math.round(r.ground.ballastNeededPerUpright)} kg on each plate${r.ground.passes ? '' : ', and it does not hold at the wind set'}.`
+                    : r.hanging
+                      ? `${r.hanging.points} hang points at ${Math.round(r.hanging.loadPerPointKg)} kg each.`
+                      : ''}
+              </p>
+            ))}
+            <p className="note">
+              From Reports, Support structure, where the method, truss and wind are set.
+              {solids.some((_, i) => layers[i]?.shape && layers[i].shape!.kind !== 'flat')
+                ? ' A curved wall is assessed as flat there, so its uprights are the flat answer laid along the curve.'
+                : ''}
+            </p>
+          </section>
+
+          <section>
+            <h4 className="viewer3d__heading">The audience</h4>
+            <label className="checkbox">
+              <input type="checkbox" checked={showAudience} onChange={(e) => setShowAudience(e.target.checked)} />
+              Nearest and furthest viewers
+            </label>
+            <p className="note">
+              {audience.nearestM} m to {audience.furthestM} m from the front of the rig, from the Viewing section. Front
+              row and Back row look from a standing viewer&rsquo;s eye, 1.6 m up.
+            </p>
           </section>
 
           {assumedDepth.length > 0 && (
