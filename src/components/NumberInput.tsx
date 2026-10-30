@@ -86,7 +86,21 @@ export default function NumberInput({
     if (next !== value) onChange(next);
   };
 
-  return (
+  /*
+   * Phone number pads have no minus key — iOS's decimal pad is digits and a
+   * point, nothing else — so a field that takes negatives carries its own.
+   * It flips whatever is in the field, half-typed or not, and commits.
+   */
+  const flipSign = () => {
+    const parsed = Number(draft);
+    const current = draft.trim() === '' || !Number.isFinite(parsed) ? value : parsed;
+    const asked = clamp(current === 0 ? 0 : -current);
+    const next = snap ? snap(asked) : asked;
+    setDraft(String(next));
+    if (next !== value) onChange(next);
+  };
+
+  const input = (
     <input
       id={id}
       className={className}
@@ -131,5 +145,24 @@ export default function NumberInput({
         }
       }}
     />
+  );
+
+  if (min == null || min >= 0) return input;
+
+  return (
+    <span className="num-signed">
+      {input}
+      <button
+        className="btn--icon num-signed__flip"
+        type="button"
+        aria-label="Flip between positive and negative"
+        title="Flip between positive and negative"
+        // Keep focus (and the phone's keypad) in the field while flipping.
+        onPointerDown={(e) => e.preventDefault()}
+        onClick={flipSign}
+      >
+        ±
+      </button>
+    </span>
   );
 }
